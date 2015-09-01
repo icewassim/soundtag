@@ -1,0 +1,90 @@
+soullifiedprofil_change_view_privacy:
+    pattern:  /board/changeprivacyview/{boardId}
+    defaults: { _controller: soullifiedboardBundle:board:changeViewPrivacy}
+
+soullifiedprofil_change_comment_privacy:
+    pattern:  /board/changeprivacycomment/{boardId}
+    defaults: { _controller: soullifiedboardBundle:board:changeCommentPrivacy}
+
+
+
+not_found_route:
+    pattern:  /404/notfound
+    defaults: { _controller: soullifiedboardBundle:board:notFound}
+
+soullifiedboard_set_pinned:
+    pattern:  /board/setpinned/{boardId}
+    defaults: { _controller: soullifiedboardBundle:board:setpinned}
+
+soullifiedboard_set_unpinned:
+    pattern:  /board/setunpinned/{boardId}
+    defaults: { _controller: soullifiedboardBundle:board:setunpinned}
+
+
+soullifiedprofil_change_board_compress:
+    pattern:  /board/menucompress
+    defaults: { _controller: soullifiedboardBundle:board:compressboard}
+
+soullifiedboard_like_board:
+    pattern:  /like/board
+    defaults: { _controller: soullifiedboardBundle:board:likeBoard}
+
+soullifiedboard_unlike_board:
+    pattern:  /unlike/board
+    defaults: { _controller: soullifiedboardBundle:board:unlikeBoard}
+
+ruspeena_community_board_show:
+    pattern:  /community/{url}
+    defaults: { _controller: soullifiedboardBundle:communityboard:show}
+
+soullifiedboard_show_dashboard:
+    pattern:  /dashboard/
+    defaults: { _controller: soullifiedboardBundle:dashboard:showDashboard}
+
+soullifiedboard_show_dahboard_template:
+    pattern:  /show/template/hot
+    defaults: { _controller: soullifiedboardBundle:dashboard:showDashboardTemplate}
+
+soullifiedboard_show_dahboard_liked_template:
+    pattern:  /show/template/liked
+    defaults: { _controller: soullifiedboardBundle:dashboard:showDashboardlikedTemplate}
+
+soullifiedboard_show_dahboard_recent_template:
+    pattern:  /show/template/rising
+    defaults: { _controller: soullifiedboardBundle:dashboard:showDashboardRecentTemplate}
+
+soullifiedboard_show_dahboard_myboards_template:
+    pattern:  /show/template/myboards
+    defaults: { _controller: soullifiedboardBundle:dashboard:showDashboardMyBoardsTemplate}
+
+get_angular_dash_elements:
+    pattern:  /angular/getdashelemnts
+    defaults: { _controller: soullifiedboardBundle:dashboard:getDashElements}
+
+get_angular_dash_select_elements:
+    pattern:  /angular/dashboard/selectelement
+    defaults: { _controller: soullifiedboardBundle:dashboard:selectElement}
+
+ruspeena_search_board:
+    pattern:  /search/board
+    defaults: { _controller: soullifiedboardBundle:search:searchBoard}
+
+update_wall_background:
+    pattern:  /wall/updatebackground
+    defaults: { _controller: soullifiedlifesoundtrackBundle:lifesoundtrack:setWallPredefinedBackground }
+    
+update_uploaded_background:
+    pattern: /board/uploadedcover
+    defaults: { _controller: soullifiedlifesoundtrackBundle:lifesoundtrack:setUploadedBackground }
+
+update_uploaded_background:
+    pattern:  /board/uploadedcover
+    defaults: { _controller: soullifiedboardBundle:board:setUploadedBackground}
+
+bind_song_board:
+    pattern: /angular/bindsongboard
+    defaults: { _controller: soullifiedboardBundle:board:bindBoardSong }
+
+validate_filter:
+    pattern: /validate/filter
+    defaults: { _controller: soullifiedboardBundle:board:validateFilter }

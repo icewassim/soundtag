@@ -1,0 +1,353 @@
+<style type="text/css">
+
+  .md-modal{
+    visibility: hidden;
+  }
+  .md-show{
+    visibility: visible;
+  }
+
+</style>
+
+
+{%  if roleflag=="Owner" or roleflag=="friend" %}
+        
+      
+<!-- Modal photos-->
+<div  id="albummodal"  class="md-modal md-effect-2" >
+  <div class="modal-dialog md-content">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close md-close"  aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Upload photos</h4>
+      </div>
+      <div class="modal-body">
+          <form class="edit-form" action="{{ path('edit', { id: posting.id, editId: editId,boardId:board.Id }) }}" method="post" {{ form_enctype(formphoto) }}>
+            {{ form_widget(formphoto) }}
+         {# Hydrated by javascript #}    <div class="file-uploader"></div>
+
+      </div>
+      <div class="modal-footer" >
+          <a class="btn btn-default md-close" >Cancel</a>
+          <button class="btn btn-primary" type="submit">{{ isNew ? "Save New Listing" : "Save Changes" }}</button> 
+
+ </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+  {%  endif %}
+
+
+     
+<!-- Modal doodles-->
+<div id="doodlemodal" class="md-modal md-effect-2" >
+  <div class="modal-dialog md-content">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close md-close"  aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Doodles </h4>
+      </div>
+      <div class="modal-body">
+      <img class="thumbnail doodle-preview" onClick='addArrow(1)' src="{{asset('pictures/icons/1whitearrow.png')}}">
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+ 
+
+     
+<!-- Modal loading page -->
+<div class="modal fade" id="loadingmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="text-align: center;height: 320px;padding-top: 110px;">
+      <img src="{{asset('pictures/icons/loading.gif')}}" >
+    </div>
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+ 
+
+
+
+<!-- Modal Message -->
+<div id="messagmodal" class="md-modal md-effect-2" >
+  <div class="modal-dialog md-content">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close md-close"  aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Send {{board.profil.fullname}} a Message</h4>
+      </div>
+      <div class="modal-body">
+          <form class="edit-form" action="{{ path('send_message', { recieverId: board.profil.Id }) }}" method="post" {{ form_enctype(formmessage) }}>
+            {{ form_widget(formmessage) }}
+          <input type="hidden" value={{board.Url}} name="boardUrl">
+      </div>
+      <div class="modal-footer">
+          <a class="btn btn-default md-close" >Cancel</a>
+          <button class="btn btn-primary" type="submit">Send Message</button> 
+    </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+
+
+<!-- Modal Friend request-->
+<div id="friendrequestmodal"  class="md-modal md-effect-2" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close md-close"  aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Send {{board.profil.fullname}} a Friend Request</h4>
+      </div>
+      <div class="modal-body">
+          <form class="edit-form" action="{{ path('send_friendrequest', { recieverId: board.profil.Id }) }}" method="post" {{ form_enctype(formfriendrequest) }}>
+            {{ form_widget(formfriendrequest) }}
+          <input type="hidden" value={{board.Url}} name="boardUrl">
+      </div>
+      <div class="modal-footer">
+          <a class="btn btn-default md-close" >Cancel</a>
+          <button class="btn btn-primary" type="submit">Send Request</button> 
+    </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+{% if roleflag=="Owner" %} 
+
+{%  if not board.iscommunity %}
+<!-- Modal song-->
+<div  id="songmodal" class="md-modal md-effect-2"  >
+  <div class="modal-dialog md-content">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close md-close"  aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">
+        {% if board.isProfil %}
+          My Soundtrack  
+        {%  else %}
+          Board Soundtrack  
+        {%  endif %}
+
+        -  Every Song has a Special Story</h4>
+      </div>
+      <div class="modal-body">
+
+          <form class="edit-form" action="{{ path('editplaylist', { id: posting.id, editId: editId,boardId:board.Id }) }}" method="post" {{ form_enctype(formsong) }}>
+            {{ form_widget(formsong) }}
+         {# Hydrated by javascript #}    <div class="file-uploader"></div>
+
+         {% if board.songs.get(0) %}
+
+         <h5 class="notification songnot">{{board.songs.get(0).title}}-{{board.songs.get(0).artist}}   <a class="btn btn-danger" href="{{ path('remove_song', { boardId: board.id } ) }}">Delete</a> </h5>
+         {% endif %}
+      </div>
+      <div class="modal-footer">
+          <a class="btn btn-default md-close" >Cancel</a>
+          <button class="btn btn-primary" type="submit">{{ isNew ? "Save New Listing" : "Save Changes" }}</button> 
+
+ </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+{% endif %}
+<div id="drawing-main-container" >
+<div class="drawing-container" style="background-color: #f7f7f7;
+border-bottom: 1px solid #ebebeb;
+position: absolute;
+top: initial;
+margin-top:80px;
+margin-left: 300px;">
+
+
+
+        <div class="tools">
+
+          <div style="cursor:pointer;display:inline-block;width:30px;height:30px;background:green;" id="green" onclick="color(this)"></div>
+          <div style="cursor:pointer;display:inline-block;width:30px;height:30px;background:blue;" id="blue" onclick="color(this)"></div>
+          <div style="cursor:pointer;display:inline-block;width:30px;height:30px;background:red;" id="red" onclick="color(this)"></div>
+          <div style="cursor:pointer;display:inline-block;width:30px;height:30px;background:yellow;" id="yellow" onclick="color(this)"></div>
+          <div style="cursor:pointer;display:inline-block;width:30px;height:30px;background:orange;" id="orange" onclick="color(this)"></div>
+          <div style="cursor:pointer;display:inline-block;width:30px;height:30px;background:black;" id="black" onclick="color(this)"></div>
+       
+             <div style="margin-top: 20px;margin-left: 220px;font-weight: bold;font-size: 15px;font-family: OpenSans-Light">Eraser</div>
+          <div style="margin-top: -17px;margin-left: 280px;width: 15px;height: 15px;background: white;border: 2px solid;margin-right: 10px;" id="white" onclick="color(this)">
+       
+        </div>
+
+
+      </div>
+
+      <canvas id="can" width="200" height="200" style="cursor:pointer;margin-top: -30px;margin-left: 15px;background-color: white;box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.2), 0 0 2px 1px rgba(255, 255, 255, 0.5);margin-bottom: 15px;margin-right: 15px;"></canvas>
+
+
+
+
+</div>
+
+
+<div  class="drawing-header">
+  drawing 
+  </div>
+  <div  class="drawing-footer">
+        <div id="drawmouse">
+          <a class="btn btn-default" onClick="$('#drawing-main-container').fadeOut();erase();" >Cancel</a>
+          <button class="btn btn-primary" onClick="$('#drawing-main-container').fadeOut();save();" >Save</button> 
+        </div>
+  </div>
+  </div>
+</div>
+
+
+
+
+
+
+                           <div id="slider-container" class="thumbnail" style="display:none;">
+                             <form id="formRotateComment" method="POST" action="" > 
+                                    <input id="myslider" type="text" size="10" class="slider-input">
+                                    <div id="round-slider" class="slider-content"></div>  
+                                      <div class="rotate-buttons" >
+                                        <button class="btn btn-primary" onClick='submitRotation()' type="submit">
+                                              Save changes
+                                        </button>
+
+                                        <button class="btn btn-default" onClick='resetPrevious()'>Cancel</button>
+                                      </div>
+                            </form>
+                          </div>
+
+<!-- Modal Background-picture -->
+<div id="backgroundmodal" class="md-modal md-effect-2"  >
+  <div class="modal-dialog md-content">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close md-close"  onClick="resetBackground()" aria-hidden="true" id="hide-background-modal" >&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Change Background Wallpaper</h4>
+      </div>
+      <div class="modal-body" style="min-height: 240px;">
+
+      {% if board.Coverurl %}
+        <img id="background-preview" class="thumbnail" style="height:200px;width:200px;margin-bottom:10px;box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.6), 0 0 0px 1px rgba(255, 255, 255, 0.5);"  src="{{asset('web/uploads/tmp/attachments/'~board.Coverurl)}}" >
+      {% endif %}
+
+
+      <div id="background-preview-group" >
+                       <img  class="thumbnail small-background-preview md-close" onClick="setPredefinedBackground(this)" src="{{asset('pictures/background/bluewood.jpg')}}" >
+
+                        <img  class="thumbnail small-background-preview md-close" onClick="setPredefinedBackground(this)" src="{{asset('pictures/background/brownwood.jpg')}}" >
+
+
+                        <img  class="thumbnail small-background-preview md-close" onClick="setPredefinedBackground(this)"  src="{{asset('pictures/background/paper1.jpg')}}" >
+
+
+                        <img  class="thumbnail small-background-preview md-close" onClick="setPredefinedBackground(this)"  src="{{asset('pictures/background/whitewood.jpg')}}" >
+
+                        <img  class="small-background-preview md-close" onClick="setPredefinedBackground(this)"  src="{{asset('pictures/background/greenboard.jpg')}}" >
+
+                        <img  class="thumbnail small-background-preview md-close" onClick="setPredefinedBackground(this)" src="{{asset('pictures/background/blackboard.jpg')}}" >
+      </div>
+
+      <form class="edit-form" action="{{ path('edit_backgroundurl', { id: posting.id, editId: editId,boardId:board.Id }) }}" 
+                method="post">
+           <input type="hidden" name="predefinedbackgroud" id="predefinedbackgroud" >      
+          <div class="file-uploader"></div>
+
+      </div>
+      <div class="modal-footer">
+          <a class="btn btn-default md-close"  onClick="resetBackground()" >Cancel</a>
+            {% if board.Coverurl %}
+                <a class="btn btn-danger" href="{{ path('remove_background', { boardId: board.id } ) }}">Delete</a>
+            {% endif %}
+          </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{% endif %}
+
+
+
+
+
+
+{%  if not board.isprofil %}
+
+<!-- Modal info-->
+<div id="infomodal"  class="md-modal md-effect-2"  >
+  <div class="modal-dialog md-content">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close md-close" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Change Board Infos</h4>
+      </div>
+      <div class="modal-body">
+
+          <form class="edit-form" action="{{ asset('editboard/') }}{{board.Id}}" method="post" {{ form_enctype(formboard) }}>
+            {{ form_widget(formboard) }}
+         
+      </div>
+      <div class="modal-footer">
+          <a class="btn btn-default md-close" >Cancel</a>
+          <button class="btn btn-primary" type="submit">{{ isNew ? "Save New Listing" : "Save Changes" }}</button>
+
+ </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+{%  else %}
+  {%  if roleflag=="Owner"  %}
+
+    <!-- Modal profil photo-->
+    <div id="profilpicmodal" class="md-modal md-effect-2"  >
+      <div class="modal-dialog md-content">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close md-close" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Change Profile Picture</h4>
+          </div>
+          <div class="modal-body">
+              <form class="edit-form" action="{{ path('editprofilphoto', { id: posting.id, editId: editId,profilId:profil.Id }) }}" method="post" {{ form_enctype(formprofilphoto) }}> 
+ 
+          <span style="display:none;">
+              {{ form_widget(formprofilphoto) }}
+          </span>
+          
+         <img id="background-preview" class="thumbnail" style="height:200px;box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.6), 0 0 0px 1px rgba(255, 255, 255, 0.5);max-width: 370px;position: absolute;right: 40px;top: 10px;"  
+                
+
+                  src={{app.user.profil.ProfilPictureBig}}
+                  
+                      />
+          <div class="file-uploader"></div>
+
+          </div>
+          <div class="modal-footer">
+              <a class="btn btn-default md-close" >Cancel</a>
+              <button class="btn btn-primary" type="submit">{{ isNew ? "Save New Listing" : "Save Changes" }}</button> 
+                {% if not isNew %}
+                    <a class="btn btn-danger" href="{{ path('delete', { id: posting.id } ) }}">Delete</a>
+                {% endif %}
+
+     </form>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% endif %}
+
+
+
+{% endif %}
+
+

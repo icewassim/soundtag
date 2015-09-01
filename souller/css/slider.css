@@ -1,0 +1,57 @@
+#slider-display {
+	float: left;
+	margin: 0;
+	color: #89B236;
+	font-size: 50px;
+	width: 250px;
+}
+#display-only {
+	float: left;
+	width: 250px;
+	padding-top: 20px;
+}
+#display-only p {
+	margin: 0;
+	text-align: center;
+}
+
+#slider-container {
+	margin: 0 auto;
+	padding: 20px 0; /* give that puppy some room outside of the box */
+	position: absolute;
+	margin-top: -77px;
+	margin-left: 160px;
+
+}
+
+.slider-input {
+	display: none;
+}
+
+#round-slider {
+	margin: 0 auto; /*center slider in its container*/
+	width: 100px;
+	height: 200px;
+	background:url(slider-bg.png) no-repeat top left;
+	border: none;
+
+}
+
+
+#round-slider a{
+	cursor:pointer;
+	background-color: transparent;
+	background-image: url(slider.png);
+	background-repeat: no-repeat;
+	background-position: 0% 0%;
+	border: none;
+	width: 109px; 
+	height: 20px;
+	margin-bottom: -0.6em; /* aligning images with images... arg */
+	left: -0.2em;
+}
+
+/* Throw down an alternate image, etc. for default/disabled/out of bounds state. IE6 Fail. */
+.ui-slider-handle.is-active {
+	background-image: url(slider.png);
+}

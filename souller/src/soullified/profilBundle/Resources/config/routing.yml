@@ -1,0 +1,264 @@
+
+verif_email:
+    pattern:  /verifemail
+    defaults: { _controller: soullifiedUserBundle:security:verifEmail}
+
+verif_username:
+    pattern:  /verifusername
+    defaults: { _controller: soullifiedUserBundle:security:verifUsername}
+
+delete:
+    pattern:  /delete
+    defaults: { _controller: soullifiedboardBundle:board:delete}
+
+soullifiedprofil_newuser:
+    pattern:  /singup/{id}
+    defaults: { _controller: soullifiedprofilBundle:user:add }
+
+addnewboard:
+    pattern:  /addnewboard
+    defaults: { _controller: soullifiedboardBundle:board:addnewboard}
+
+editboard:
+    pattern:  /editboard/{boardId}
+    defaults: { _controller: soullifiedboardBundle:board:editboard}
+
+savenewboard:
+    pattern:  /savenewboard/{boardId}
+    defaults: { _controller: soullifiedboardBundle:board:saveNewBoard}
+
+show_my_boards_modal:
+    pattern:  /myboardsmodal/{profilId}
+    defaults: { _controller: soullifiedboardBundle:board:myboardsmodal}
+
+show_my_boards:
+    pattern:  /myboards
+    defaults: { _controller: soullifiedboardBundle:board:myboards}
+    
+render_choose_avatar:
+    pattern:  /chooseavatar
+    defaults: { _controller: soullifiedprofilBundle:Home:chooseAvatar}
+
+show_home_page:
+    pattern:  /
+    defaults: { _controller: FOSUserBundle:Security:login}
+
+render_home_page:
+    pattern:  /home
+    defaults: { _controller: soullifiedprofilBundle:Home:show}
+
+soullifiedprofil_showboard:
+    pattern:  /{url}
+    defaults: { _controller: soullifiedboardBundle:board:show}
+
+pingsteprofil:
+    pattern:  /life/
+    defaults: { _controller: soullifiedprofilBundle:user:showprofil}
+
+pingsteprofiltemplate:
+    pattern:  /profiltemplate/angular
+    defaults: { _controller: soullifiedprofilBundle:user:showprofilTemplate}
+
+view_inbox:
+    pattern:  /inbox/{senderid}
+    defaults: { _controller: soullifiedprofilBundle:message:viewInbox}
+
+view_ajax_inbox:
+    pattern:  /ajax/unseenmessages
+    defaults: { _controller: soullifiedprofilBundle:message:getajaxmessagesbox}
+
+soullifiedprofil_addcomment:
+    pattern:  /myboard/addcomment/{id}
+    defaults: { _controller: soullifiedboardBundle:comment:addcomment}
+
+edit:
+    pattern:  /edit/{boardId}
+    defaults: { _controller: soullifiedboardBundle:board:edit}
+
+soullified_editprofilphoto:
+    pattern:  /profil/editprofilpic
+    defaults: { _controller: soullifiedprofilBundle:user:editprofilphoto}
+
+upload:
+    pattern:  /song/upload
+    defaults: { _controller: soullifiedboardBundle:board:upload}
+
+upload_screen_shot:
+    pattern:  /screen/{boardId}
+    defaults: { _controller: soullifiedboardBundle:board:uploadscreen}
+
+update_pos_album:
+    pattern:  /updatealbum/pos
+    defaults: { _controller: soullifiedboardBundle:board:updatePosAlbum}
+    
+update_pos_comment:
+    pattern:  /updateposcomment/{id}
+    defaults: { _controller: soullifiedboardBundle:comment:updatePosComment}
+
+update_pos_halfboard:
+    pattern:  /updateposhalfboard/{id}
+    defaults: { _controller: soullifiedprofilBundle:user:updatePosHalfBoard}
+
+update_pos_board:
+    pattern:  /life-according-to/updateposboard/{boardId}
+    defaults: { _controller: soullifiedprofilBundle:user:updatePosBoard}
+
+editplaylist:
+    pattern:  /editplaylist/{boardId}
+    defaults: { _controller: soullifiedboardBundle:board:editplaylist}
+
+addhalfboard:
+    pattern:  /addhalfboard/{id}
+    defaults: { _controller: soullifiedprofilBundle:user:addHalfBoard}
+
+edit_backgroundurl:
+    pattern:  /boardAngular/editbackground
+    defaults: { _controller: soullifiedboardBundle:board:editbackground}
+
+update_predefined_backgroundurl:
+    pattern:  /updatepredefined/{boardId}
+    defaults: { _controller: soullifiedboardBundle:board:setPredefinedBackground}
+
+remove_song:
+    pattern:  /removesong/{boardId}
+    defaults: { _controller: soullifiedboardBundle:board:remove_song}
+
+remove_background:
+    pattern:  /removebackgroundcover/{boardId}
+    defaults: { _controller: soullifiedboardBundle:board:remove_backgroundcover}
+
+remove_comment:
+    pattern:  /removecomment/{commentId}
+    defaults: { _controller: soullifiedboardBundle:comment:remove_comment}
+
+remove_album:
+    pattern:  /removealbum/{albumId}
+    defaults: { _controller: soullifiedboardBundle:board:remove_album}
+
+updaterotcomment:
+    pattern:  /updaterotcomment/{commentId}
+    defaults: { _controller: soullifiedboardBundle:comment:update_rotcomment}
+
+updaterotalbum:
+    pattern:  /updaterotalbum/{albumId}
+    defaults: { _controller: soullifiedboardBundle:board:updateRotateAlbum}
+
+send_friendrequest:
+    pattern:  /sendfriendrequest/{recieverId}
+    defaults: { _controller: soullifiedprofilBundle:friendrequest:send}
+
+get_ajax_requests:
+    pattern:  /infoprofil/getajaxrequests
+    defaults: { _controller: soullifiedprofilBundle:friendrequest:getajaxrequests}
+
+get_ajax_messages:
+    pattern:  /infoprofil/getajaxmessages
+    defaults: { _controller: soullifiedprofilBundle:message:getajaxmessages}
+     
+decline_frien_request:
+    pattern:  /declinerequest/{requestId}
+    defaults: { _controller: soullifiedprofilBundle:friendrequest:declineFrequest}
+
+accept_frien_request:
+    pattern:  /acceptfrequest/{requestId}
+    defaults: { _controller: soullifiedprofilBundle:friendrequest:acceptFrequest}
+
+send_message:
+    pattern:  /sendmessage/{recieverId}
+    defaults: { _controller: soullifiedprofilBundle:message:send}
+
+get_unseen_messages:
+    pattern:  /events/getunseen
+    defaults: { _controller: soullifiedprofilBundle:message:getUnseen}
+
+reset_unseen_messages:
+    pattern:  /events/messagesseen
+    defaults: { _controller: soullifiedprofilBundle:message:resetUnseenMessages}
+
+reset_unseen_events:
+    pattern:  /events/eventsseen
+    defaults: { _controller: soullifiedprofilBundle:message:resetUnseenEvents}
+
+reset_about_trigger:
+    pattern:  /reset/abouttrigger
+    defaults: { _controller: soullifiedprofilBundle:user:resetabouttrigger}
+
+reset_photo_trigger:
+    pattern:  /reset/phototrigger
+    defaults: { _controller: soullifiedprofilBundle:user:resetphototrigger}
+
+get_angular_comments:
+    pattern:  /angual/getcomments
+    defaults: { _controller: soullifiedboardBundle:comment:getAngularComments}
+
+set_angular_board_info:
+    pattern:  /angual/setboardinfo
+    defaults: { _controller: soullifiedboardBundle:comment:updateBoardInfo}
+
+remove_angular_background:
+    pattern:  /angual/removebackgroundcover
+    defaults: { _controller: soullifiedboardBundle:comment:removeBackground}
+
+submit_angular_photo:
+    pattern:  /angual/submitpicture
+    defaults: { _controller: soullifiedboardBundle:comment:SubmitAngularPhoto}
+
+comment_add_sub_comment:
+    pattern:  /add/subcomment
+    defaults: { _controller: soullifiedboardBundle:subcomment:addsubcomment}
+    
+comment_rm_sub_comment:
+    pattern:  /rm/subcomm
+    defaults: { _controller: soullifiedboardBundle:subcomment:rmSubComment}
+
+comment_get_sub_comments:
+    pattern:  /get/subcomments
+    defaults: { _controller: soullifiedboardBundle:subcomment:getSubComments}
+
+comment_upvote:
+    pattern:  /angular/comment/upvote
+    defaults: { _controller: soullifiedboardBundle:comment:upVote}
+    
+get_angular_my_boards:
+    pattern:  /angular/myboards
+    defaults: { _controller: soullifiedboardBundle:comment:getAngularMyBoards}
+
+comment_downvote:
+    pattern:  /angular/comment/downvote
+    defaults: { _controller: soullifiedboardBundle:comment:downVote}
+
+comment_cancelvote:
+    pattern:  /angular/comment/cancelvote
+    defaults: { _controller: soullifiedboardBundle:comment:cancelVote}
+
+profil_setFavFont:
+    pattern:  /profil/set/favvote
+    defaults: { _controller: soullifiedprofilBundle:user:setFavFont}
+
+show_angular_classic_profil:
+    pattern:  /show/angularclassiccprofil
+    defaults: { _controller: soullifiedprofilBundle:user:showAngularClassicProfil}
+
+profil_setFavColor:
+    pattern:  /profil/set/favcolor
+    defaults: { _controller: soullifiedprofilBundle:user:setFavColor}
+
+profil_setAvatar:
+    pattern:  /profil/set/avatar
+    defaults: { _controller: soullifiedprofilBundle:Home:avatarChosen}
+
+profil_fresh_avatar:
+    pattern:  /register/avatar
+    defaults: { _controller: soullifiedprofilBundle:Home:chooseFreshAvatar}
+
+show_feedback:
+    pattern:  /show/feedback
+    defaults: { _controller: soullifiedprofilBundle:user:feedback}
+
+send_feedback:
+    pattern:  /send/feedback
+    defaults: { _controller: soullifiedprofilBundle:user:sendFeedback}
+
+show_about:
+    pattern:  /show/about
+    defaults: { _controller: soullifiedprofilBundle:user:showAbout}

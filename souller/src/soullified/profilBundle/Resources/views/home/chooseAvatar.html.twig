@@ -1,0 +1,28 @@
+
+      <br>
+      <div style="padding: 20px;text-align:right" class="col-md-6 col-sm-8 col-xs-12 col-md-offset-3 col-sm-offset-2 col-xs-offset-0 boards-container">
+        {%  if app.user.google_id or app.user.facebook_id %}
+        <div class="input-group" style="margin-left:0px;margin-bottom:25px">
+                        <span class="input-group-addon"><img src="{{ asset('pictures/icons/tinyUserBlack.png') }}" style="margin-right: 7px;"></span>
+                        <input id="guestName" style='width:100%;z-index:0' name="usernam" type="text" class="form-control input-lg" placeholder="Username">
+        </div>
+        {%  endif %}
+        <hr style="margin-bottom:0px;">
+        <br>
+        <span id="avatars-container"  >
+          
+        </span>
+        <br>
+        <hr>
+
+        <br>
+        <span style="margin-top:50px;">
+        <form method="POST" action="/profil/set/avatar">
+          <span class="file-uploader" onclick="setIsProfilPic()"></span>
+          <a href="/home" class="btn btn-default" style="margin-right: 5px;">Skip</a>
+          <input id="avatar-input" type="hidden" name="avatar" value="/pictures/icons/thumbuser.png">
+          <button id="submitProfilPicture" class="btn btn-primary">Confirm</button>
+        </span>
+        <img  id="profil-pic-preview" style="position: fixed;top: 90px;left: 280px;height: 120px;" />
+        </form>
+      </div>

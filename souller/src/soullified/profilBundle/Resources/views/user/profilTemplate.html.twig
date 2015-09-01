@@ -1,0 +1,336 @@
+<div id="main-container" ng-click="showCommentFormAngular()" style="position: absolute;">
+
+<span id="boards">
+    <div ng-repeat="myBoard in boards" id="boardId##myBoard.id##" class="board" style="top:##myBoard.posTop##px;left:##myBoard.posLeft##px;" ng-mouseUp="updatePosAngularBoard(myBoard)" >
+  {%  if app.user %}
+    <span class="control-board-buttons" ng-show='board.ownerId == {{app.user.profil.Id}}'>
+      <img class='rotate-small' src="{{ asset('pictures/icons/small-rotate.png') }}"  onClick=rotateslider("boardId##myBoard.id##","board") />
+      <img title="unpin board" ng-click="unpinBoard(myBoard)" src="{{ asset('pictures/icons/pin-black.png') }}" style="height: 20px;cursor: pointer;"> 
+    </span>
+  {%  endif %}
+                <a href="/life/#/board/##myBoard.url##">
+                  <img id="boardCover##myBoard.id##" ng-show="myBoard.coverurl" ng-src="##myBoard.coverurl##" style="width: 100%;" >
+                   <div class="board-title ng-binding">##myBoard.title##</div>
+                </a>
+                <div class="board-info" style="opacity:0.5">
+                <a href="/life/#/board/##myBoard.url##">
+                  <div class="likes-comments">  
+                    <span ng-show="myBoard.nbrLikes > 0">
+                      <img class="small-community" src="/pictures/icons/small-owner.png" style="opacity:1">
+                      <span id="nbrOfComments" style="margin-left:10px;" >##myBoard.nbrLikes##</span>
+                    </span>
+                    <span ng-show="myBoard.nbrComments > 0">
+                      <img src="/pictures/icons/small-comment-black.png" class="like-buttons" style=";margin-left:10px;cursor:default;">        
+                      <span id="nbrOfComments" >##myBoard.nbrComments##</span>
+                    </span>
+                </div>
+            </a>
+    </div>
+  <!-- endfor -->
+</div>
+
+</span>
+
+<span id="comments">
+   <div ng-repeat="comment in comments" style='font-family:##comment.font##;position:absolute;top:##comment.posy##px;left:##comment.posx##px;color:##comment.color##;-webkit-transform:##comment.rotation##;-moz-transform:##comment.rotation##;'
+           ng-mouseenter="popoverAngularComment(comment)" ng-mouseleave="hidePopopver()" id='commentId##comment.commentId##'
+                  class='comment' 
+                   ng-mouseUp="updatePosAngularcomment(comment)" date="##comment.commentDate##">
+      <span ng-show="comment.allowedContent">
+                 ##comment.allowedContent##
+      </span>  
+      <span ng-show="!comment.allowedContent">
+                 ##comment.content##
+      </span>        
+     
+    </div>
+</span> <!-- end comment container -->
+
+
+     <span id="album-container"  >
+      <img id="canvasimg" style="position:absolute;top: 126px;left: 309px;" style="display:none;">
+    <div ng-repeat="photo in photos" class="board" style="left:##photo.posx##px;-webkit-transform:##photo.rotation##;-moz-transform:##photo.rotation##;top:##photo.posy##px;width: 180px;" id="boardPhoto##photo.Id##"  albumId="##photo.Id##"  ng-mouseUp="updatePosAngularPic(photo)"  ng-mouseenter="setDraggable()">
+
+   {% if app.user %}
+        <span class='small-menu-icons'  ng-show='board.ownerId == {{app.user.profil.Id}}'>
+          <img class='rotate-small' src="{{ asset('pictures/icons/small-rotate.png') }}"  onClick=rotateslider("boardPhoto##photo.Id##","pic") />
+          <img class='delete-small' src="{{ asset('pictures/icons/close.png') }}" ng-click="rmAngularPic(photo)" />
+        </span>
+    {%  endif %}
+      
+
+        <input id="albumId" pictureId="##photo.Id##" value="##photo.Id##" style="display:none;">
+        <a title="##photo.title##" data-lightbox="image-1" href='/web/uploads/tmp/attachments/##photo.folder##/medium/##photo.url##' >
+        <img id="##photo.folder##" Title="##photo.title##" ownername="##board.profil.Fullname##" ownerId="##board.profil.Id##"  
+                        ng-src="{{ asset('web/uploads/tmp/attachments/##photo.folder##/small/1') }}" 
+                        ng-class="{angularpiclabel:photo.title.length,angularpicnolabel:!photo.title.length}" 
+         /> 
+        <div class="board-title" ng-show="photo.title.length" >
+              ##photo.title##
+        </div>
+    </a>
+ </div>
+        </span>  <!-- end photo container -->
+</div>
+
+
+<!-- Modal comment -->       
+<div id="comment-container">
+    <span id="comment-area" style="overflow: hidden;max-width: 450px;height:auto;width:auto;color:white;color:##user.favColor##;font-family:##user.favFont##;" class="form-control input-lg colorInner"></span>
+</div><!-- /.modal-content -->
+<!-- modal comment -->
+<div id="commentModal" style="position:fixed;display:none;z-index:100;"  >
+  <div class="modal-dialog" style="width:500px;">
+    <div class="modal-content" id="comment-modal-content" style="box-shadow:0 5px 10px 1px rgba(0, 0, 0, 0.21), 0 0 10px 1px rgba(255, 255, 255, 0)">
+      <div class="modal-header" style="cursor: move;">
+      <button type="button" class="close" ng-click="hideCommentFormAngular()" >&times;</button>
+      <span style="display: inline-block;font-weight:bold;font-size: 12px;">Font:</span>
+      <span style="display: inline-block;margin-left: 40px;">
+            <select id="font-selector" >
+              <option ng-selected='user.favFont =="Open Sans, sans-serif"' value="'Open Sans', sans-serif">OpenSans-Light</option>
+              <option ng-selected='user.favFont =="JennaSue"' value="JennaSue">JennaSue</option>
+              <option ng-selected='user.favFont =="THURSTON_erc_002"' value="THURSTON_erc_002">THURSTON</option>
+              <option ng-selected='user.favFont =="OwnThatShhhh"' value="OwnThatShhhh">OwnThatShhhh</option>
+              <option ng-selected='user.favFont =="comesinhandy"' value="comesinhandy">comesinhandy</option>
+              <option ng-selected='user.favFont =="BrookeS"' value="BrookeS">BrookeS</option>
+              <option ng-selected='user.favFont == true' value="DiamondsPearls">DiamondsPearls</option>
+              <option ng-selected='user.favFont == "sketch_Block"' value="sketch_Block"> font2</option>
+              <option ng-selected='user.favFont == "FAIL____"' value="FAIL____">FAIL</option>
+              <option ng-selected='user.favFont == "daniel-webfont"' value="daniel-webfont">daniel-webfont </option>
+              <option ng-selected='user.favFont == "the_quiet_scream"' value="the_quiet_scream">the_quiet_scream </option>
+              <option ng-selected='user.favFont == "pops_08_BOLD"' value="pops_08_BOLD">pops_08_BOLD</option> 
+              <option ng-selected='user.favFont == "pops_08_REGULAR"' value="pops_08_REGULAR">pops_08_REGULAR</option> 
+              <option ng-selected='user.favFont == "Scribulous_Scrawlin___by_Alphabeta85"' value="Scribulous_Scrawlin___by_Alphabeta85">Scribulous_Scrawlin</option> 
+              <option ng-selected='user.favFont == "Mawns_Handwriting"' value="Mawns_Handwriting">Mawns_Handwriting</option> 
+              <option ng-selected='user.favFont == "LSTKGarPenTin"' value="LSTKGarPenTin">LSTKGarPenTin</option> 
+              <option ng-selected='user.favFont == "Linny"' value="Linny">Linny</option> 
+              <option ng-selected='user.favFont == "HappyFox-Condensed"' value="HappyFox-Condensed">HappyFox-Condensed</option> 
+              <option ng-selected='user.favFont == "GoodDog"' value="GoodDog">GoodDog</option> 
+              <option ng-selected='user.favFont == "FATSB___"' value="FATSB___">FATSB___</option> 
+              <option ng-selected='user.favFont == "danielbk"' value="danielbk">danielbk</option> 
+              <option ng-selected='user.favFont == "ArchitectsDaughter"' value="ArchitectsDaughter">ArchitectsDaughter</option> 
+              <option ng-selected='user.favFont == "billy"' value="billy">billy</option> 
+              "Chomp",
+            </select>
+      </span>
+          <div id="colorPicker">
+             <a class="color"><div class="colorInner" style="background-color:##user.favColor##;">Color</div></a>
+             <div class="track"></div>
+             <ul class="dropdown"><li></li></ul>
+             <input type="hidden" class="colorInput"/>
+          </div>
+    </div>      
+      <div class="modal-body">
+              <span class="file-uploader-container">
+                <div class="file-uploader"></div>
+              </span>
+          <input id="comment-input-area" type="text" ng-model="inputComment.content" placeholder="Scribble here" class="form-control" style="margin-bottom: 0px"><span style="margin-left:5px;opacity:0.5;color:green;" ng-show="noSpace==false">##55 - inputComment.content.length ##</span>
+        <hr style="margin-bottom:10px;margin-top:10px;">
+        <label style="margin-top: 0px;" >Extended thoughs:<span style="opacity: 0.4;"> (optional - unlimited) </span></label>
+        <textarea id="commentDescription" class="form-control description" ng-model="inputComment.desc"></textarea>         
+      </div>
+      <div class="modal-footer" style="text-align:left;padding: 10px 20px 10px;cursor: move;">
+          <button id="submit-comment" ng-click="submitCommentAngular(board)"  class="btn btn-primary" type="submit" >Scribble</button> 
+          <button id="cancel-comment" ng-click="hideCommentFormAngular()" class="btn btn-default" type="reset">Cancel</button>
+          <span id="noEnoughtSpace" ng-show="noSpace==true"style="color: black;background-color: rgba(247, 130, 130, 0.32);padding: 6px;border-radius: 3px;">Not enought Space, <span ng-show="inputComment.content.length < 55">try to scroll down !!</span></span>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!-- popver  comment -->
+<div id="popoverComment" ng-mouseleave="hidePopopverFromPopverComment()" class="popover fade ##hoveredComment.placement## in" style="top:##hoveredComment.top##px; left:##hoveredComment.left##px;">
+  <div class="arrow"></div>
+  <h3 class="popover-title">
+    <a ng-show="hoveredComment.ownerId != -1"  href="/life/#/scrapbook/##hoveredComment.ownerId##" class="comment-owner">
+     ##hoveredComment.ownerFullName##
+      <img class="comment-thumbnail" ng-src="##hoveredComment.profilPic##" style="border-radius:50%">
+    </a>
+    <a ng-show="hoveredComment.ownerId == -1" class="comment-owner">
+     ##hoveredComment.ownerFullName##
+      <img class="comment-thumbnail" ng-src="##hoveredComment.profilPic##" style="border-radius:50%">
+    </a>
+    <br>
+    <span  style="color:black;">##hoveredComment.shortContent##</span>
+    <span  ng-show="hoveredComment.desc" style="text-transform:none;">
+      <hr style="margin-top: 0px;margin-bottom: 3px;">
+      <span id="hoveredDescription">
+        ##hoveredComment.shortDesc##   
+      </span>
+    </span>
+      <a ng-show="hoveredComment.more == true;" style="text-transform:initial;" ng-click='fakeTrigger()'>read more</a>
+    
+    <span ng-show="">
+    </span>
+
+    <span class="votesButtons">
+      <a id="upvoteButton"  class="btn-sm btn-primary add-achievement-btn" ng-class="{disabled:upvotes.indexOf(hoveredComment.commentId) != -1,null:upvotes.indexOf(hoveredComment.commentId) != -1}" ng-click="upvote()" style="padding-bottom: 6px;padding-top: 5px;">
+        <img src="/pictures/icons/upvote.png" style="margin-top:-10px">
+      </a>
+      <span ng-show='hoveredComment.votes == 0'>
+        -
+      </span>
+      <span ng-show='hoveredComment.votes != 0'>
+        ##hoveredComment.votes##
+      </span>
+      <a id="downvoteButton" class="btn-sm btn-primary add-achievement-btn" ng-class="{disabled:downvotes.indexOf(hoveredComment.commentId) != -1,null:downvotes.indexOf(hoveredComment.commentId) != -1}" ng-click="downvote()" style="padding-bottom: 6px;padding-top: 5px;">
+        <img src="/pictures/icons/downvote.png">
+      </a>
+    </span>
+    <div class="small-menu-icons" style="display:inherit;top:initial;bottom:5px;">
+    <span>
+      <a ng-click="fakeTrigger()" class="notif-nbr-ccomments">
+      <span ng-show="hoveredComment.nbrsubcomments > 0">  ##hoveredComment.nbrsubcomments## </span> comment<span ng-show="hoveredComment.nbrsubcomments > 1">s</span>
+      </a>
+    </span>
+    <img class="comment-small" ng-click="fakeTrigger()" src="/pictures/icons/small-comment-black.png">
+   {% if app.user %}
+    <span ng-show='hoveredComment.ownerId == "{{app.user.username}}"   || board.ownerId == {{app.user.profil.Id}}'>
+      <img  class="rotate-small" src="/pictures/icons/small-rotate.png" onclick="rotateslider('commentId##hoveredComment.commentId##','comment')" data-original-title="" title="">
+      <img class="delete-small" src="/pictures/icons/close.png" onclick="removecomment('commentId##hoveredComment.commentId##')" data-original-title="" title="">
+    </span>  
+   {% else %}
+    <span ng-show='hoveredComment.isNewGuest == true'>
+      <img  class="rotate-small" src="/pictures/icons/small-rotate.png" onclick="rotateslider('commentId##hoveredComment.commentId##','comment')" data-original-title="" title="">
+      <img class="delete-small" src="/pictures/icons/close.png" onclick="removecomment('commentId##hoveredComment.commentId##')" data-original-title="" title="">
+    </span>
+   {%  endif %}
+    </div>
+  </h3>
+  <div class="popover-content">
+    <span class="notif-date">##hoveredComment.commentDate## <span ng-show='!hoveredComment.fresh'>ago</span></span>
+    <span style="visibility:hidden;">m</span>
+  </div>
+</div>
+
+
+<!-- popover fresh comment  -->
+<div id="popoverFreshComment" ng-show="inputComment.desc && inputComment.content.length" class="popover fade ##inputComment.placement## in" style="top:##inputComment.top##px; left:##inputComment.left##px;">
+  <div class="arrow"></div>
+  <h3 class="popover-title">
+  {%  if app.user %}
+    <a href="{{ path('pingsteprofil')}}#/scrapbook/{{app.user.username}}" class="comment-owner">{{app.user.profil.fullname}}</a>
+  {%  else %}
+    <a href="/" id="fresh-comment-username"  class="comment-owner">##guest.name##</a>
+  {%  endif %}
+    <br>
+    <span id="freshTitle" style="color:black;">##inputComment.content##</span>
+    <hr style="margin-top: 0px;margin-bottom: 3px;">
+    <span id="freshDescription">##inputComment.desc##</span>
+    <span ng-show="inputComment.desc.length > 92"  style="  position: absolute;right: 1px;bottom: 30px;color: rgb(0, 139, 255);cursor: pointer;text-transform: lowercase;"> ...read more</span>
+  {%  if app.user %}
+    <img class="comment-thumbnail" ng-src="{{app.user.profil.profilPicture}}"   style="top: 8px;">
+  {%  else %}
+    <img ng-show="guest.avatar == null" id="fresh-comment-thumbnail" class="comment-thumbnail" ng-src="{{ asset('/pictures/icons/thumbuser.png')}}"  style="top: 8px;">
+
+    <img ng-show="guest.avatar != null" id="fresh-comment-thumbnail" class="comment-thumbnail" ng-src="##guest.avatar##"  style="top: 8px;">
+  {%  endif %}
+  </h3>
+  <div class="popover-content" style="text-align: right;">
+    <span style="color: grey;font-size: 10px;">just now</span><span class="small-friend-request">become a friend</span>
+  </div>
+</div>
+
+
+<style type="text/css">
+
+    .board-background{
+      width: 49%;
+      margin-bottom: 1%;
+
+    }
+
+    .board-info{
+      /*position: absolute;*/
+      top: 10%;
+      padding-top: 15px;
+      /*border: 1px rgb(209, 209, 209) solid;*/
+      height: 89%;
+      width: 96%;
+      background-color: rgba(255, 255, 255, 0.89);
+      font-family: sans-serif;
+ }
+
+  .board{
+      z-index:9;
+      position: absolute;
+      width: 210px;
+      line-height: 1.42857143;
+      background-color: #fff;
+      border: 0px;
+      padding: 2px;
+      margin-bottom: 10px;
+      display: inline-block;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+      border-radius: 2px;
+      border: 1px solid rgb(219, 219, 219);
+      -moz-box-shadow: 0 3px 10px 1px rgba(0, 0, 0, 0.6), 0 0 20px 1px rgba(255, 255, 255, 0.24);
+      -webkit-box-shadow: 0 3px 10px 1px rgba(0, 0, 0, 0.6), 0 0 20px 1px rgba(255, 255, 255, 0.24);
+      box-shadow: 0 3px 10px 1px rgba(0, 0, 0, 0.6), 0 0 20px 1px rgba(255, 255, 255, 0.24);
+    }
+
+    .board:hover{
+      opacity: 1;
+     }
+
+  .likes-comments{
+    font-family: serif;
+    font-size: 10px;
+    color: rgb(187, 187, 187);
+    text-align: right;
+  }
+
+
+    .likes-comments img{
+      height: 13px;
+      margin-top: -2.5px;
+    }
+
+  .small-community{
+    margin-right: 0px;
+    height: 13px;
+  }
+
+  
+    .board-description{
+      color: #3D3A3A;
+      font-weight: normal;
+      margin-top: 10px
+    }
+
+    .boards-container{
+      padding: 15px 20px;
+    }
+
+    .board-title{
+      /*text-align: center;*/
+      color: black;
+      text-transform: capitalize;
+      font-family: JennaSue;
+      font-weight: bold;
+      font-size: 25px;
+      padding-left: 5px;
+      padding-right: 5px;
+      margin-top: 10px;
+    }
+
+  .control-board-buttons{
+    position:absolute;
+    top: -24px;
+    right: 0;
+    opacity:0.4;
+  }
+  .control-board-buttons:hover{
+    opacity:1;
+  }
+  a
+  {
+    text-decoration: initial;
+  }
+  a:focus
+  {
+    text-decoration: initial;
+  }
+</style>

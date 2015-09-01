@@ -1,0 +1,240 @@
+<script type="text/javascript">
+
+var gGoalId;
+function addProgress(str,goalId){
+  gGoalId=goalId;
+  $("#progress-table")[0].innerHTML="";
+  $("#progress-modal-header")[0].innerHTML="How much are you getting closer to "+$("#"+str).html()+" ?";
+  $("#progress-table").append("<tr><td><img src={{asset('pictures/icons/tiny-plus-black.png')}} > Added to Life list : 1% Progress</td><td style='text-align:right;' >"+$("#"+str).attr("date")+" ago</td></tr>");
+  $("#add-achievement-trigger")[0].click();
+  getProgressHistory();
+}
+
+function submitProgress(){
+  $("#progress-table").append("<tr><td><img src={{asset('pictures/icons/tiny-plus-black.png')}} > Made a "+$("#soullified_add_progress_input").val()+" % Progress </td><td style='text-align:right;' >Just Now</td></tr>");
+
+
+  var achieved=parseFloat($("#achievement-progress-bar-modal")[0].style.width.replace("%",""));
+  var progress=parseFloat($("#soullified_add_progress_input").val());
+  var newAchievemnt=progress+achieved;
+  $("#achievement-progress-bar-modal")[0].style.width=newAchievemnt+"%";
+      var url="{{ asset('addprogress/') }}";
+        url=url+gGoalId;
+         //start send the post request
+         $.get(url,{
+             percentage:progress,
+        },function(data){   
+             //the response is in the data variable
+              if(data.responseCode==200 ){
+              //  alert(data.resultat); 
+              }
+             else if(data.responseCode==400){//bad request
+                
+                
+             }
+             else{
+                //if we got to this point we know that the controller
+                //did not return a json_encoded array. We can assume that           
+                //an unexpected PHP error occured
+                ////alert("An unexpeded error occured.");
+
+             }
+         });//It is silly. But you should not write 'json' or any thing as the fourth parameter. It should be undefined. I'll explain it futher down
+
+
+
+  
+
+}
+
+$("#comment-form").submit(function(){
+      //get the url for the form
+
+      var url="{{ asset('app_dev.php/my-life-list/addgoal/') }}";
+      url=url+"{{board.Id}}";
+      
+      if($("#comment-form #comment-area").val()=="") {
+        commentContainerFadeOut()
+        return false;
+      }
+
+$("#comment-form #comment-area").val()
+       $("#submit-comment").attr("disabled","true");
+       $(".modal-footer").css("cursor","progress");
+       $.post(url,{
+           content:$("#comment-form #comment-area").val(),
+           size:$("#comment-area").css("font-size"),
+           font:$("#font-selector").val(),
+           color:$("#color-selector").val(),
+           posx:$("#comment-area").offset().top+9,
+           posy:$("#comment-area").offset().left+15,
+           achieved:1,
+           rotation:$('#comment-area').css('-webkit-transform'),
+       },function(data){   
+           //the response is in the data variable
+            if(data.responseCode==200 ){
+             // alert(data.commentId); 
+              submit_comment(data.commentId,$("#comment-area").offset().top+9,$("#comment-area").offset().left+15);
+              $("#submit-comment").removeAttr("disabled");
+              $(".modal-footer").css("cursor","move");
+              $(".comment").draggable();
+            }
+       });
+    return false;
+   });
+
+
+
+
+function popoverComment(commentdiv){
+  var smallControlMenu="";
+  var commentTitle;
+  {% if roleflag=="Owner" %} 
+
+  smallControlMenu="<div class='small-menu-icons' style='display:inherit;' ><img class='edit-small' src='{{ asset('pictures/icons/small-edit.png') }}'  onClick=rotateslider("+commentdiv.attr('id')+") /><img class='rotate-small' src='{{ asset('pictures/icons/small-rotate.png') }}'  onClick=rotateslider("+commentdiv.attr('id')+") /><img class='delete-small'  src='{{ asset('pictures/icons/small-trash.png') }}'  onClick=removecomment("+commentdiv.attr('id')+") /></div>";
+
+  {% endif %}
+
+    var ownerid=commentdiv.attr("ownerid");
+    var commentId=commentdiv.attr("id");
+    var path="{{ asset('/life-according-to/') }}"+ownerid;
+    var trigger="hover";
+    var place="top";
+    var goalId=commentdiv.attr("goalId");
+    var pos=commentdiv.css("left").replace("px","");
+    var postop=commentdiv.css("top").replace("px","");
+    var halfwidth=window.innerWidth/2;
+    var halfHeight=window.innerHeight/4;
+    if(postop>halfHeight)
+      place="top";
+    else 
+      place="bottom";
+
+    if (pos<100)
+     place="right";
+    if (pos> window.innerWidth -250)
+     place="left";
+
+    if(commentdiv.css("font-family")=="arrow") {
+      commentTitle="-->";
+      trigger="click"
+    }
+
+    if(commentdiv.css("font-family")=="arrow") {
+      commentTitle="-->";
+      trigger="click"
+    }
+    else commentTitle=commentdiv.html();
+
+    if(commentdiv.attr("achieved"))
+
+  {%  if roleflag=="Owner" %}
+    commentdiv.popover({title:"<a href='"+path+"'' class='comment-owner'>"+commentdiv.attr("owner")+" </a><br>"+commentTitle+"<img class='comment-thumbnail' src="+commentdiv.attr("profil-pic")+" /><span class='achieved-progress'>Achieved : "+commentdiv.attr("achieved")+" % <div class='progress'><div class='progress-bar progress-bar-striped active'  role='progressbar' aria-valuenow='45' aria-valuemin='0' aria-valuemax='100'style='width:" +commentdiv.attr("achieved")+"%''><span class='sr-only'>" +commentdiv.attr("achieved")+" % Complete</span></div></div></span>",html:true,content: "<button class='btn-sm btn-primary add-achievement-btn' onClick=addProgress("+JSON.stringify(commentId)+","+goalId+") > <img src={{asset('pictures/icons/tiny-plus-white.png')}}>Add progress</button> <span class='small-friend-request'>become a friend</span>"+smallControlMenu+"<span>",placement:place,trigger:"hover",delay:{hide: 1000}});
+  {%  else %}
+    commentdiv.popover({title:"<a href='"+path+"'' class='comment-owner'>"+commentdiv.attr("owner")+" </a><br>"+commentTitle+"<img class='comment-thumbnail' src="+commentdiv.attr("profil-pic")+" />"+smallControlMenu+"<span class='achieved-progress'>Achieved : "+commentdiv.attr("achieved")+" % <div class='progress'><div class='progress-bar progress-bar-striped active'  role='progressbar' aria-valuenow='45' aria-valuemin='0' aria-valuemax='100'style='width:" +commentdiv.attr("achieved")+"%''><span class='sr-only'>" +commentdiv.attr("achieved")+" % Complete</span></div></div></span>",html:true,content: commentdiv.attr("date")+"<span class='small-friend-request'>become a friend</span> <img src={{asset('pictures/icons/tiny-msg-black.png')}} class='small-msg' /> <span>",placement:place,trigger:"hover",delay:{hide: 1000}});
+  {% endif %}
+
+
+  commentdiv.popover("show");
+    $(".edit-small").tooltip({title:"Edit",placement:"bottom"});
+    $(".rotate-small").tooltip({title:"Rotate",placement:"bottom"});
+    $(".delete-small").tooltip({title:"Delete",placement:"bottom"});
+    $(".btn-sm btn-primary add-achievement-btn").tooltip({title:"Add progress",placement:"bottom"});
+
+    $(function() {
+          var AchievementStepsArray = new Array(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100);
+          $('#soullified_add_progress_slider').slider({
+              value: 1,
+              min: 0,
+              max: 100,
+              step: 1,
+              slide: function(event, ui) {
+                  var sFontSizeArray = AchievementStepsArray[ui.value];
+                  $("#achievement-progress-bar-modal")[0].style.width=sFontSizeArray+"%";
+              }
+          });
+         // $('#font_size').val((aFontsSizeArray[$('#size-selector').slider('value')]) + ' px');
+      });
+  }
+
+//addd-a -new comment
+function submit_comment(id,top,left){
+    commentContainerFadeOut()
+     {%  if app.user.profil.photourl %} 
+         var profilpic="{{asset('web/uploads/tmp/attachments/')}}{{app.user.profil.photourl.album.folder}}/thumbnails/{{app.user.profil.photourl.url}}";
+
+      {%  elseif app.user.profil.Photoconnect %}
+          var profilpic="{{app.user.profil.Photoconnect}}}";
+      {%  else%}
+          var profilpic="{{asset('pictures/icons/thumbuser.png')}}";
+      {%  endif %}
+
+    commentHtml="<div id="+id+" class='comment' date='Just now' achieved='1' ownerid='{{app.user.username}}' profil-pic="+profilpic+" owner='{{app.user.profil.fullname}}'  style='font-family:"+$("#font-selector").val()+";font-size:"+$("#comment-area").css("font-size")+";position:absolute;top:"+top+"px;left:"+left+"px;color:"+$("#color-selector").val()+";-webkit-transform:"+$("#comment-area").css("-webkit-transform")+";-moz-transform:"+$("#comment-area").css("-webkit-transform")+"'>"+$("#comment-container #comment-area").val()+"</div>";
+
+  var nbr= document.getElementById("nbrOfComments").innerHTML;
+  nbr++;
+  document.getElementById("nbrOfComments").innerHTML=nbr;
+  $("#comments").append(commentHtml);
+  $(".comment").mouseup(function(){
+           //$(this).css("-webkit-animation","maximize 0.5s forwards");
+           $(this).css("border", "");
+           $(this).css("cursor","default")
+           var leftpx=$(this).css("left");
+           var toppx=$(this).css("top");
+           var url;
+           var commentId=$(this).attr("id");
+           url="{{ asset('updateposcomment/') }}";
+           url=url+commentId;
+       $.post(url,{
+           left:leftpx.replace("px",""),
+           top:toppx.replace("px",""),
+      });
+     });
+
+    $(".comment").mouseenter(function(){
+      comment=$(this);
+      popoverComment(comment);
+    });
+
+}
+
+
+function getProgressHistory() {
+      var achieved=0;
+      var url="{{ asset('getProgressHistory/') }}";
+        url=url+gGoalId;
+         //start send the post request
+         $.get(url,function(data){   
+             //the response is in the data variable
+              if(data.responseCode==200 ){
+                for (var i = 0; i < data.progressHistory.length; i++) {
+                  console.log(data.progressHistory[i].percentage,data.progressHistory[i].date);
+                  $("#progress-table").append("<tr><td><img src={{asset('pictures/icons/tiny-plus-black.png')}} > Made a "+data.progressHistory[i].percentage+" % Progress </td><td style='text-align:right;' >"+data.progressHistory[i].date+" ago </td></tr>");
+                   achieved=achieved+parseFloat(data.progressHistory[i].percentage);
+                };
+                $("#achievement-progress-bar-modal")[0].style.width=achieved+"%";
+                if(achieved >= 100 ) 
+                  $("#progress-input")[0].style.display="none";
+                else  
+                  $("#progress-input")[0].style.display="block";
+              }
+         });
+       }
+
+$(".comment").mousedown(function(){
+  $(this).css("-webkit-animation","minimize 0.1s forwards");
+})
+
+
+
+
+function removecomment(id){
+  $("#"+id).fadeOut();
+  url="{{ asset('my-life-list/removegoal/') }}";
+  url=url+id;
+  $.get(url);
+  //alert(id)
+
+}
+
+</script>

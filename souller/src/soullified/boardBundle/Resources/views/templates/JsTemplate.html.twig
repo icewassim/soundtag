@@ -1,0 +1,440 @@
+<script type="text/javascript">  
+
+function acceptRequest(requestId){
+  //faut que ca soit securisé il faut que on verif a partit du controlleur
+  $('div[notificationId='+requestId+']').fadeOut();
+  var url="{{ asset('acceptfrequest/') }}";
+  url=url+requestId;
+  $.get(url);
+}
+
+function cancelRequest(requestId){
+  //faut que ca soit securisé il faut que on verif a partit du controlleur
+  $('div[notificationId='+requestId+']').fadeOut();
+  var url="{{ asset('declinerequest/') }}";
+  url=url+requestId;
+  $.get(url);
+}
+
+$(function() {
+  $("#comment-container").draggable();
+ });
+
+
+/*
+$(".comment").mouseup(function(){
+  $(this).css("border", "");
+  $(this).css("-webkit-animation","maximize 0.1s forwards");
+  $(this).css("cursor","pointer");
+  $(this).css('opacity',1);
+  var leftpx=$(this).css("left");
+  var toppx=$(this).css("top");
+  var url;1
+  var commentId=$(this).attr("id");
+  url="/updateposcomment/";
+  url=url+commentId;
+  $.post(url,{
+              left:leftpx.replace("px",""),
+              top:toppx.replace("px",""),
+            });
+  });
+*/
+$("#cancel-comment,.close").click(function() {
+  commentContainerFadeOut()
+});
+
+//rotate a comment
+  $("#formRotateComment").submit(function(){
+      //get the url for the form
+           if($(this).attr("commentId")!=null) {
+            var id=$(this).attr("commentId");
+            var url="/updaterotcomment/";
+            var deg=$("#"+id).css("-webkit-transform");       
+            if(!deg)
+              deg=$("#"+id).css("-moz-transform");
+            id=$(this).attr("commentId").replace("commentId","");
+              }
+           else{
+            var url="/updaterotalbum/";
+            console.log($(this))
+            var id=$(this).attr("pictureId");
+            var deg=$("[albumId="+id+"]").css("-webkit-transform");
+            if(!deg)
+              deg=$("#"+id).css("-moz-transform");
+            }
+           url=url+id;
+       $.post(url,{
+           deg:deg,
+         });
+    return false;
+   });
+
+{%  if app.user %}
+//addd-a -new comment
+function submit_arrow(id,type,top,left){
+    var pictureUrl="{{asset('pictures/icons/')}}"+type+"whitearrow.png";
+    commentHtml="<div id="+id+" class='comment' ownerid='{{app.user.profil.Id}}' owner='{{app.user.profil.Fullname}}' style='font-family:arrow;position:absolute;top:"+top+"px;left:"+left+"px;-webkit-transform:"+$("#comment-area").css("-webkit-transform")+"'><img id='arrow' src='"+pictureUrl+"' ></div>";
+  $("#comments").append(commentHtml);
+  $("#"+id).draggable();
+
+  $(".comment").mouseup(function(){    
+    $(this).css("border", "");
+    $(this).css("cursor","default")
+    var leftpx=$(this).css("left");
+    var toppx=$(this).css("top");
+    var url;
+    var commentId=$(this).attr("id");
+    url="/updateposcomment/";
+    url=url+commentId;
+    $.post(url,{
+         left:leftpx.replace("px",""),
+         top:toppx.replace("px",""),
+      });
+
+    });
+
+    $(".comment").mouseenter(function(){
+      comment=$(this);
+      popoverComment(comment);
+    });
+}
+
+{%  endif %}
+
+function removecomment(id){
+  console.log(id)
+  $('#popoverComment').fadeOut(100);
+  $("#"+id).popover("hide");
+  $("#"+id).fadeOut();
+  var url="/removecomment/";
+  url=url+id.replace("commentId","");
+  $.get(url);
+}
+
+/*
+
+$(".comment").mouseenter(function(){
+  comment=$(this);
+  popoverComment(comment);
+});*/
+
+$(".album img").mouseenter(function(){
+  picture=$(this);
+//  popoverPicture(picture);
+});
+
+ var oldposition;
+ var oldId;
+
+ function rotateslider(id,type){
+  /*Slider */
+  oldposition=$("#"+id).css("-webkit-transform");
+  oldId=id;
+  $("#"+id).attr("oldposition",oldposition);
+  var top=$("#"+id).css("top");
+  var left=$("#"+id).css("left");
+  var width=$("#"+id).css("width");
+
+if(type=="pic"){
+  top=$("#"+id).css("top");
+  left=$("#"+id).css("left");
+  width=$("#"+id).css("width");
+  console.log($("#"+id))
+  $("#formRotateComment").attr("pictureId",$("#"+id).attr("albumId"));
+  $("#formRotateComment").removeAttr("commentId");
+}
+else{
+    $("#formRotateComment").attr("commentId",id);
+    $("#formRotateComment").removeAttr("pictureId");
+} 
+
+$("#slider-container").css("left",left);
+$("#slider-container").css("top",top);
+$("#slider-container").css("min-width",width);
+
+
+$("#slider-container").fadeIn();
+$('.slider-input').each(function() {
+      var currVal = $(this).val();
+      if(currVal < 0){
+        currVal = 0;
+      }
+    $(this).parent().children('.slider-content').slider({
+      'animate': true, 
+      'min': -1, 
+      'max': 201,
+      'value' : 100,
+      'orientation' : 'vertical',
+      'stop': function(e, ui){
+        $(".rotate-buttons").fadeIn();
+      },
+      'slide': function(e, ui){
+        var percentLeft;
+        var submitValue;
+        var Y = ui.value - 100; //Find center of Circle (We're using a max value and height of 200)
+        var R = 100; //Circle's radius
+        var skip = false;        
+        $(this).children('.ui-slider-handle').attr('href',' UI.val = ' + ui.value);
+        //Show default/disabled/out of bounds state
+        if ( ui.value > 0 && ui.value < 201 ) { //if in the valid slide rang
+          $(this).children('.ui-slider-handle').addClass('is-active');
+        }
+        else {
+          $(this).children('.ui-slider-handle').removeClass('is-active');
+        }
+        
+        //Calculate slider's path on circle, put it there, by setting background-position
+        if ( ui.value >= 0 && ui.value <= 200 ) { //if in valid range, these are one inside the min and max
+          var X = Math.sqrt((R*R) - (Y*Y)); //X^2 + Y^2 = R^2. Find X.
+          if ( X == 'NaN' ) {
+            percentLeft = 0;
+          }
+          else {
+            percentLeft = X;          
+          }
+        }
+        else if ( ui.value == -1 || ui.value == 201 ) {
+          percentLeft = 0;
+          skip = true;
+        }
+        else {
+          percentLeft = 0;
+        }
+        
+        //Move handle
+        if ( percentLeft > 100 ) { percentLeft = 100; } 
+        $(this).children('.ui-slider-handle').css('background-position',percentLeft +'% 100%'); //set css sprite
+
+        //Figure out and set input value
+        if ( skip == true ) {
+          submitValue = 'fail';
+          $(this).children('.ui-slider-handle').css('background-position',percentLeft +'% 0%'); //reset css sprite          
+        }
+        else {
+          submitValue = Math.round(ui.value / 2); //Clamp input value to range 0 - 100
+        }     
+        var rotation=-2*submitValue+100;
+        $("#"+id).css("-webkit-transform","rotate("+rotation+"deg)");
+        
+      }
+    });
+  });
+  
+
+}
+
+ //-------------------------------------------------------------------------------------------------------------
+var Friendevents="";
+function getEvents(){
+       $.get("{{ path('get_ajax_requests')}}", //replace it with the secssion
+        function(data){   
+           //the response is in the data variable
+            if(data.responseCode==200 ){
+                 Friendevents=data.htmlcode;
+                 $("#Friend-requests").popover({title:function() {
+                        return Friendevents;                        
+                                  },html:true,placement:"bottom"});
+            }
+         }
+       );
+
+}
+//--------------------------------------------------------------------------------------------------------------
+
+var Fmessages="";
+function getMessages(){
+       $.get("{{ path('get_ajax_messages')}}", //replace it with the session
+        function(data){   
+           //the response is in the data variable
+            if(data.responseCode==200 ){
+                  var finalText="";
+                for (var i = 0; i < data.tab.length; i++) {
+                  data.tab[i]
+                  finalText=finalText+"<a href='/inbox/"+data.tab[i].senderId+"'  class='notification nothover "+data.tab[i].seen+"' notificationId="+data.tab[i].messageId+" > <b style='text-transform:capitalize'><span href='/life-according-to/"+data.tab[i].senderId+"'>"+data.tab[i].senderName+"</span></b> send you a message<p class='message-content'>"+data.tab[i].content+"</p><span class='not-date' >"+data.tab[i].date+" ago</span></span>";
+                };
+
+                Fmessages=finalText;
+                 $("#messages").popover({title:function() {
+                                            return Fmessages;                        
+                                         },content:"<span class='space'></span><a style='font-size: 15px;font-weight: bold;margin-left: 117px;position: absolute;margin-top: -18px;' >See all</a>",html:true,placement:"bottom"});
+            }
+         }
+       );
+}
+
+// getEvents();
+// getMessages();
+
+$("#Friend-requests").mouseenter(function(){
+  getEvents();
+});
+
+$("#messages").mouseenter(function(){
+ getMessages();
+});
+
+function changeViewPrivacy(argum){
+    var valeur;
+    if(argum=="friends") {valeur="Friends<span class='submenu-icons-black friends-icon'></span>";}
+    if(argum=="owner") {valeur="Only Me<span class='submenu-icons-black onlyme-icon'></span>";}
+    if(argum=="public") {valeur="Everyone<span class='submenu-icons-black everyone-icon'></span>";}
+    $("#viewprivacytoggle").html(valeur);
+    var url="{{ asset('board/changeprivacyview/') }}";
+    url=url+"board.Id";
+    $.get(url,{privacy:argum});
+}
+
+
+function addArrow(id){
+// add an Arrrow 
+      var url="{{ asset('myboard/addcomment/') }}";
+      url=url+"board.Id";
+
+       $.post(url,{
+           content:id,
+           size:25,
+           font:"arrow",
+           color:id+"whitearrow.png",
+           posx:200,
+           posy:300,
+           rotation:$('#comment-area').css('-webkit-transform'),
+       },function(data){   
+           //the response is in the data variable
+            if(data.responseCode==200 ){
+              //alert(data.commentId); 
+              submit_arrow(data.commentId,id,200,400);
+            }});
+}
+
+
+function changeCommentPrivacy(argum){
+      var url="{{ asset('board/changeprivacycomment/') }}";
+      url=url+"board.Id";
+      var valeur;
+      if(argum=="friends") {valeur="Friends<span class='submenu-icons-black friends-icon'></span>";}
+      if(argum=="owner") {valeur="Only Me<span class='submenu-icons-black onlyme-icon'></span>";}
+      if(argum=="public") {valeur="Everyone<span class='submenu-icons-black everyone-icon'></span>";}
+      $("#commentprivacytoggle").html(valeur);
+      $.get(url,{
+                  privacy:argum,
+                 });
+}
+
+var settings="";
+var commentprivacy='board.Commentprivacy';
+var viewprivacy='board.Viewprivacy';
+var likes="<button class='btn btn-sm btn-default like'>Like <img src='{{asset('pictures/icons/like.png')}}' /></buttons><button class='btn btn-sm btn-default unlike'><img src='{{asset('pictures/icons/unlike.png')}}'></button></div>";
+var htmlcontentForboardtitle="<div class='notification' style='padding:7px;'><b><h4>board.title</h4></b><p style='color: #B6B6B6;'>board.description</p>"+likes+settings+"</div>";
+$("#board-title").popover({title:htmlcontentForboardtitle,html:true,placement:"bottom",trigger:"hover",delay:{hide: 1500}});
+var menucompressed=false;
+
+$("#arrows").popover({title:"<img class='btn btn-default arrow-prview' onClick='addArrow(1)' src='{{asset('pictures/icons/firstblackarrow.png')}}' style='height:36px'><img class='btn btn-default arrow-prview' src='{{asset('pictures/icons/secondblackarrow.png')}}' style='height:36px' onClick='addArrow(2)'>",html:true,placement:"bottom",trigger:"hover",delay:{hide: 1500}});
+
+
+
+
+function checkunseen(){
+        var url="{{asset('events/getunseen')}}";
+       $.get(url,function(data){   
+           //the response is in the data variable
+            if(data.responseCode==200 ){
+              var unseenmessages=data.unseenmessages; 
+              var unseenevents=data.unseenevents;
+              if(unseenmessages>0) {
+                $("#messages").attr("src","{{asset('pictures/icons/chat-small-red.png')}}").css('opacity','1');
+                getMessages();
+              }
+              else $("#messages").attr("src","{{asset('pictures/icons/chat-small.png')}}").css('opacity','0.7');
+
+             if(unseenevents>0) {
+              $("#Friend-requests").attr("src","{{asset('pictures/icons/flag-red.png')}}").css('opacity','1');
+              getEvents();
+             }
+             else $("#Friend-requests").attr("src","{{asset('pictures/icons/flag.png')}}").css('opacity','0.7');
+            
+            }
+           else if(data.responseCode==400){//bad request
+              
+                
+           }
+           else{
+           }
+       });
+}
+
+$("#messages").click(function(){
+  hideMainMenue();
+  $(this).attr("src","{{asset('pictures/icons/chat-small.png')}}").css('opacity','0.7');
+  var eventsurl="{{ path('reset_unseen_messages') }}"
+  $.get(eventsurl);
+})
+
+$("#Friend-requests").click(function(){
+  hideMainMenue()
+  $(this).attr("src","{{asset('pictures/icons/flag.png')}}").css('opacity','0.7');
+  var eventsurl="{{ path('reset_unseen_events') }}"
+  $.get(eventsurl);
+})
+
+
+//var intervall=setInterval(checkunseen,10000);
+
+  $("#settings-trigger").tooltip({title:"customize",placement:"bottom"});
+  $("#home").tooltip({title:"Home",placement:"bottom"});
+  $("#uploadPicture").tooltip({title:"Upload picture",placement:"bottom"});
+  $("#Friend-requests").tooltip({title:"Notifications",placement:"bottom"});
+  $("#messages").tooltip({title:"Messages",placement:"bottom"});
+  $("#scribble-icon").tooltip({title:"Scribble",placement:"bottom"});
+  $("#sideMenuTrigger").tooltip({title:"menu",placement:"bottom"});
+  $("#search").tooltip({title:"Search",placement:"bottom"});
+  
+
+function likeboard(){
+  var nbr= document.getElementById("nbrOfLikes").innerHTML;
+  nbr++;
+  document.getElementById("nbrOfLikes").innerHTML=nbr;
+  $("#likeimg").css("opacity","1");
+  // $("#likeimg").attr("src","{{asset('pictures/icons/like-red.png')}}");
+
+  url="{{ asset('like/') }}"
+  $.get(url);
+  $("#likeimg").attr("onClick","unlikeboard()");
+}
+
+function unlikeboard(){
+  var nbr= document.getElementById("nbrOfLikes").innerHTML;
+  nbr--;
+  document.getElementById("nbrOfLikes").innerHTML=nbr;
+  $("#likeimg").css("opacity","0.7");  
+  // $("#likeimg").attr("src","{{asset('pictures/icons/like.png')}}");
+  url="{{ asset('unlike/') }}"
+  $.get(url);
+  $("#likeimg").attr("onClick","likeboard()");
+}
+
+/*
+$("#background-preview-group img").mouseenter(function(){
+  var sub_item=$(this);
+  setTimeout(function(){
+
+  if(!sub_item.is(":hover")) return false;
+  $("#main-container").css("background-image","url("+sub_item.attr("src")+")");
+
+},250)});
+
+*/
+
+$("#fileUpload").click(function(){
+    $("#predefinedbackgroud").attr("value","");
+})
+
+function resetBackground(flag){
+  var url="{{asset('web/uploads/tmp/attachments/')}}"+"board.Coverurl";
+  var url="{{asset('pictures/background/default.jpg')}}";
+  $("#background-pic").attr("src",url);
+  $("#main-container").css("background-image","url("+url+")");
+
+}
+
+
+</script>

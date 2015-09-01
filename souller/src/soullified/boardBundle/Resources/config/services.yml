@@ -1,0 +1,7 @@
+parameters:
+#    soullifiedboard.example.class: soullified\boardBundle\Example
+
+services:
+#    soullifiedboard.example:
+#        class: %soullifiedboard.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

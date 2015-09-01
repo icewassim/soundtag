@@ -1,0 +1,291 @@
+
+
+<span id="player-giraffe" style="position:absolute;bottom:10px;left:10px;display:none;">
+  <img src="{{asset('pictures/icons/soundcloud.png')}}" style="  position: absolute;bottom: 10px;height: 52px;left: 396px;">
+  <span id="player-controll-buttons">
+    <img  id="previousTrack" src="{{asset('pictures/icons/backward-white.png')}}" style="padding: 5px;border: 2px solid white;border-radius: 50%;margin-left: -12px;height: 25px;display:inline-block;margin-left: 10px;margin-right: 5px" >
+    <img id="playerPlayButton" src="{{asset('pictures/icons/play-button.png')}}" style="padding: 5px;border: 2px solid white;border-radius: 50%;height: 45px;display:inline-block" >
+    <img  id="nextTrack" src="{{asset('pictures/icons/forward-white.png')}}" style="padding: 5px;border: 2px solid white;border-radius: 50%;margin-left: -12px;height: 25px;display:inline-block;margin-right: 5px;margin-left: 5px;" >
+  </span>
+
+  <span id="player-track-title" ></span>
+
+  <span id="progress-controls" >
+    <span id="beginning">00:00</span>
+    <span id="progress-bar-player-container" style="
+    border: 1px solid white;
+    width: 210px;
+    padding-left: 88px;
+    margin-left: 10px;
+    height: 10px;
+    margin-right: 10px;
+    position:relative;
+    margin-top: 5px;
+">
+    <span id="progress-line-playing" ></span>   
+
+    </span>
+    <span id="ending"></span>
+  </span>
+</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="player-container" onMouseleave="hideplayerContainerTimeout=setTimeout(delayedMouseLeave,1000);" class="popover bottom in" style="position:fixed;display: initial;left: inherit;top: 41px;display:none;
+{%  if app.user %}
+  right:220px;" >
+{%  else %}
+  right: 290px;" >
+{%  endif %}
+  <div class="arrow" style="right: 5px;left:inherit;"></div>
+    <h3 class="popover-title" style="font-size: 14px;padding-right: 5px;">
+      <div  style="padding:7px;"><b id="player-track-title-top" style="min-height: 50px;font-size:20px;padding-left: 63px;display: inline-block;line-height: initial;"></b>
+      <img id="player-track-picture" src="{{asset('pictures/icons/soundCloudLogo.png')}}" class="comment-thumbnail" style="position: absolute;top: 14px;left: 14px;height: 50px;" />
+        <a href="www.soundcloud.com">
+          <img src="{{asset('pictures/icons/soundCloudLogo.png')}}" style='position:absolute;right:5px;height:20px;margin-top:-10px;'>
+        </a>
+        <hr class="menu-hr">
+        <span class="loadBar"></span>
+        <span id="progress-bar">
+          <span id="beginning-top">00:00</span>
+          <hr id="progress-line-container" >
+          <hr id="progress-line-playing" >
+          <span id="ending-top"></span>
+        </span>
+
+        <span id="controls-button">
+         <img  src="{{asset('pictures/icons/backward-black.png')}}" style='height: 20px;cursor:pointer;'>
+         <img id="playerPlayButton" src="{{asset('pictures/icons/big-play.png')}}" style='height:45px;margin-left: 50px;margin-right: 30px;cursor:pointer;'>
+         <img  src="{{asset('pictures/icons/forward-black.png')}}" style='height: 20px;cursor:pointer;mar'>
+        </span>
+        <hr class="menu-hr" style="margin-top: 0px;">
+          <span id="player-lyrics">
+          </span>
+      </div>
+    </h3>
+
+      <div class="popover-content" style="text-align: right;font-size: 13px;font-weight: bold;"  onClick="hidePlayerContainer()">
+           <button type="button" class="close md-close" aria-hidden="true" style="position: absolute;left: 8px;font-family: sans-serif;font-weight: bolder;cursor: pointer;">&times;</button>
+           <a  id="player-link-soundtrack" >
+              <img src="{{asset('pictures/icons/tag_music.jpg')}}" style='display:none;height: 20px;margin-left: -3px;margin-right: 0px;margin-bottom: 0px;'>
+                          <span style="color:grey">View</span>  <span id="track-owner-name" style="text-transform:capitalize;"> </span> <span style="color:grey;margin-right:2px;">'s </span>SoundTags
+            </a>           
+    </div>
+
+</div>
+<script>
+function msToTime(s) {
+
+  function addZ(n) {
+    return (n<10? '0':'') + n;
+  }
+
+  var ms = s % 1000;
+  s = (s - ms) / 1000;
+  var secs = s % 60;
+  s = (s - secs) / 60;
+  var mins = s % 60;
+  var hrs = (s - mins) / 60;
+
+  return addZ(mins) + ':' + addZ(secs);
+}
+
+
+try
+{
+
+  function loadSongTrack(trackId){
+    SC.initialize({
+      client_id: "229b5c9f7dca199464f6a3d38a9a16d1",
+    });
+    SC.get("/tracks/"+trackId, {limit: 1}, function(tracks){
+      
+      //console.log("init of the player"+tracks.duration);
+      $("#ending")[0].innerHTML=msToTime(tracks.duration);
+      $("#ending-top")[0].innerHTML=msToTime(tracks.duration);
+    });
+  }
+}catch(e){
+  console.log("error initialing sound cloud "+e);
+}
+var soundObject;
+var a=new Object();
+a.position=0;
+function play_track(trackId) {
+try{
+  
+    playing=true;
+    if(soundObject)
+      soundObject.resume();
+    else{
+      SC.initialize({
+        client_id: "229b5c9f7dca199464f6a3d38a9a16d1",
+      });
+
+      SC.get("/tracks/"+trackId, {limit: 1}, function(tracks){
+      
+        $("#ending")[0].innerHTML=msToTime(tracks.duration);
+        $("#ending-top")[0].innerHTML=msToTime(tracks.duration);
+      });
+
+      SC.stream("/tracks/"+trackId, function(sound){
+         soundObject=sound;
+         setTimeout(delayedMouseLeave,10000)
+         soundObject._whileplaying = function (b,c,d,e,f)
+         {
+          if(a.position)
+            {
+              $("#beginning")[0].innerHTML=msToTime(a.position);
+              $("#beginning-top")[0].innerHTML=msToTime(a.position);
+            }
+          if(a.position == soundObject.durationEstimate)
+            stop_track();
+
+          $("#progress-line-playing").css('width', ((a.position/soundObject.durationEstimate) * 100) + '%'); 
+          var g=a._iO;if(isNaN(b)||null===b)return!1;a.position=b;a._processOnPosition();if(!a.isHTML5&&8<i){if(g.usePeakData&&"undefined"!==typeof c&&c)a.peakData={left:c.leftPeak,right:c.rightPeak};if(g.useWaveformData&&"undefined"!==typeof d&&d)a.waveformData={left:d.split(","),right:e.split(",")};if(g.useEQData&&"undefined"!==typeof f&&f&&f.leftEQ&&(b=f.leftEQ.split(","),a.eqData=b,a.eqData.left=b,"undefined"!==typeof f.rightEQ&&f.rightEQ))a.eqData.right=f.rightEQ.split(",")}1===a.playState&&(!a.isHTML5&&8===i&&!a.position&&a.isBuffering&&a._onbufferchange(0),g.whileplaying&&g.whileplaying.apply(a));
+         return!0
+       }
+         soundObject.play();
+       });
+      }
+    $("#playerPlayButton").attr("src","{{asset('pictures/icons/big-pause.png')}}");
+    $("#playerPlayButton").attr("onClick","pause_track("+trackId+")");
+    $("#Soundtagged").attr("src","{{asset('pictures/icons/pause.png')}}");
+    $("#Soundtagged").attr("onClick","pause_track("+trackId+")");
+    }catch(e){console.log(e);}
+}
+function pause_track(trackId) {
+    playing=false;
+    soundObject.pause();
+    $("#playerPlayButton").attr("src","{{asset('pictures/icons/big-play.png')}}");
+    $("#playerPlayButton").attr("onClick","play_track("+trackId+")");
+    $("#Soundtagged").attr("src","{{asset('pictures/icons/play-button.png')}}");
+    $("#Soundtagged").attr("onClick","play_track("+trackId+")");   
+}
+
+
+function stop_track() {
+    playing=false;
+    soundObject.stop();
+    $("#progress-line-playing").css('width', '0%');
+    $("#playerPlayButton").attr("src","{{asset('pictures/icons/big-play.png')}}");
+    $("#playerPlayButton").attr("onClick","play_track("+trackId+")");
+    $("#Soundtagged").attr("src","{{asset('pictures/icons/play-button.png')}}");
+    $("#Soundtagged").attr("onClick","play_track("+trackId+")");   
+}
+
+function hidePlayerContainer()
+{
+  $("#player-container").fadeOut();
+}
+
+
+function displayPlayerContainer()
+{
+  $("#player-container").fadeIn();
+}
+
+
+
+var hideplayerContainerTimeout;
+function delayedMouseLeave()
+{
+  if(!$("#player-container").is(":hover"))
+    hidePlayerContainer();
+
+  clearTimeout(hideplayerContainerTimeout);
+};
+
+
+
+</script>
+
+<style type="text/css">
+
+#progress-controls{
+  color: white;
+  position: absolute;
+  top: 21px;
+  left: 135px;
+  width: 310px;
+  display: flex;
+}
+
+#controls-button{
+  width: 100%;
+  text-align: center;
+  display: block;
+}
+
+#progress-line-container{
+  border-top: 7px solid #DBDBDB;
+  width: 100%;
+  display: inline-block;
+  margin-bottom: 1px;
+  margin-top: 6px;
+  margin-left: 5px;
+  position: absolute;
+}
+#progress-line-playing{
+  background-color: white;
+  height: 8px;
+  top: 0;
+  position: absolute;
+  left: 0;
+  width: 0%;
+}
+#progress-bar{
+  width: 185px;
+  display: block;
+  position: relative;
+}
+
+#player-track-title{
+    color: white;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-family: sans-serif;
+    position: absolute;
+    top: 0px;
+    left: 135px;
+    width: 255px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+    height: 15px;
+}
+
+#player-container{
+  z-index:50;
+}
+
+#player-controll-buttons img{
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+#player-controll-buttons img:hover{
+  cursor: pointer;
+  opacity: 1;
+}
+</style>

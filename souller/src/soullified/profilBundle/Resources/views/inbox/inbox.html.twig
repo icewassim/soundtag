@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <link rel="icon" href="{{asset('pictures/icons/ruspinasmalllogo.png')}}" type="image/x-icon" />
+    <link rel="shortcut icon" href="{{asset('pictures/icons/ruspinasmalllogo.png')}}" type="image/x-icon" />
+   
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="viewport" content="width=800, user-scalable=no">
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css')}} ">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/avgrund.css')}} " >
+
+    <script type="text/javascript" src="{{ asset('js/jquery-1.7.2.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}" ></script>   
+    <script type="text/javascript" src="{{ asset('js/angular.min.js')}}" ></script> 
+
+    <title>Inbox - RuspeenA</title>
+</head>
+
+
+    <div id="firstheader" style="color: rgb(142, 152, 255);">
+
+                  <b style="color: #0078e7;font-family:sans-serif;font-weight: bolder;font-size: 22px;margin-left: 1%;position: absolute;top: 16px;">Rusp<span style="background-color: #0078e7;font-family: OpenSans-Light;color: white;">eenA<span></b>
+
+
+            <div id="header">      
+                       <ul id="main-mlmenu-dropdown" class="dropdown-menu" role="menu" aria-labelledby="dLabel">      
+        
+                            <li role=presentation >
+                              <a role=menuitem tabindex='-1' href="{{asset('profil/')}}{{app.user.profil.Id}}" >
+                               <img src="{{asset('pictures/icons/tinyUserBlack.png')}}" style='height: 16px;'>Me
+                              </a>
+                            </li>
+
+                           <li role=presentation>
+                              <a role=menuitem tabindex='-1' href="{{asset('myboards')}}" >
+                               <img src="{{asset('pictures/icons/tinyBoardBlack.png')}}" style='height: 16px;'> My boards
+                              </a>
+                            </li>
+
+                           <li role=presentation>
+                              <a role=menuitem tabindex='-1' >
+                                <img src="{{asset('pictures/icons/tinyConfigBlack.png')}}" style='height: 16px;'> 
+                                Settings
+                              </a>
+                            </li>
+        
+                           <li role=presentation>
+                              <a role=menuitem tabindex='-1' >
+                               <img src="{{asset('pictures/icons/tinyReportBlack.png')}}" style='height: 16px;'> Feedback
+                              </a>
+                            </li>
+
+                           <li role=presentation>
+                             <a role=menuitem tabindex='-1' >
+                                <img src="{{asset('pictures/icons/equalizer2.gif')}}" style='height: 30px;margin-left: -6px;margin-right: 1px;'> 
+                                Music player
+                              </a>
+                            </li>
+        
+
+                           <li role=presentation>
+                              <a role=menuitem tabindex='-1' href="{{asset('logout')}}" >
+                              <img src="{{asset('pictures/icons/tinySwitchOffBlack.png')}}" style='height: 16px;'>
+                               Log out
+                              </a>
+                            </li>
+
+                          </ul>
+                      <img id="messages"  src="{{asset('pictures/icons/chat-small-black.png')}}" style="opacity:0.1;"/>
+                      <img id="Friend-requests" src="{{asset('pictures/icons/flag-black.png')}}" style="opacity:0.1;"/>
+                      <a href="/app_dev.php/home">
+                        <img id="home" src="{{asset('pictures/icons/home-small-black.png')}}" style="opacity:0.3" />
+                      </a>
+                <a id="myname" onClick="displayMainMenue()" >
+                        {{app.user.profil.Fullname}}
+                    <img id="profilpicthumb" style="opacity:1" 
+                
+
+                {%  if app.user.profil.photourl %}
+                    src="{{asset('web/uploads/tmp/attachments/')}}{{app.user.profil.photourl.album.folder}}/small/{{app.user.profil.photourl.url}}"
+                {% elseif app.user.profil.Photoconnect %}
+                      src="{{app.user.profil.Photoconnect}}"
+               
+                {%  else %}
+                      ssrc="{{asset('pictures/icons/tinyUserBlack.png')}}"
+                {%  endif %}
+
+                      />
+          </a>        
+    </div>
+
+       
+ </div>
+
+
+<div id="container">
+  <div class="row">
+        <div id="side-menu" class="col-md-2" >
+
+        {%  for message in messagesHeaders |slice(0,8)   %}
+                  <span class="side-message-label">
+                      
+
+
+                       <img
+                          {%  if  message.sender.photourl %}
+                             src="{{asset('web/uploads/tmp/attachments/')}}{{message.sender.photourl.album.folder}}/thumbnails/{{message.sender.photourl.url}}" 
+                          {%  elseif message.sender.Photoconnect %}
+                                src="{{message.sender.Photoconnect}}"
+                            {%  elseif message.sender.photourl==null and message.sender.Photoconnect==null %}
+                                src="{{asset('pictures/icons/thumbuser.png')}}"  
+                            {% endif %}
+                          >
+                         
+                    <span class="side-content-container">
+                          <a  class="message-sender" href="">
+                                {{message.sender.fullname}}
+                          </a>
+                          <br>
+                          <span class="side-date">
+                            {{message.date}} ago
+                          </span>
+                    </span>
+                </span>
+         {%  endfor %}
+          
+
+
+
+
+        </div>
+
+        <div id="messages-menu" class="col-md-6" >
+
+          <div id="message-notifs">
+            {%  for message in messages %}
+                  <div class="message-notif-container" >
+
+                  <span class="message-label" style="display: inline-flex;">
+                  <img
+                  {%  if  message.sender.photourl %}
+                     src="{{asset('web/uploads/tmp/attachments/')}}{{message.sender.photourl.album.folder}}/thumbnails/{{message.sender.photourl.url}}" 
+                  {%  elseif message.sender.Photoconnect %}
+                        src="{{message.sender.Photoconnect}}"
+                    {%  elseif message.sender.photourl==null and message.sender.Photoconnect==null %}
+                        src="{{asset('pictures/icons/thumbuser.png')}}"  
+                    {% endif %}
+                  >
+                    <span class="message-content">
+                      <a class="sender-label"> {{message.sender.fullname}} </a>
+                      <div class="message-overview"> {{message.content |slice(0,19) }}</div>
+                    </span>
+                  </span>
+                  <span class="date"> {{message.date}} ago</span>
+                  
+                  </div>
+           {%  endfor %}           
+
+         </div>
+
+
+          <div id="writing-container">
+           <textarea id="message-input" class="form-control" >
+
+
+           </textarea>
+          <hr>
+          <div id="buttons">
+                <button href="" class="btn btn-default" onClick='submitMessage()'>send message</button>
+            </div>
+            
+          </div>
+
+        </div>
+  </div>
+</div>
+
+
+
+</div>
+
+
+</div>
+    </div> 
+    <style type="text/css">
+
+
+.side-content-container{
+  width: 225px;
+  position: relative;
+}
+
+#messages-menu{
+  position: fixed;
+  bottom: 0;
+  height: 89%;
+  left: 270px;
+}-
+
+  .input-lg{
+      margin-bottom: 14px;
+      display: none;
+  }
+
+.side-message-label{
+  display: inline-flex;
+  border-bottom: 1px solid #d7d7d7;
+  background-color: white;
+  height: 80px;
+}
+
+.side-message-label img{
+  height: 50px;
+  width: 50px;
+}
+
+.side-date{
+  position: absolute;
+  top: 0px;
+  right:5px;
+  color: #C9C9C9;
+}
+
+
+
+    @media only screen and (min-width:500px)
+    {
+      .small-screen{
+        display: none;
+      }
+      .big-screen{
+        display: initial;
+      }
+      .cols {
+          -moz-column-count:3;
+          -moz-column-gap: 3%;
+          -moz-column-width: 30%;
+          -webkit-column-count:3;
+          -webkit-column-gap: 3%;
+          -webkit-column-width: 30%;
+          column-count: 3;
+          column-gap: 3%;
+          column-width: 30%;
+      }
+
+      .next-button{
+        display: none;
+      }
+
+    .pin-button
+    {
+      position: absolute;
+      bottom: 1px;
+      left: 8px;
+      opacity: 0.3;
+      margin-bottom: 3px;
+      background-color: transparent;
+      color: black;
+      border: 2px solid rgba(192, 191, 191, 0.83);
+      border-radius: 2px;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding: 2px;
+      font-weight: bold;
+      text-transform: capitalize;
+      font-family: sans-serif;
+    }
+    .pin-button:hover{
+      opacity:1;
+    }
+
+    .pinned
+    {
+      opacity:1;
+    }
+
+    .pin-track{
+      position: absolute;
+      bottom: 0;
+      left: 38px;
+      opacity:0.5;
+    }
+    .pin-track:hover{
+      opacity: 1;
+    }
+
+        #explore-container{
+        width: 100%;
+        max-width: 700px;
+        margin: 2em auto;
+    }
+
+
+ body{
+  background-color: #F5F5F5;
+  font-family:OpenSans-Light;
+ }
+
+    #firstheader{
+        border: 1px solid #d7d7d7;
+        background-color: white;
+        min-height: 70px;
+        position: fixed;
+        z-index: 1;
+        width: 100%;
+    }
+
+    @font-face{
+        font-family:OpenSans-Light;
+        src:url("{{asset('fonts/OpenSans-Light.ttf')}}");
+    }
+
+    .board-background{
+      height: 110px;
+      width: 170px;
+    }
+
+#side-menu{
+  position: fixed;
+  top: 70px;
+  left: -3px;
+}
+
+.date{
+  position: absolute;
+  right: 9px;
+  color: #C9C9C9;
+}
+
+  #writing-container{
+  display: inline-block;
+  padding: 15px;
+  padding-bottom: 25px;
+  bottom: 43px;
+  width: 100%;
+  background-color: rgb(210, 215, 255);
+  }
+
+    .board{
+      margin-left: 10px;
+      display: inline-block;
+      width: 175px;
+      height: 180px;
+    }
+    .likes-comments{
+      text-align: right;
+    }
+
+    .boards-container{
+      height: 225px;
+      font-family: OpenSans-Light;
+      width: 100%;
+      -webkit-border-bottom-right-radius: 4px;
+      -webkit-border-bottom-left-radius: 4px;
+      -moz-border-radius-bottomright: 4px;
+      -moz-border-radius-bottomleft: 4px;
+      border-bottom-right-radius: 4px;
+      border-bottom-left-radius: 4px;
+      border-collapse: separate;
+      background-color: #fff;
+      padding: 15px 20px;
+      border: 1px solid #d7d7d7;
+
+    }
+
+    .board-title{
+      font-weight: bold;
+      font-size: 20px;
+    }
+    #singupContainer{
+        font-family: OpenSans-Light;
+        width: 730px;
+        -webkit-border-bottom-right-radius: 4px;
+        -webkit-border-bottom-left-radius: 4px;
+        -moz-border-radius-bottomright: 4px;
+        -moz-border-radius-bottomleft: 4px;
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 4px;
+        -moz-box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.1);
+        -webkit-box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.1);
+        box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.1);
+        border-collapse: separate;
+        background-color: #fff;
+        padding: 15px 20px;
+        border: 1px solid #d7d7d7;
+        margin-top: 70px;
+        margin-left: 30px;
+        background-color: #F5F5F5;
+    }
+
+
+
+    .login-form{
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        display: inline-flex;
+    }
+
+
+    .inputname{
+        height: 80px;
+        font-weight: 100;
+        font-size: 60px;
+        font-family: OpenSans-Light;
+        border-collapse: separate;
+    }
+
+    #footer{
+        position: absolute;
+        bottom: 0px;
+        right: 0;
+    }
+
+
+    .message-label img{
+      width: 50px;
+      margin-right: 5px
+    }
+
+    .sr-only{
+      background-color: #B8CCFF;
+    }
+
+    .form-control{
+      width: 98.5%;
+      min-height: 88px;
+      border-radius: 0px;
+    }
+
+
+    textarea.form-control{
+      height: auto;
+      color: black;
+      font-weight: bold;
+    }
+
+    .dropdown{
+      /*background-color: #B8CCFF;*/
+      /*margin-right: -15px;*/
+      position: absolute;
+      right: 0px;
+      margin-left: 21px;
+      top: 0px;
+    }
+    .album{
+      width: 100px;
+      position: absolute;
+      cursor: pointer;
+      left: 566px;
+      top: 160px;
+    }
+
+    #arrows{
+      display: none;
+    }
+
+
+    .albumtitle{
+      font-size: 46px;
+      position: absolute;
+      /*top: 448px;*/
+      /*left: 372px;*/
+      bottom: 50px;
+      left: 10px;
+      font-family: JennaSue;
+    }
+
+    .albumphotos{
+      -webkit-transform: rotate(0deg);
+      padding: 7px;
+      /*padding-bottom: 73px;*/
+      height: 220px;
+      border-radius: 0px;
+      box-shadow: 0 3px 10px 1px rgba(0, 0, 0, 0.6), 0 0 20px 1px rgba(255, 255, 255, 0.5);
+    }
+
+
+    #slider{
+       display: inline-block;
+       width: 134%;
+       cursor:pointer;
+       margin-left: -37px;
+    }
+    #rotate
+    {
+       width: 40%;
+       cursor:pointer;
+    }
+     #right-side-menue{
+        position: fixed;
+        height: 78%;
+        top: 70px;
+        width: 5%;
+        background-color: black;
+      }
+
+
+
+    #comment-container{
+        display: none;
+        width: 500px;
+        position: absolute;
+        top:200px;
+        left: 300px;
+        background-color: rgba(122, 122, 122, 0.37);
+        box-shadow: 0 5px 12px -1px rgba(0, 0, 0, 0.6), 0 0 200px 1px rgba(255, 255, 255, 0.5);
+      }
+
+
+     body{
+      height: 100%;
+
+     }
+
+     .secondary-container{
+      margin-left: 255px;
+      font-family: OpenSans-Light;
+      width: 73%;
+
+     }
+
+     .message-sender{
+      font-weight: bold;
+     }
+
+     #lifetrack{
+      display: inline-block;
+      margin-top: -25px;
+      vertical-align: -15px;
+     }
+
+    #slider-container{
+      margin: 0 auto;
+      padding: 14px;
+      padding: 20px00 0;
+      opacity: 0.8;
+      position: absolute;
+      margin-top: -77px;
+      box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.6), 0 0 200px 1px rgba(255, 255, 255, 0.5);
+    }
+
+    .comment{
+        cursor: default;
+        max-width: 500px;
+    }
+
+    .menu_item{
+      margin-right: 25px;
+    }
+
+    .popover.right .arrow:after{
+      border-right-color: #f7f7f7;
+    }
+
+    .popover.left .arrow:after{
+      border-left-color: #f7f7f7;
+    }
+
+    a{
+      cursor: pointer;
+    }
+
+    #comment-form-header{
+      background-color: rgba(255, 255, 255, 0.38);
+      width: 100%;
+      padding-left: 10px;
+    }
+
+    #comment-form-header ul{
+      list-style-type: none;
+      font-size: 16px;
+      font-weight: bold;
+      min-width: 134px;
+      margin-bottom: 0px;
+      margin-top: 0px;
+      display: inline-block;
+    }
+
+    #comment-form-header ul:hover{
+      background-color: white;
+    }
+    #font-selector{
+      display: inline-block;
+      height: 28px;
+      margin-left: -39px;
+      line-height: 28px;
+      border: 1px solid #aaa;
+      padding: 4px;
+      color: #555;
+    }
+
+    .send-frequest{
+      background-color:rgb(226, 255, 199);
+    }
+
+    .send-frequest:hover{
+      background-color: rgb(195, 255, 139);
+    }
+
+
+    #myname{
+      text-decoration: none;
+      font-size: 21px;
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+      cursor: pointer;
+    }
+
+    #myname:hover{
+      opacity: 1;
+    }
+    .description{
+      min-height: 170px;
+    }
+
+    .modal-body input{
+      width: 50%;
+    }
+
+
+    .modal-body{
+      background-color: #F7F7F7;
+      margin-bottom: -15px;
+      padding-top: 2%;
+      width: 60%;
+      margin-left: 19%;
+    }
+
+    .modal-footer{
+      width: 60%;
+      margin-left: 19%;
+    }
+    .side-main-menu{
+      z-index: 11;
+      -webkit-box-shadow: 0 0 19px -1px rgba(0, 0, 0, 0.1);
+      -moz-box-shadow: 0 0 19px -1px rgba(0, 0, 0, 0.1);
+      -ms-box-shadow: 0 0 19px -1px rgba(0, 0, 0, 0.1);
+      -o-box-shadow: 0 0 19px -1px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 19px -1px rgba(0, 0, 0, 0.1);
+      -webkit-transition: width 0.25s;
+      -moz-transition: width 0.25s;
+      -ms-transition: width 0.25s;
+      -o-transition: width 0.25s;
+      transition: width 0.25s;
+      -webkit-transform: translate3d(0, 0, 0);
+      -moz-transform: translate3d(0, 0, 0);
+      -ms-transform: translate3d(0, 0, 0);
+      -o-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      background: #191B1F;
+      bottom: 0;
+      position: fixed;
+      top: 0;
+      width: 240px;
+      height: 100%;
+      box-shadow: 0 3px 10px 1px rgba(0, 0, 0, 0.6), 0 0 20px 1px rgba(255, 255, 255, 0.5);
+    }
+
+    .sosNeticonWhite {
+      display: inline-block;
+      width: 45px;
+      vertical-align: -17px;
+      height: 45px;
+      background-image: url("{{asset('pictures/icons/transparent-preview.png')}}");
+      transition-property:background-image;
+      transition-duration: 0.5s;
+    }
+
+    .sosNeticonBlack {
+      display: inline-block;
+      width: 45px;
+      vertical-align: -17px;
+      height: 45px;
+      background-image: url("{{asset('pictures/icons/transparent-preview-black.png')}}");
+      transition-property:background-image;
+      transition-duration: 0.5s;
+    }
+
+
+    .smallSosNeticonBlack {
+      display: inline-block;
+      width: 45px;
+      vertical-align: -17px;
+      height: 45px;
+      background-image: url("{{asset('pictures/icons/transparent-preview-black.png')}}");
+      transition-property:background-image;
+      transition-duration: 0.5s;
+    }
+
+
+    .sosNeticonWhite:hover{
+      background-image: url("{{asset('pictures/icons/transparent-preview-black.png')}}");
+    }
+
+    .settingicon {
+      background-position:-154px -120px;
+    }
+
+    .boardicon {
+      background-position: -154px -550px;
+    }
+
+    .ownericon {
+      background-position: -924px -1390px;
+    }
+
+    .commentsicon{
+     background-position:  186px -301px;
+    }
+    .likeicon{
+      background-position: 0px -180px;
+    }
+
+    .unlikeicon{
+      background-position: 0px -180px;
+    }
+    .compressicon{
+      background-position: 261px 474px;
+    }
+
+    #compress-menu{
+      margin-left: 0px;
+      position: absolute;
+      bottom: 0px;
+      right: -8px;
+      cursor: pointer;
+    }
+
+
+    .menu-primary-options{
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+      height: 50px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      font-size: 15px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      background-color: #1f2228;
+      border-top: 1px solid #262930;
+      border-bottom: 1px solid #191b1f;
+      text-transform: uppercase;
+    }
+
+    .menu-primary-options:hover{
+        background-color: #f2f6f7;
+        border-color: #f2f6f7;
+        color: #5a6273;
+     }
+
+    .menu-primary-options li{
+      display: none;
+    }
+
+    .submenu{
+      background: #f2f6f7;
+      bottom: 0;
+      color: #494f5b;
+      height: 100%;
+      left: 60px;
+      padding: 0;
+      position: absolute;
+      top: 0;
+      width: 180px;
+      z-index: 10;
+    }
+
+    .logo-side{
+      font-size: 26px;
+      color: white;
+      margin-left: 15px;
+      margin-top: 40px;
+      min-height: 70px;
+      list-style:none;
+    }
+
+    .submenu-header{
+      background: transparent;
+      border-bottom: 1px solid white;
+      min-height: 173px;
+      padding: 1px 20px;
+      margin-bottom: 0px;
+      width: auto;
+    }
+
+
+    .submenu-header:hover{
+      background-color: white;
+    }
+
+
+    .submenu-header p{
+      color: #a8adb0;
+      font-weight: none;
+      font-size: 12px;
+      line-height: 16px;
+      margin: 18px 0 0 0;
+      padding: 0;
+      width: auto;
+    }
+
+
+    .submenu-item{
+      display: flex;
+      background: transparent;
+      border-bottom: 1px solid white;
+      min-height: 100px;
+      min-height: 85px;
+      padding: 18px 14px;
+      width: auto;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .submenu-item:hover{
+      background-color: white;
+    }
+
+
+    .submenu-icons{
+      margin-right: 10px;
+       display: inline-block;
+      width: 60px;
+      vertical-align: -17px;
+      height: 45px;
+      background-image: url("{{asset('pictures/icons/transparent-preview-black.png')}}");
+    }
+
+    .comment-icon{
+        background-position: -233px -550px;
+    }
+
+    .everyone-icon{
+      background-position: -63px -899px;
+    }
+
+    .onlyme-icon{
+      background-position: -835px -494px;
+    }
+    .friends-icon{
+      background-position:-760px -490px;
+    }
+    .message-icon{
+      background-position: -693px -304px;
+    }
+
+    .song-icon{
+      background-position:  -1033px -1205px;
+    }
+
+    .photo-icon{
+     background-position:  417px -1984px;
+    }
+
+    .join-icon{
+     background-position:  -80px 346px;
+    }
+
+
+    .background-icon{
+     background-position: -154px 164px;
+    }
+
+    #header{
+      top:20px;
+      padding-left:2px;
+      width: auto;
+      margin-right: 0px;
+      right: 0px;
+      padding-left:8px;
+      position: absolute;
+   }
+
+
+    .small-menu-icons{
+      display: none;
+      position: absolute;
+      top: 2px;
+      right: 4px;
+      height: 19px;
+      width: 65px;
+      background-color: rgba(255, 255, 255, 0.58);
+    }
+
+    .small-menu-icons img{
+      cursor: pointer;
+      padding-left: 3px;
+      opacity:0.5;
+    }
+
+    .small-menu-icons img:hover{
+      opacity:1;
+    }
+
+    .arrow-prview{
+      display: inline;
+      margin-left: 3px;
+      border:1px solid;
+    }
+
+    .comment-only{
+      position: absolute;
+      left: 71%;
+      top: 6px;
+      opacity: 0.8;
+      cursor:pointer;
+    }
+
+
+    #color-select-frame{
+      margin-left: -34px;
+    }
+
+
+    #color-select-frame button{
+      width: 20px;
+      height: 20px;
+
+    }
+    .comment-only:hover{
+      opacity: 1;
+    }
+
+
+a b span{
+  color: #428bca;
+}
+    .notification{
+      color: black;
+      box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.2), 0 0 2px 1px rgba(255, 255, 255, 0.5);
+      margin-bottom: 8px;
+      padding: 6px;
+      padding-left: 10px;
+      padding-right: 5px;
+      line-height: 1.428571429;
+      background-color: #fff;
+      display: block;
+    }
+
+    .songnot{
+      font-size: 20px;
+      color: grey;
+      font-weight: 100;
+      background-color: #F7F7F7;
+    }
+
+    .nothover{ 
+      padding-right: 10px;
+      cursor: pointer;
+    }
+
+    .notiseen{
+      background-color: #E9E9E9;
+    }
+
+    .nothover:hover{
+      background-color: #E9E9E9;
+    }
+
+    .like{
+      margin-left: 123px;
+      margin-right: 6px;
+      background-color: #EDF8EC;
+    }
+    #header img{
+      cursor: pointer;
+      height: 25px;
+      margin-right: 10px;
+     
+    }
+
+    #message-notifs{
+      max-height: 70%;
+      overflow-y: scroll;
+    }
+
+
+    .message-notif-container{
+      border-bottom: 1px solid #d7d7d7;
+      border-left: 1px solid #d7d7d7;
+      border-right: 1px solid #d7d7d7;
+      background-color: white;
+      padding: 11px;
+      min-height: 100px;
+      position: relative;
+    }
+    
+    #header img:hover{
+      opacity: 1;
+    }
+
+    .like:hover{
+      background-color: #C4DBC2;
+    }
+    .unlike{
+      background-color: #F8ECEC;
+    }
+
+    .unlike:hover{
+      background-color: #DBC2C2;
+    }
+
+    #header .popover .popover-title{
+
+      padding-right: 10px;
+    }
+
+    #dropdownconfig{
+      position: absolute;
+      right: 36%;
+    }
+
+    .message-content{
+      /*margin-right: 5px;*/
+      color: #A2A2A2;
+    }
+
+    .rotate-buttons{
+      margin-top: 20px;
+    }
+    .comment-owner{
+      margin-right: 5px;
+      font-weight: bold;
+    }
+
+    .popover{
+      border-radius: 0px;
+    }
+
+    slider a{
+      display: none;
+    }
+
+    .modal-body input{
+      margin-bottom: 10px;
+    }
+
+    .message-area{  
+      width: 536px;
+      min-height: 247px;
+    }
+
+    #board-owner{
+      font-family: comesinhandy;
+      color: black;
+      margin-left: 30px;
+    }
+
+
+
+    #board-tools-menue img{
+      cursor: pointer;
+      height: 25px;
+    }
+
+    .message-overview{
+      /*margin-left: 30px;*/
+    }
+
+
+    .message-label{
+      position: absolute;
+
+    }
+    .sender-label{
+      font-family: sans-serif;
+      font-size: 20px;
+    }
+
+
+    #main-container{
+      position: fixed;
+      width: 65%;
+      height: 100%;
+    }
+
+    .input-area{
+      position: absolute;
+      right: 0px;
+      bottom: 19px;
+      width: 825px;
+      margin: 0px;
+      height: 66px;
+    }
+
+
+    #message-tools{
+      border-bottom: 1px solid #d7d7d7;
+      padding: 10px;
+      min-height: 60px;
+    }
+
+    #buttons{
+      position: absolute;
+      margin-top: -17px;
+    }
+
+
+    #message-receiver{
+      font-size: 20px;
+      font-family: sans-serif;
+    }
+
+
+    #message-content{
+      padding: 20px;
+      font-size: 20px;
+    }
+</style>
+
+   
+<script type="text/javascript">
+   
+  
+function acceptRequest(requestId){
+  //faut que ca soit securisé il faut que on verif a partit du controlleur
+  $('div[notificationId='+requestId+']').fadeOut();
+
+
+      var url="{{ asset('acceptfrequest/') }}";
+      url=url+requestId;
+
+   $.get(url,
+        function(data){   
+           //the response is in the data variable
+            if(data.responseCode==200 ){
+                      
+            
+            }
+           else if(data.responseCode==400){//bad request
+              
+              
+           }
+           else{
+              //if we got to this point we know that the controller
+              //did n
+             // return a json_encoded array. We can assume that           
+              //an unexpected PHP error occured
+              //alert("An unexpeded error occured.");
+
+           }
+         }
+       );
+
+
+}
+
+
+function cancelRequest(requestId){
+  //faut que ca soit securisé il faut que on verif a partit du controlleur
+  $('div[notificationId='+requestId+']').fadeOut();
+
+      var url="{{ asset('declinerequest/') }}";
+      url=url+requestId;
+
+   $.get(url,
+        function(data){   
+           //the response is in the data variable
+            if(data.responseCode==200 ){
+                      
+            
+            }
+           else if(data.responseCode==400){//bad request
+              
+              
+           }
+           else{
+              //if we got to this point we know that the controller
+              //did n
+             // return a json_encoded array. We can assume that           
+              //an unexpected PHP error occured
+              //alert("An unexpeded error occured.");
+
+           }
+         }
+       );
+
+
+}
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ //-------------------------------------------------------------------------------------------------------------
+var Friendevents="";
+function getEvents(){
+
+       $.get("{{ path('get_ajax_requests')}}", //replace it with the secssion
+        function(data){   
+           //the response is in the data variable
+            if(data.responseCode==200 ){
+                  
+           
+                 Friendevents=data.htmlcode;
+                 $("#Friend-requests").popover({title:function() {
+                  
+                  return Friendevents;                        
+                                                                      },html:true,placement:"bottom"});
+                 
+
+
+        
+            }
+           else if(data.responseCode==400){//bad request
+              
+              
+           }
+           else{
+              //if we got to this point we know that the controller
+              //did n
+             // return a json_encoded array. We can assume that           
+              //an unexpected PHP error occured
+              //alert("An unexpeded error occured.");
+
+           }
+         }
+       );
+
+}
+
+//--------------------------------------------------------------------------------------------------------------
+
+var notif_menu=$("#message-notifs");
+notif_menu.scrollTop(notif_menu.css("height").replace("px",""));
+
+
+var Fmessages="";
+function getMessages(nbr){
+
+       $.get("{{ path('view_ajax_inbox')}}",{unseen:nbr,userid:{{senderid}}}, //replace it with the session
+        function(data){   
+           //the response is in the data variable
+            if(data.responseCode==200 ){
+                  
+           
+                for (var i = 0; i < data.tab.length; i++) {
+                  //console.log(data.tab[i]);
+
+                var src="";
+                var myHtml='<div class="message-notif-container" ><span class="message-label" style="display: inline-flex;"><img src='+src+' ><span class="message-content"><a class="sender-label"> '+data.tab[i].senderName+' </a><div class="message-overview"><p>'+data.tab[i].content+'</p></div></span></span><span class="date"> few seconds ago </span></div>';
+
+                $("#message-notifs").append(myHtml);
+                $("#message-notifs").scrollTop(20000);
+                
+
+
+
+
+                };
+
+                 
+                 $("#messages").popover({title:function() {
+                  
+                  return Fmessages;                        
+                                                                      },html:true,placement:"bottom"});
+                 
+
+        
+            }
+           else if(data.responseCode==400){//bad request
+              
+              
+           }
+           else{
+              //if we got to this point we know that the controller
+              //did n
+             // return a json_encoded array. We can assume that           
+              //an unexpected PHP error occured
+              //alert("An unexpeded error occured.");
+
+           }
+         }
+       );
+
+}
+
+
+
+//var intervall=setInterval(getEvents,7000);
+ getEvents();
+
+$("#Friend-requests").mouseenter(function(){
+  getEvents();
+});
+
+$("#messages").mouseenter(function(){
+ getMessages(0);
+});
+
+
+
+// $('.lightbox').mouseout(function(){
+
+//   $(this).parent().find('span').fadeOut(2000);
+
+// });
+
+function checkunseen(){
+        var url="{{asset('events/getunseen')}}";
+       $.get(url,function(data){   
+           //the response is in the data variable
+            if(data.responseCode==200 ){
+              var unseenmessages=data.unseenmessages; 
+              var unseenevents=data.unseenevents;
+              if(unseenmessages>0) {
+                $("#messages").attr("src","{{asset('pictures/icons/chat-small-red.png')}}").css('opacity','1');
+                getMessages(unseenmessages);
+              }
+              else $("#messages").attr("src","{{asset('pictures/icons/chat-small-black.png')}}").css('opacity','0.1');
+
+             if(unseenevents>0) {
+              $("#Friend-requests").attr("src","{{asset('pictures/icons/flag-red.png')}}").css('opacity','1');
+              getEvents();
+             }
+             else $("#Friend-requests").attr("src","{{asset('pictures/icons/flag-black.png')}}").css('opacity','0.1');
+            
+            }
+           else if(data.responseCode==400){//bad request
+              
+                
+           }
+           else{
+              //if we got to this point we know that the controller
+              //did not return a json_encoded array. We can assume that           
+              //an unexpected PHP error occured
+              //alert("An unexpeded error occured.");
+
+           }
+       });//It is silly. But you should not write 'json' or any thing as the fourth parameter. It should be undefined. I'll explain it futher down
+}
+
+$("#messages").click(function(){
+  $(this).attr("src","{{asset('pictures/icons/chat-small-black.png')}}").css('opacity','0.3');
+  $.get("events/messagesseen");
+})
+
+
+$("#Friend-requests").click(function(){
+  $(this).attr("src","{{asset('pictures/icons/flag-black.png')}}").css('opacity','0.3');
+  $.get("events/eventsseen");
+})
+
+
+checkunseen();
+var intervall=setInterval(checkunseen,5000);
+
+
+function displayMainMenue(){
+  $("#main-menu-dropdown").fadeIn();
+  $("#myname").attr("onClick","hideMainMenue()");
+}
+
+function hideMainMenue(){
+  $("#main-menu-dropdown").fadeOut();
+  $("#myname").attr("onClick","displayMainMenue()");
+}
+
+
+  $(".jp-play").tooltip({title:"Play Song",placement:"bottom"});
+  $(".jp-pause").tooltip({title:"Pause Song",placement:"bottom"});
+
+
+
+
+ function compressMenu(){
+    $(".side-main-menu").animate({width: "60px"}, 200);
+    $("#board-title2").fadeOut(10);
+    $(".label-icon").fadeOut(10);
+    $(".sosNeticonWhite").animate({"margin-left": "-30px"}, 100);
+    $(".submenu").css("display","none");
+    menucompressed=true;
+    $("#compress-menu").attr("onClick","uncompressMenu()");
+    $("#compress-menu").css("background-position","341px 474px");
+
+
+    $.get("{{ path('soullifiedprofil_change_board_compress')}}",{compress:true}, //replace it with the secssion
+        function(data){   
+           //the response is in the data variable
+            if(data.responseCode==200 ){
+        
+            }
+           else if(data.responseCode==400){//bad request
+           }
+           else{
+              //alert("An unexpeded error occured.");
+           }
+         }
+       );
+
+
+
+  }
+
+  function uncompressMenu(){
+        $(".side-main-menu").animate({width: "240px"}, 200);
+        $(".sosNeticonWhite").animate({"margin-left": "0px"}, 100);
+        $(".label-icon").delay(350).fadeIn();
+        $("#board-title2").delay(350).fadeIn();
+        menucompressed=false;
+        $("#compress-menu").attr("onClick","compressMenu()");
+        $("#compress-menu").css("background-position","261px 474px");
+  
+
+
+
+    $.get("{{ path('soullifiedprofil_change_board_compress')}}",{compress:false}, //replace it with the secssion
+        function(data){   
+           //the response is in the data variable
+            if(data.responseCode==200 ){
+        
+            }
+           else if(data.responseCode==400){//bad request
+           }
+           else{
+              //alert("An unexpeded error occured.");
+           }
+         }
+       );
+  }
+
+
+  {% if app.user.profil.menuboardcompressed %} 
+   compressMenu()
+  {% endif %}
+
+ 
+  $("#message-input").val("").attr("placeholder","write something");
+
+
+  function submitMessage(){
+
+
+
+      {%  if app.user.profil.photourl %}
+          var src="{{asset('web/uploads/tmp/attachments/')}}{{app.user.profil.photourl.album.folder}}/small/{{app.user.profil.photourl.url}}";
+      {% elseif app.user.profil.Photoconnect %}
+          var src="{{app.user.profil.Photoconnect}}";       
+      {%  else %}
+          var  src="{{asset('pictures/icons/thumbuser.png')}}";
+      {%  endif %}
+
+
+    
+    var myHtml='<div class="message-notif-container" ><span class="message-label" style="display: inline-flex;"><img src='+src+' ><span class="message-content"><a class="sender-label"> {{app.user.profil.Fullname}} </a><div class="message-overview"><p>'+$("#message-input").val()+'</p></div></span></span><span class="date"> few seconds ago </span></div>';
+
+    $("#message-notifs").append(myHtml);
+    $("#message-notifs").scrollTop(20000);
+    
+
+
+    url="{{ path('send_message', { recieverId: senderid }) }}";
+    $.post(url,{
+             'soullified_profilbundle_message[content]':$("#message-input").val(),
+             
+        },function(data){   
+             //the response is in the data variable
+              if(data.responseCode==200 ){
+              //  alert(data.resultat); 
+              }
+             else if(data.responseCode==400){//bad request
+                
+                
+             }
+             else{
+                //if we got to this point we know that the controller
+                //did not return a json_encoded array. We can assume that           
+                //an unexpected PHP error occured
+                ////alert("An unexpeded error occured.");
+
+             }
+         });//It is silly. But you should not write 'json' or any thing as the fourth parameter. It should be undefined. I'll explain it futher down
+
+    $("#message-input").val("");    
+  }
+
+
+
+
+
+
+
+//-------------------------------------------------------------------------------------------------------------------
+
+
+
+function getNextExploreWave(nickName,isTrigged)
+{
+  var url="/app_dev.php/angular/myboards";
+  $.get(url,{
+    nickName:nickName,
+    scrollIndex:exploreScrollIndex
+  },function (data) {
+    var exploreHtml="";
+    maxLvl=data.boards.length;
+    for (var i = 0; i <data.boards.length; i++) {
+      var trackName="";
+      var coverurl="";
+      if (data.boards[i].coverurl)
+        coverurl=data.boards[i].coverurl.replace("large","small");
+      exploreHtml=exploreHtml+'<div class="box explore-board">'+
+      '<div class="owner-track" ><img class="explore-pic-owner" style="margin-right:5px;" src="'+data.boards[i].ownerPic+'">'+data.boards[i].ownerName+
+      '</div>'+
+      '<div style="position:absolute;color:grey;right:5px;top:5px;font-size:10px;">'+data.boards[i].date+' ago</div>'+
+      '    <a href="/app_dev.php/life/#/board/'+data.boards[i].url+'" >             '+
+      '          <img ng-show="board.coverurl" src="'+coverurl+'" style="width: 100%;">'+
+      '       <div class="explore-board-title">'+data.boards[i].name+'</div>'+
+      '        <div class="explore-board-info">'+
+      '              <p class="explore-board-description">'+data.boards[i].desc+'</p>'+
+      '          <div class="likes-comments">  '+
+      '            <span >'+
+      '              <img class="small-community" src="{{asset("pictures/icons/small-owner.png")}}" style="opacity:1">'+
+      '              <span id="nbrOfComments">'+data.boards[i].nbrLikes+'</span>'+
+      '            </span>'+
+      '            <span>'+
+      '              <img  src="{{asset("pictures/icons/small-comment-black.png")}}"  class="like-buttons" style=";margin-'+'left:10px;cursor:default;opacity:0.5;">    '+    
+      '              <span id="nbrOfComments">'+data.boards[i].nbrComments+' Scribbles</span>'+
+      '            </span>'+
+      '            </div>'+
+      '        </div>'+
+      '      </a>'+
+     /* '      <span class="pin-track" ng-show="templateType == 3">'+
+      '        <core-icon-button icon="av:my-library-music" id="core_icon_button1"></core-icon-button>'+
+      '      </span>'+
+      '      <button class="btn btn-sm btn-detault pin-button" ng-show="!board.pinned" ng-click="pinBoard(board)">'+
+      '        <img title="Pin Bord to ScrapBook"  src="{{ asset("pictures/icons/pin-black.png") }}" style="height: 20px;cursor: '+'pointer;"> '+
+      '      </button>'+
+      '      <button class="btn btn-sm btn-detault pin-button" ng-show="!board.pinned" ng-click="pinBoard(board)">'+
+      '        <img title="Pin Bord to ScrapBook"  src="{{ asset("pictures/icons/pin-black.png") }}" style="height: 20px;cursor: '+'pointer;"> '+
+      '      </button>'+
+      '      <button class="btn btn-sm btn-detault pin-button pinned" ng-show="board.pinned" ng-click="unPinBoard(board)">'+
+      '        <img title="Unpin Bord from ScrapBook"  src="{{ asset("pictures/icons/pin-black.png") }}" style="height: '
+      '+20px;cursor: pointer;"> '+
+      '      </button>'+*/
+      '</div>';
+    };
+    $("#explore-container").append(exploreHtml);
+    if(isTrigged==true)
+      $('html, body').animate({
+            scrollTop:$("#main-container").height()+1
+            }, 'slow');
+
+    if(data.boards.length > 0)
+      ignoreExploreScrolling=false;
+  })
+}
+
+
+ignoreScrolling=false;
+var exploreHeaderTop=false;
+var ignoreExploreScrolling=false;
+var exploreScrollIndex=0;
+$(document).scroll(function(){
+            //console.log("scrolling")
+            if((-$(this).scrollTop() + $("#main-container").height() < 0) && exploreHeaderTop == false)
+              {
+                $("#explore-header").attr("class","fixed-explore-header");
+                $("#user-profil-card")[0].style.position="fixed";
+                exploreHeaderTop=true;
+              }
+            else if((-$(this).scrollTop() + $("#main-container").height() > 0) && exploreHeaderTop == true)
+               {
+                $("#explore-header").attr("class","vola-explore-header");
+                $("#user-profil-card")[0].style.position="absolute";
+                $(".tag-panel").fadeOut()
+                exploreHeaderTop=false;
+              }
+            if( $("#explore-body").height() - $(window).scrollTop() < 500 && ignoreExploreScrolling == false)
+              {
+                console.log("bottom reached");
+                getNextExploreWave("iceman");
+                exploreScrollIndex++;
+                ignoreExploreScrolling=true;
+              }
+      })
+
+$(document).ready(function() {
+  alert("ll")
+  getNextExploreWave("iceman");
+  exploreScrollIndex++;
+})
+
+</script>
+
+
+</body>
+
+</html><!-- all righs reserved RuspeenA.com

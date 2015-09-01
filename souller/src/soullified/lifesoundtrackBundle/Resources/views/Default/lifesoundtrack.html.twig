@@ -1,0 +1,1887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="{{asset('pictures/icons/soulicon.ico')}}" type="image/x-icon" />
+    <link rel="shortcut icon" href="{{asset('pictures/icons/soulicon.ico')}}" type="image/x-icon" />
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="viewport" content="width=device-width, initial-scale=0.7">
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css')}} ">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/lightbox.css')}} " >
+    
+    <script type="text/javascript" src="{{ asset('js/jquery-1.7.2.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery-ui.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}" ></script>    
+    <script type="text/javascript" src="{{ asset('js/lightbox-2.6.min.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('js/underscore-min.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.fileupload.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.iframe-transport.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('js/FileUploader.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.autocomplete.js')}}"></script>
+    <title>{{profil.fullname}} - Soundtrack</title>
+</head>
+<body>
+  <div id="firstheader" style="color: rgb(51, 51, 54);padding-top: 20px;font-family:sans-serif;">  
+{% if app.user %}
+        <a href="/app_dev.php/home" style="margin-left: 8%;">
+              <img id="home" src="{{asset('pictures/icons/home-small-black.png')}}" style="opacity:0.3;" />
+              Home
+        </a>
+      <a id="Friend-requests" >
+        <img src="{{asset('pictures/icons/flag-black.png')}}" style="opacity: 0.3;"/>
+        Notifications
+      </a>
+{%  endif %}
+
+        <img id="soullogo" src="/pictures/icons/soullogomini.png" style="cursor:pointer;position: fixed;top: 6px;left: 1%;height: 52px;opacity: 1;">      
+{% if not app.user %}
+  <span>
+    <a style="
+      position: fixed;
+      top: 9px;
+      font-size: 20px;
+      left: 78px;
+      font-family: OpenSans-Light;
+      font-weight: bold;">Soul<span style="font-weight: normal;">lified</span></a>   
+       
+  <hr style="
+      position: fixed;
+      top: 15px;
+      width: 90px;
+      z-index: 565;
+      left: 76px;
+      border-top:2px solid rgba(66, 139, 202, 0.43);
+  ">
+  </span>
+{%  endif %}
+
+<div id="header">     
+      {% if app.user %}
+        {% include "soullifiedboardBundle:templates:UserMenuTemplate.html.twig" %}                    
+      {%  else %}
+      {%  endif %}
+        <input type="search" class="form-control search-input" placeholder="Search in soullified" style="margin-right: 5px;width: 170px;padding-left:28px;height: 30px;border-radius: 2px;">
+        <img src="{{asset('pictures/icons/search-white.png')}}" style="opacity:0.5;position:absolute;right: 188px;top: 5px;">
+      
+      {% if app.user %}  
+        <img id="menu-icon" onClick="displayMainMenue()"                                    
+              src="{{asset('pictures/icons/menu-icon.png')}}" 
+              />
+      {% else %}
+        <a href="/app_dev.php/home" >
+              <img id="home" src="{{asset('pictures/icons/home-small-black.png')}}" style="opacity:0.3;margin-right: 5px;" />
+        </a>
+      {%  endif %}
+     
+ </div>       
+</div>
+
+<br>
+<br>
+<br>
+{%  if not app.user %}
+  <br>
+{%  endif %}
+<br>
+<div id="main-container" onClick="hideAllNotifs()">
+<div class="row" style="display:none;">
+  <span class="col-md-2 col-sm-1 col-xs-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-3 sub-container new-board-preview" style="position:fixed;width: 15%;">
+    <a class="new-board-preview-title" >
+      <button class="btn btn-primay follow-button">Follow</button>
+      {{profil.fullname}}
+        <img id="profilpicthumb" style="opacity:1;width:160px;"
+                                  src="{{profil.profilPicture}}"
+                          />
+        <hr> 
+        <span style="color: black;font-family: sans-serif;font-size: 15px;">
+          <img src="{{asset('pictures/icons/share-fb.png')}}" style="height: 30px;" >
+          <img src="{{asset('pictures/icons/share-gp.png')}}" style="height: 28px;" >
+          <img src="{{asset('pictures/icons/share-tw.png')}}" style="height: 28px;" >
+          <span id="share-icons">
+
+          </span>
+        </span>
+        
+    </a>
+  </span>
+</div>
+<div class="row">
+{% if app.user %}
+  <div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 sub-container new-board-preview"  style="text-align: center;" >
+      <form id="add-song-form" style="col-md-offset-1 col-sm-offset-1 col-xs-offset-0 col-md-5 col-sm-5 col-xs-5">
+        <input  id="song-input" class="form-control input-lg" placeholder="Type a song or an artist name" >
+        <input  id="song-input-echo" class="form-control input-lg" placeholder="TypeSong Title" >
+        <button id="add-song-button" class="progress-button form-control input-lg btn-primary" type="submit" ><b style="margin-right:2px;"><img src="{{asset('pictures/icons/search-white-true.png')}}"></b>Find</button>
+      </form>
+      <span id="mood" style="position: absolute;bottom: 0;left: 0;">
+          <select id="mood-slector">
+            <option value="1">How i m feeling right now</option>
+            <option value="2">A song keep buzzing in my head </option>
+            <option value="3">An untold story</option>
+            <option value="4">A memory</option>
+            <option value="5">+ Add</option>
+          </select>
+      </span>
+  </div>
+{%  endif %}
+</div>
+<div id="add-song-loading" class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 sub-container new-board-preview" style="text-align: center;min-height: 60px;">
+      <img src="{{asset('pictures/icons/loading.gif')}}" >
+</div>
+<div id="main-row" class="row">
+  <div  id="caching-pictures" class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 sub-container" style="text-align: center;">
+</div>
+
+{% if  profil.tracks|length == 0 %}
+    <div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 introduction" >
+      Music is what feelings sounds like.<br>
+      and behind every song is a story<br>
+      whether it  describes your mood today,<br>
+      revives old memories, <br>
+      or just a song that keep buzzing in your head.
+      <br>
+      <br>
+      If your life had a soundtrack, what would it be like?
+      the lyrics are optional
+    </div>
+ 
+{% else %}
+
+{%  for track in profil.tracks|reverse|slice(0,4) %}
+                    <div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 main-comment-area" >
+
+                      <textarea id="comment-area{{track.id}}" type="text" class="form-control tag-input" placeholder="What do you think about when you listen to :{{track.halftitle(0)}} ?" value=""></textarea>
+                      <img src="{{asset('pictures/icons/tag_music.jpg')}}"  class="song-tag-icon">
+                      <span class="file-uploader-container">
+                        <div id="upload{{track.id}}" class="file-uploader"></div>
+                      </span>
+                      
+                    </div>
+
+                {%  for comment in track.commentstrack | reverse %}
+                    <div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 main-comment-area"  style="opacity:1" onMouseenter="displayClose({{comment.Id}})" onMouseleave="hideClose({{comment.Id}})" >
+                      <span class="input-group-addon" style="border: 0px;border-radius: 0px;background-color: white;">
+                        <a href="/app_dev.php/life/#/scrapbook/{{comment.owner.user.username}}" class="comment-username" >
+                          {{comment.owner.Fullname}}
+                        </a><img style="box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);opacity:1;cursor:pointer;width:50px;position:absolute;top:2px;left:1px;" src="{{comment.owner.profilPicture}}"/>
+                      </span>
+                      <span id="comment-area{{comment.id}}" class="form-control commented-area" 
+                       >
+                        # {{comment.content}}
+                      
+                     
+                        <span class="pic-comment-container" style="height:80px;"></span>
+                      </span>
+                      <span id="closeComment{{comment.Id}}" class="close delete-comment" onClick="deleteComment({{comment.id}})">x</span>
+                    </div>
+               {% endfor %}
+
+
+                    <div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 sub-container new-board-preview" >
+                {%  if app.user %}
+                  {%  if app.user.profil.id == track.profil.id %}
+                    <button id="choose-lyrics-button{{track.id}}" class='btn btn-default btn-select-lines' onClick="chooseLyrics({{track.id}})" style="margin-top: 1%;">Pick From Lyrics</button>
+
+                    <button id="done-selecting-button{{track.id}}" class='btn btn-success btn-select-lines disabled' onClick="doneSelecting({{track.id}})" style="margin-top: 1%;display:none;" >
+                      Done selecting
+                    </button>
+                  {% endif %}
+                {%  endif %}
+                    <img src="{{asset('pictures/icons/lyrics.png')}}" style="top: -8%;opacity: 0.4;height: 55px;" />
+
+                    <span id="lyrics{{track.id}}" 
+
+                    {%  if track.songtrack.isready %}
+                      class="ready"
+                    {%  else %}
+                      class="not-ready"
+                    {%  endif %}
+                    >
+                      <p class="lyrics-limited">{{ track.chosenlyrics }}</p>
+                    </span>
+                    <hr>
+                    <span id="{{track.id}}"  class="youtube-frame-container">
+                    <span class="new-board-preview-title" href="{{path('pingsteprofil',{id:profil.user.username})}}">
+                      
+                      {% if track.mood == 1 %}
+                        <span class="board-date">How i felt {{track.date}} ago</span>
+                      {% elseif track.mood == 2 %}
+                        <span class="board-date">#song was buzzing in my head {{track.date}} ago</span>
+                      {% elseif track.mood == 3 %}
+                        <span class="board-date">#Reminded me of an untold story {{track.date}} ago</span>
+                      {% elseif track.mood == 4 %}
+                        <span class="board-date">#Reminded me of a memory {{track.date}} ago</span>
+                      {%  endif %}
+                      <img id="playSong{{track.songtrack.id}}"  src="{{asset('pictures/icons/big-play.png')}}" class="play-btn" onClick='playSong({{track.songtrack.id}},"{{track.songtrack.youtubeid}}")' >
+                      <span id="songtrackTitle{{track.songtrack.Id}}">{{track.songtitle}}</span>
+                    <a href="/app_dev.php/life/#/scrapbook/{{track.profil.user.username}}">
+                      <table class="user-thumnail">
+                        <tr>
+                          <td>
+                            <b>
+                              {{track.profil.Fullname}}
+                            </b>
+                          </td>
+                        <tr>
+                          <td>  
+                            <img id="profilpicthumb" style="opacity:1" 
+                                  src="{{track.profil.profilPicture}}"
+                          />
+                         </td>
+                        </tr>
+                      </table>
+                    </a>
+
+                    </span>
+        </div>
+    {%  endfor %}
+
+{%  endif %}
+ 
+           
+  </div>
+</div>  
+<!-- Modal photos-->
+    <div class="modal fade" id="uploadingmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog md-content">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" class="close"  aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">The Story Behind The Song</h4>
+          </div>
+          <div class="modal-body">
+                      
+          </div>
+          <div class="modal-footer" >
+              <a data-dismiss="modal" class="btn btn-default md-close" >Cancel</a>
+              <button class="btn btn-primary" type="submit"> Save Changes</button> 
+
+     </form>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+     
+
+</div>
+ 
+<span id="youtubeframe"></span>
+
+<script type="text/javascript">
+
+
+$("#add-song-form").submit(function(){
+  addSong();
+  return false;
+})
+
+
+
+$(window).scroll(function(){
+        if($(this).scrollTop() > 30) 
+          $('#firstheader').css("box-shadow"," 0 2px 4px 0 rgba(0,0,0,.15)");
+        else
+          $('#firstheader').css("box-shadow","0 0px 0px 0");
+});
+
+function completeTrack() {
+ /* if($("#song-input").val().indexOf(" ") == -1) 
+      gSpaceIndex = 1;*/
+    /*var spaceIndex = $("#song-input").val().split(" ").length;
+    if(gSpaceIndex < spaceIndex) 
+    {
+      gSpaceIndex = spaceIndex;
+    */
+      $("#song-input-echo").val($("#song-input").val())
+      $("#song-input-echo").focus();
+      $("#song-input").focus();
+    //}
+}
+
+var gSpaceIndex = 1;
+var editedId;
+var stopTyping;
+$("#song-input").on("change keyup paste", function(){
+    clearTimeout(stopTyping);
+    stopTyping = setTimeout(completeTrack,500);
+    if($("#song-input").val().indexOf(" ") == -1) 
+      gSpaceIndex = 1;
+    var spaceIndex = $("#song-input").val().split(" ").length;
+    if(gSpaceIndex < spaceIndex) 
+    {
+      gSpaceIndex = spaceIndex;
+    
+      $("#song-input-echo").val($("#song-input").val())
+      $("#song-input-echo").focus();
+      $("#song-input").focus();
+    }
+
+
+})
+
+var gSpaceIndex = 1;
+var gtest;
+$("textarea").on("change keyup paste", function(e){
+    if((e.keyCode == 13)&&($(this).val().trim() != ""))
+      submitComment($(this).attr("id").substr(12));
+})
+
+
+{%  if app.user %}
+
+function deleteComment(commentId)
+{
+  
+  var url = "{{ path('soullifiedlifesoundtrack_delete_comment')}}";
+  $("#comment-area"+commentId).parent().fadeOut();  
+  $.get(url,{
+    commentId:commentId
+  })
+}
+
+
+
+function submitComment(id){
+  var value=$("#comment-area"+id).val();
+  addComment(id,value);
+}
+
+
+function addComment(trackId,content)
+{
+  $("#comment-area"+trackId).val("");
+  var url = "{{ path('soullifiedlifesoundtrack_add_new_comment')}}";
+  $.post(url,{
+    editId:editedId,
+    content:content,
+    trackId:trackId
+  },function (data)
+  {
+    var minHeight;
+    if($("#caching-pictures")[0].innerHTML.trim()=="")
+      minHeight="60px";
+    else
+      minHeight="160px"
+    //console.log(data);
+      commentHtml='<div onMouseenter="displayClose('+data.id+')" onMouseleave="hideClose('+data.id+')" class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 main-comment-area"  style="opacity:1"><span class="input-group-addon" style="border: 0px;border-radius: 0px;background-color: white;"><span class="comment-username" >{{app.user.profil.fullname}}</span><img style="box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);opacity:1;cursor:pointer;width:50px;position:absolute;top:2px;left:1px;" src="{{app.user.profil.profilPicture}}"/></span><span id="comment-area'+data.id+'" type="text" class="form-control commented-area" style="min-height:'+minHeight+'" >#'+content+'<span class="pic-comment-container" style="height:80px;">'+$("#caching-pictures")[0].innerHTML+'</span></span><span id="closeComment'+data.id+'" class="close delete-comment" onClick="deleteComment('+data.id+')">x</span></div>';
+
+    $("#comment-area"+trackId).parent().after(commentHtml);
+    $("#caching-pictures")[0].innerHTML=""; 
+  })
+}
+
+{% endif %}
+
+function displayMainMenue(){
+  $("#main-menu-dropdown").fadeIn();
+  $("#menu-icon").attr("onClick","hideMainMenue()");
+}
+
+function hideMainMenue(){
+  $("#main-menu-dropdown").fadeOut();
+  $("#menu-icon").attr("onClick","displayMainMenue()");
+}
+
+function playSong(songtrackId,youtubeId)
+{
+   console.log(youtubeId)
+   //the response is in the data variable
+   if(youtubeId.length == 0 || youtubeId == "null")
+    {
+      var songTitle = $("#songtrackTitle"+songtrackId)[0].innerHTML;
+      searchYoutubeId(songTitle,songtrackId);
+    }
+   else
+   {
+    var frameHtml='<iframe width="420" height="315" style="width: 240px;position: fixed;height: 107px;right: 0px;bottom: 1px;z-index: 1;" src="//www.youtube.com/embed/'+youtubeId+'?autoplay=1" frameborder="0" allowfullscreen=""></iframe>';
+    $("#youtubeframe")[0].innerHTML=frameHtml;
+   }
+}
+
+function updateYoutubeId(songtrackId,videoId)
+{
+  var url="{{path('soullifiedlifesoundtrack_update_youtube_id')}}";
+  $.get(url,{
+             songtrackId:songtrackId,
+             videoId:videoId
+         },function(data){   
+                  $("#playSong"+songtrackId).attr("onClick","playSong("+songtrackId+",'"+videoId+"')"); 
+               }); 
+}
+var search;
+var keyWord="";
+
+var laSource=[""];
+function getSourceComplete()
+{
+
+  keyWord=$("#song-input").val();
+  //var url=
+  var url="http://www.corsproxy.com/api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?callback=?&artist=michael%20jackson&song=bad";
+    //console.log(url);
+    $.ajax({
+    crossDomain: true,
+    contentType: "json; charset=utf-8",
+  //  dataType : "jsonp",
+    url: url,
+    }).done(function( data ) {
+    //  JSON.stringify(data)
+        //console.log(data);
+   //     var searchArray= ["the","that"];
+       // console.log(data);
+       // console.log(data.data[0]);
+        //$("#hidden-lyrics")[0].innerHTML=data.data[0].snippet.split("\n").join("<br>").replace("\n","<br>");
+//
+    })
+}
+
+
+//getSourceComplete();
+
+{%  if app.user %}
+var idCache = new Array();
+function addSong(songName)
+{
+ 
+
+ if(songName)
+{
+  keyWord=songName;
+  var artist = songName.split("-")[1];
+  var title = songName.split("-")[0];
+  var newTrackId = 0;
+  var search = artist+" "+title;
+  var searchId =search.split(" ").join("_");
+  var src="{{profil.profilPicture}}"
+  if(idCache.length == 0)
+      idCache.push(0);
+  else
+  {
+      newTrackId=idCache[idCache.length - 1];
+      newTrackId--;
+      idCache.push(newTrackId);
+  }
+  var lyricsLoading = "<span id='lyricsLoading"+newTrackId+"' ><img style='margin-right: -50px;opacity: 0.5;z-index: -2;margin-left: 105px;' src='{{asset('pictures/icons/loading.gif')}}' > Searching Lyrics</span>"
+  var myhtml='<div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 main-comment-area" ><textarea id="comment-area'+newTrackId+'" type="text" class="form-control tag-input"  placeholder="What do you think about when you listen to "'+title+'" ?" ></textarea><img src="{{asset("pictures/icons/tag_music.jpg")}}" class="song-tag-icon"><span class="file-uploader-container"><div id="upload'+newTrackId+'" class="file-uploader"></div></span></div><div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 sub-container new-board-preview" ><button id="choose-lyrics-button'+newTrackId+'" class="btn btn-default btn-select-lines" onClick="chooseLyrics('+newTrackId+')" style="margin-top: 1%;">Pick From Lyrics</button><button id="done-selecting-button'+newTrackId+'" class="btn btn-success btn-select-lines disabled" onClick="doneSelecting('+newTrackId+')" style="margin-top: 1%;display:none;" >Done selecting</button><img src="{{asset("pictures/icons/lyrics.png")}}" style="top: -8%;opacity: 0.4;height: 55px;" /><span id="lyrics'+newTrackId+'"><p class="lyrics-limited">'+lyricsLoading+'</p><hr><span id="'+searchId+'"  class="youtube-frame-container"></span></span><span class="new-board-preview-title" ><span class="board-date">How i m feeling right now </span><img src="{{asset("pictures/icons/big-play.png")}}" class="play-btn"  id="playSong'+newTrackId+'" >'+title+' -  '+artist+'<table class="user-thumnail"><tr><td><b>{{app.user.profil.Fullname}}</b></td><tr><td><img id="profilpicthumb" style="opacity:1"  src="'+src+'" /></td></tr></table></div>'
+    $("#main-row").prepend(myhtml);
+    $("#song-input").val("");
+}
+else
+{
+  $("#add-song-loading").fadeIn();
+  songName=$("#song-input").val();
+  if(songName.length == 0)
+    return false;
+}
+
+
+  $("#validate-lyrics-button").fadeIn();
+  //$("#add-song-loading").fadeIn();
+  //getLyrics($("#song-input").val());
+
+
+/*  src="{{profil.profilPicture}}"*/
+  var url='http://api.lyricsnmusic.com/songs?api_key=0ece71190cce454fd5beea3db7ec22&track='+encodeURI(title)+'&artist='+encodeURI(artist);
+  //console.log(url);
+  $.ajax({
+  crossDomain: true,
+  contentType: "json; charset=utf-8",
+  dataType : "jsonp",
+  url: url,
+  cache:true,
+  }).done(function( data ) {
+      var gdata=data.data.sort(sortingOccur);
+      var lyrics=gdata[0].snippet.trim();
+      console.log(lyrics);
+      console.log("#lyricsLoading"+newTrackId);
+      console.log($("#lyricsLoading"+newTrackId)[0]);
+      $("#lyricsLoading"+newTrackId)[0].innerHTML=lyrics;
+
+/*      var title = keyWord.split("-")[0]; //gdata[0].title.trim().replace("[Live]","");
+      title=title.trim().replace("[DVD]","");
+      title=title.replace("[Live]","");
+      var artist =keyWord.split("-")[1]; //gdata[0].artist.name.trim();
+      search = artist+" "+title;*/
+/*      var searchId =search.split(" ").join("_");
+      var newTrackId = 0;
+      if(idCache.length == 0)
+        idCache.push(0);
+      else
+      {
+        newTrackId=idCache[idCache.length - 1];
+        newTrackId--;
+        idCache.push(newTrackId);
+      }*/
+      
+/*
+
+      var myhtml='<div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 main-comment-area" ><textarea id="comment-area'+newTrackId+'" type="text" class="form-control tag-input"  placeholder="What do you think about when you listen to "'+title+'" ?" ></textarea><img src="{{asset("pictures/icons/tag_music.jpg")}}" class="song-tag-icon"><span class="file-uploader-container"><div id="upload'+newTrackId+'" class="file-uploader"></div></span></div><div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 sub-container new-board-preview" ><button id="choose-lyrics-button'+newTrackId+'" class="btn btn-default btn-select-lines" onClick="chooseLyrics('+newTrackId+')" style="margin-top: 1%;">Pick From Lyrics</button><button id="done-selecting-button'+newTrackId+'" class="btn btn-success btn-select-lines disabled" onClick="doneSelecting('+newTrackId+')" style="margin-top: 1%;display:none;" >Done selecting</button><img src="{{asset("pictures/icons/lyrics.png")}}" style="top: -8%;opacity: 0.4;height: 55px;" /><span id="lyrics'+newTrackId+'"><p class="lyrics-limited">'+lyrics+'</p><hr><span id="'+searchId+'"  class="youtube-frame-container"></span></span><span class="new-board-preview-title" ><span class="board-date">How i m feeling right now </span><img src="{{asset("pictures/icons/big-play.png")}}" class="play-btn"  id="playSong'+newTrackId+'" >'+title+' -  '+artist+'<table class="user-thumnail"><tr><td><b>{{app.user.profil.Fullname}}</b></td><tr><td><img id="profilpicthumb" style="opacity:1"  src="'+src+'" /></td></tr></table></div>'
+
+*/
+//      $("#main-row").prepend(myhtml);
+      $("#song-input").val("");
+  //    $("#add-song-loading").fadeOut();
+      if(defaultMood == 0)
+        {
+          var mood=$("#mood-slector").val();
+          defaultMood = 1;
+        }
+      else
+        var mood=defaultMood;
+
+      sendTrack(title,artist,lyrics,mood);
+    }
+  );
+}
+
+{% endif %}
+function sendTrack(title,artist,lyrics,mood)
+{
+  var url="{{path('soullifiedlifesoundtrack_add_track')}}";
+  $.post(url,{
+              title:title,
+              artist:artist,
+              mood:mood,
+              lyrics:lyrics.trim()
+              },function(data){ 
+
+                var nextId=idCache.pop();
+                var newTrackId = data.songId;
+
+                $("#choose-lyrics-button"+nextId).attr("id","choose-lyrics-button"+newTrackId);
+                $("#choose-lyrics-button"+newTrackId).attr("onClick","chooseLyrics("+newTrackId+")");
+
+                $("#done-selecting-button"+nextId).attr("id","done-selecting-button"+newTrackId);
+                $("#done-selecting-button"+newTrackId).attr("onClick","doneSelecting("+newTrackId+")");
+                
+                $("#upload"+nextId).attr("id","upload"+newTrackId);
+                $("#lyrics"+nextId).attr("id","lyrics"+newTrackId);
+
+                $("#playSong"+nextId).attr("id","playSong"+data.songtrackId);
+                $("#playSong"+data.songtrackId).attr("onClick","playSong("+data.songtrackId+",'"+data.youtubeId+"')"); 
+                
+                if(!data.youtubeId) 
+                    {
+                      searchYoutubeId(data.songTitle,data.songtrackId);
+                    }
+                });
+}
+
+function containsOne(elt){ 
+  return elt.title.indexOf(keyWord) > -1 
+}
+
+function sortingOccur(a,b){
+    return (numbreOfOccurance(b.title+" "+b.artist.name,keyWord) - numbreOfOccurance(a.title+" "+a.artist.name,keyWord))
+  }
+
+
+function numbreOfOccurance(strA,strB)
+{
+  var total=0;
+  var total2=0;
+  var tabA=strA.toLowerCase().split(/[\s,?!]+/);
+  var tabB=strB.toLowerCase().split(/[\s,?!]+/);
+
+  for (var j = 0; j< tabA.length; j++) 
+  {
+    for (var i = 0; i < tabB.length; i++) 
+    {
+      if( tabB[i] == tabA[j] ) {
+        total ++ ;
+        if( i == j) total++ ;
+      }
+    };
+  };
+
+  for (var j = 0; j< tabB.length; j++) 
+  {
+    for (var i = 0; i < tabA.length; i++) 
+    {
+      if( tabB[j] == tabA[i] )
+      {
+        total2 ++ ;
+        if( i == j) total2 ++ ;
+      }
+    };
+  };
+  return Math.min(total,total2);
+}
+
+function select(id,i)
+{
+  var lineId=id+""+i;
+  var elt=$("#l"+lineId);
+  $("#done-selecting-button"+id).attr("class","btn btn-success btn-select-lines");
+  elt[0].getAttribute.class="lyrics-line selected";
+  elt.attr("class","lyrics selected");
+  elt.attr("onClick","deselect("+id+","+i+")");
+}
+
+function deselect(id,i)
+{
+  var lineId=id+""+i;
+  var elt=$("#l"+lineId);
+  elt.attr("class","lyrics notSelected");
+  elt.attr("onClick","select("+id+","+i+")");
+}
+
+var debugStr;
+function doneSelecting(id)
+{
+    $(".lyrics.notSelected").fadeOut();
+    $(".lyrics.selected").css('background-color','white');
+    $(".lyrics.selected").css('color','black');
+    $(".lyrics.selected").css('cursor','auto');
+    
+    if(lyricsFound == false)
+    var chosenlyrics = $("#editArea"+id).val();
+    else
+    {    
+      
+    var childrenArray=$("#lyrics"+id).children().children();
+    var chosenlyrics="";
+    for (var i = 0; i < childrenArray.length; i++) {
+      if( childrenArray[i].getAttribute('class') == "lyrics selected")
+         chosenlyrics=chosenlyrics+childrenArray[i].innerHTML.replace(' <img src="/pictures/icons/tiny-plus-white.png" style="margin-right:1%;">',"\n");
+  
+    };
+  }
+// $("#lyrics"+id).children().children()[0].innerHTML.replace('  <img src="/pictures/icons/tiny-plus-white.png" style="margin-right:1%;">',"")
+  debugStr=chosenlyrics;
+  chosenlyrics=chosenlyrics.replace("<lyric>","").replace("</lyric>","").split("\n\n").join("\n")
+  //console.log(chosenlyrics);
+  var url = "{{path('soullifiedlifesoundtrack_update_chosen_lyrics')}}";
+  $.post(url,{
+             id:id,
+             chosenlyrics:chosenlyrics,
+         }); 
+
+  $("#lyrics"+id)[0].innerHTML="<p class='lyrics-limited'>"+chosenlyrics+"</p>";
+  $("#done-selecting-button"+id).fadeOut();
+  $("#choose-lyrics-button"+id).fadeIn();
+}
+
+$(".file-uploader-container").tooltip({title:"add photos",placement:"top"});
+
+function checkLyricsFound(id,oldLyrics)
+{
+  if(lyricsFound == false)
+  {
+    $("#lyrics"+id)[0].innerHTML="<textarea class='form-control editArea' id='editArea"+id+"'  >"+
+                                 oldLyrics.replace('<p class="lyrics-limited">',"").replace("</p>","").trim()+
+                                 "</textarea>";
+    $("#done-selecting-button"+id).attr("class","btn btn-success btn-select-lines");
+  }
+  else
+    return true;
+}
+
+
+var lyricsFound;
+function chooseLyrics(id)
+{
+
+  lyricsFound=false;
+  var oldLyrics =  $("#lyrics"+id)[0].innerHTML;
+  setTimeout(checkLyricsFound,4000,id,oldLyrics);
+  $("#choose-lyrics-button"+id).fadeOut();
+  $("#done-selecting-button"+id).fadeIn();
+  $("#lyrics"+id)[0].innerHTML='<img src="{{asset("pictures/icons/loading.gif")}}" style="margin-left: 24%;margin-top: 31px;opacity: 1;">';
+  if($("#lyrics"+id).attr("class")!="ready")
+    retrieveFromApi(id,false);
+  else
+    retrieveFromSoullified(id);
+}
+
+
+function retrieveFromSoullified(id)
+{
+
+var url="{{path('soullifiedlifesoundtrack_get_Full_lyrics_ready')}}";
+  $.get(url,{
+             trackId:id
+         },function(data){   
+              //the response is in the data variable
+            if(data.responseCode==200 ){
+                 // alert(data.commentId);
+              if(data.lyrics.length < 10 || data.lyrics.substr(0,8).indexOf("version=") ==0 )
+              {
+                  lyricsFound = false;
+                  return true;
+              }
+              else
+                  lyricsFound=true;
+
+                  if(data.lyrics.indexOf("\n") != -1)
+                    var fullLyrics=data.lyrics.trim().split("\n");
+                  else
+                    var fullLyrics=data.lyrics.trim().split(". ");
+
+                  var myhtml="<span class='lyrics'>";
+                   
+                  myhtml=myhtml+"<div id=l"+id+"0 class='lyrics notSelected'  style='margin-top: -8%;' onClick=select("+id+",0)>  <img src='{{asset('pictures/icons/tiny-plus-white.png')}}' style='margin-right:1%;' >"+fullLyrics[0]+'</div>';
+
+                  for (var i = 1; i < fullLyrics.length; i++) {
+                    var lineId=id+""+i;
+                    myhtml=myhtml+"<div id=l"+lineId+" class='lyrics notSelected' onClick=select("+id+","+i+")> <img src='{{asset('pictures/icons/tiny-plus-white.png')}}' style='margin-right:1%;' >"+fullLyrics[i]+'</div>';
+                   };
+                  
+                  myhtml += "</span>";
+                  $("#lyrics"+id)[0].innerHTML=myhtml;
+            }
+           else if(data.responseCode==500){//bad request
+              console.log("error 500")
+           }  
+           else{
+              console.log("gen error")
+           }
+
+        });
+}
+
+function retrieveFromApi(id,isDeamon)
+{
+  var url="{{path('soullifiedlifesoundtrack_get_full_lyrics')}}";
+  $.get(url,{
+             id:id
+         },function(data){   
+              //the response is in the data variable
+            if(data.responseCode==200 ){
+                 // alert(data.commentId);
+                 if(isDeamon == false){ 
+                                   lyricsFound=true;
+                                   if(data.lyrics.indexOf("\n") != -1)
+                                     var fullLyrics=data.lyrics.trim().split("\n");
+                                   else
+                                     var fullLyrics=data.lyrics.trim().split(". ");
+                 
+                                   var myhtml="<span class='lyrics'>";
+                                    
+                                   myhtml=myhtml+"<div id=l"+id+"0 class='lyrics notSelected'  style='margin-top: -8%;' onClick=select("+id+",0)>  <img src='{{asset('pictures/icons/tiny-plus-white.png')}}' style='margin-right:1%;' >"+fullLyrics[0]+'</div>';
+                 
+                                   for (var i = 1; i < fullLyrics.length; i++) {
+                                     var lineId=id+""+i;
+                                     myhtml=myhtml+"<div id=l"+lineId+" class='lyrics notSelected' onClick=select("+id+","+i+")> <img src='{{asset('pictures/icons/tiny-plus-white.png')}}' style='margin-right:1%;' >"+fullLyrics[i]+'</div>';
+                                    };
+                                   
+                                   myhtml += "</span>";
+                                   $("#lyrics"+id)[0].innerHTML=myhtml;
+                    }
+
+                  $.post("{{ path('soullifiedlifesoundtrack_update_Full_lyrics')}}",{FullLyrics:data.lyrics.replace("<Lyric>","").replace("</Lyric>","").replace("</GetLyricResult>","").trim(),trackId:id});
+            }
+           else if(data.responseCode==500){//bad request
+              console.log("error 500")              
+           }  
+           else{
+              console.log("gen error")
+           }
+
+        });
+}
+
+
+ //-------------------------------------------------------------------------------------------------------------
+var Friendevents="";
+
+/*$("#Friend-requests").popover({title:function() {
+                       return "<img src='{{asset('pictures/icons/loading.gif')}}' style='margin-left: 60px;' >";                        
+                                 },html:true,placement:"bottom"});
+*/
+
+function getEvents(){
+       $.get("{{ path('get_ajax_requests')}}", //replace it with the secssion
+        function(data){   
+           //the response is in the data variable
+            if(data.responseCode==200 ){
+                 Friendevents=data.htmlcode;
+                 $("#Friend-requests").popover({title:function() {
+                        return Friendevents;                        
+                                  },html:true,placement:"bottom"});
+            }
+         }
+       );
+
+}
+//--------------------------------------------------------------------------------------------------------------
+
+
+$(document).ready(function(){
+  setTimeout(getEvents,1000);
+  FillLyricsDeamons();
+})
+
+
+
+var idx=0;
+function getNextWave()
+{
+
+  var loadingHTML='<div id="loading-html" class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 sub-container new-board-preview" style="text-align:center;"><img src="{{asset("pictures/icons/loading.gif")}}" style="opacity:1;margin-top: 12px;margin-right: 0%;"><span class="awesome-loading">loading Awesomness ...</span></div>';
+
+  $("#main-row").append(loadingHTML);
+
+  ignoreScrolling = true;
+  idx=idx+5;
+  var url="{{path('soullifiedlifesoundtrack_get_next_wave')}}";
+  $.get(url,{
+             idx:idx,
+             id:'{{profil.id}}'
+         },function(data){   
+          if(data.taille == 0)
+          {
+             $("#loading-html").remove()
+            return true;
+          }
+          mdata=data.finalTab;
+          //console.log(data);  
+          for (var i = 0; i < mdata.length; i++) {
+          var mood;
+          if(mdata[i].mood == 1)
+            mood = "How i felt ";
+          else if(mdata[i].mood == 2)
+            mood = "Song was buzzing in my head ";
+          else if(mdata[i].mood == 3)
+            mood = "Reminded me of an untold story ";
+          else if(mdata[i].mood == 4)
+            mood = "Reminded me of a memory ";
+
+ {% if app.user %}
+            var myhtml='<div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 main-comment-area" ><textarea type="text" class="form-control tag-input" placeholder="What do you think about when you listen to '+mdata[i].title.split(" - ")[0]+' ?" value="" id="comment-area'+mdata[i].id+'" ></textarea><img src="{{asset("pictures/icons/tag_music.jpg")}}"  class="song-tag-icon"><img class="upload-pic-btn"  data-toggle=modal data-target="#uploadingmodal" src="{{asset("pictures/icons/small-pic-black.png")}}" /></div><div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 sub-container new-board-preview" ><button id="choose-lyrics-button'+mdata[i].id+'" class="btn btn-default btn-select-lines" onClick="chooseLyrics('+mdata[i].id+')" style="margin-top: 1%;">Pick From Lyrics</button><button id="done-selecting-button'+mdata[i].id+'" class="btn btn-success btn-select-lines disabled" onClick="doneSelecting('+mdata[i].id+')" style="margin-top: 1%;display:none;" >Done selecting</button><img src="{{asset("pictures/icons/lyrics.png")}}" style="top: -8%;opacity: 0.4;height: 55px;" /><span id="lyrics'+mdata[i].id+'" class='+mdata[i].ready+'><p class="lyrics-limited">'+mdata[i].lyrics+'</p></span><hr><span id="'+mdata[i].id+'"  class="youtube-frame-container"></span><span class="new-board-preview-title" ><span class="board-date">'+mood+mdata[i].date+' ago </span><img src="{{asset("pictures/icons/big-play.png")}}" class="play-btn" id="playSong'+mdata[i].songtrackId+'" onClick=\'playSong('+mdata[i].songtrackId+',"'+mdata[i].youtubeId+'")\' ><span id="songtrackTitle'+mdata[i].songtrackId+'">'+mdata[i].title+'</span><table class="user-thumnail"><tr><td><b>'+mdata[i].profilFullname+'</b></td><tr><td><img id="profilpicthumb" style="opacity:1"  src='+mdata[i].profilPictureSrc+' /></td></tr></table></span></div>'
+
+{%  else %}
+       var myhtml='<div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 sub-container new-board-preview" ><button id="choose-lyrics-button'+mdata[i].id+'" class="btn btn-default btn-select-lines" onClick="chooseLyrics('+mdata[i].id+')" style="margin-top: 1%;">Pick From Lyrics</button><button id="done-selecting-button'+mdata[i].id+'" class="btn btn-success btn-select-lines disabled" onClick="doneSelecting('+mdata[i].id+')" style="margin-top: 1%;display:none;" >Done selecting</button><img src="{{asset("pictures/icons/lyrics.png")}}" style="top: -8%;opacity: 0.4;height: 55px;" /><span id="lyrics'+mdata[i].id+'" class='+mdata[i].ready+'  ><p class="lyrics-limited">'+mdata[i].lyrics+'</p></span><hr><span id="'+mdata[i].id+'"  class="youtube-frame-container"></span><span class="new-board-preview-title" ><span class="board-date">'+mood+mdata[i].date+' ago </span><img src="{{asset("pictures/icons/big-play.png")}}" class="play-btn" id="playSong'+mdata[i].songtrackId+'" onClick=\'playSong('+mdata[i].songtrackId+',"'+mdata[i].youtubeId+'")\' ><span id="songtrackTitle'+mdata[i].songtrackId+'">'+mdata[i].title+'</span><table class="user-thumnail"><tr><td><b>'+mdata[i].profilFullname+'</b></td><tr><td><img id="profilpicthumb" style="opacity:1"  src='+mdata[i].profilPictureSrc+' /></td></tr></table></span></div>'
+
+{%  endif %}
+
+                $("#loading-html").remove()
+                $("#main-row").append(myhtml);
+                ignoreScrolling=false;
+                $("textarea").on("change keyup paste", function(e){
+                    if((e.keyCode == 13)&&($(this).val().trim() != ""))
+                      submitComment($(this).attr("id").substr(12));
+                })
+          };
+          
+        });
+}
+var ignoreScrolling = false;
+var doc=$(document);
+doc.scroll(function(){
+  if((-$(this).scrollTop() + $(this).height() < 700) && ignoreScrolling == false)
+    getNextWave();  
+//console.log("scrolltop :"+$(this).scrollTop()+"         "+$(this).height());
+})
+
+</script>
+<!-- <script type="text/javascript" src="{{ asset('js/underscore-min.js')}} "></script>
+<script type="text/javascript" src="{{ asset('js/jquery.fileupload.js')}} "></script>
+<script type="text/javascript" src="{{ asset('js/jquery.iframe-transport.js')}} "></script>
+<script type="text/javascript" src="{{ asset('js/FileUploader.js')}} "></script>
+ -->
+     {% include "PunkAveFileUploaderBundle:Default:templates.html.twig" %}
+
+<script type="text/javascript">
+$(".file-uploader").click(function(){
+  var str=($(this).attr("id"))
+    clickedId=str.substr(6,str.length);
+})
+
+var options, a;
+jQuery(function(){
+    options = { serviceUrl:"http://ws.audioscrobbler.com/2.0/?method=track.search&api_key=543fc405ef684b058fa4808ce33ee018&format=json&limit=5&"};
+    a = $('#song-input-echo').autocomplete(options);
+}); 
+
+var editId=0;
+function getEditId()
+  {    
+    editedId=0;
+    var url= "{{ path('soullifiedlifesoundtrack_gen_new_editId')}}";
+    $.get(url,{},function(data){   
+          editedId = data.editId;;
+          editId = data.editId;
+          $(function() {
+                new PunkAveFileUploader({ 
+                    'uploadUrl': "{{asset('commenttrack/upload')}}?editId="+editId,
+                    'viewUrl':  "{{asset('web/uploads/tmp/attachments/')}}?editId="+editId,
+                    'el': '.file-uploader',
+                    'exist gingFiles': {{ null | json_encode | raw }},
+                    'delaySubmitWhileUploading': '.edit-form' ,
+                });
+            });
+        });
+  }
+  
+getEditId();
+
+var deamonsJar= new Array();
+function FillLyricsDeamons()
+{
+  $(".not-ready").each(function(){
+    deamonsJar.push(this.id.replace("lyrics",""));
+  });
+}
+
+function releaseDeamon()
+{
+  if(deamonsJar.length == 0 )
+    return false;
+  
+  deamonId=deamonsJar.pop();
+  retrieveFromApi(deamonId,true);
+}
+
+function hideAllNotifs()
+{
+  hideMainMenue();
+}
+
+setInterval(releaseDeamon,50000);
+//----------------- youtube api ____________________________________________________________________
+
+// The client id is obtained from the Google APIs Console at https://code.google.com/apis/console
+// If you run access this code from a server other than http://localhost, you need to register
+// your own client id.
+var OAUTH2_CLIENT_ID = '552858651186-qr2qifg0mcvmjkennfolu0m4a2d0h45g.apps.googleusercontent.com';
+var OAUTH2_SCOPES = [
+  'https://www.googleapis.com/auth/youtube'
+];
+
+// This callback is invoked by the Google APIs JS client automatically when it is loaded.
+googleApiClientReady = function() {
+  gapi.auth.init(function() {
+    window.setTimeout(checkAuth, 1);
+  });
+}
+
+// Attempt the immediate OAuth 2 client flow as soon as the page is loaded.
+// If the currently logged in Google Account has previously authorized OAUTH2_CLIENT_ID, then
+// it will succeed with no user intervention. Otherwise, it will fail and the user interface
+// to prompt for authorization needs to be displayed.
+function checkAuth() {
+  gapi.auth.authorize({
+    client_id: OAUTH2_CLIENT_ID,
+    scope: OAUTH2_SCOPES,
+    immediate: true
+  }, handleAuthResult);
+}
+
+// Handles the result of a gapi.auth.authorize() call.
+function handleAuthResult(authResult) {
+  if (authResult) {
+    // Auth was successful; hide the things related to prompting for auth and show the things
+    // that should be visible after auth succeeds.
+    $('.pre-auth').hide();
+    loadAPIClientInterfaces();
+  } else {
+    // Make the #login-link clickable, and attempt a non-immediate OAuth 2 client flow.
+    // The current function will be called when that flow is complete.
+    $('#login-link').click(function() {
+      gapi.auth.authorize({
+        client_id: OAUTH2_CLIENT_ID,
+        scope: OAUTH2_SCOPES,
+        immediate: false
+        }, handleAuthResult);
+    });
+  }
+}
+
+// Loads the client interface for the YouTube Analytics and Data APIs.
+// This is required before using the Google APIs JS client; more info is available at
+// http://code.google.com/p/google-api-javascript-client/wiki/GettingStarted#Loading_the_Client
+function loadAPIClientInterfaces() {
+  gapi.client.load('youtube', 'v3', function() {
+    handleAPILoaded();
+  });
+}
+
+//gapi.client.setApiKey("AIzaSyCB8mGG8WCJF-FDuLdT5RRCsbPxjsKc5hc")
+
+//------------------------------------------------- search youtube id  ----------------------------------
+function searchYoutubeId(str,songtrackId) {
+  var request = gapi.client.youtube.search.list({
+    q: str+" lyrics",
+    part: 'snippet',
+  });
+
+
+request.execute(function(response) {
+    var videoId =response.result.items[0].id.videoId;
+    updateYoutubeId(songtrackId,videoId);
+  });
+
+}
+
+function handleAPILoaded() {
+  $('#search-button').attr('disabled', false);
+  gapi.client.setApiKey("AIzaSyCB8mGG8WCJF-FDuLdT5RRCsbPxjsKc5hc")
+}
+
+
+var moodSelectorCounter=0;
+var defaultMood = 1;
+function incrementMoodSelector () {
+  if(moodSelectorCounter == 4)
+    moodSelectorCounter = 0;
+  moodSelectorCounter++;
+  $("#mood-slector").val(moodSelectorCounter);
+}
+var moodInterval=setInterval(incrementMoodSelector,2000)
+
+$("#mood-slector").click(function(){
+    defaultMood=0;
+    clearInterval(moodInterval);
+  });
+
+function displayClose(commentId){
+  $("#closeComment"+commentId)[0].style.display="inherit";
+}
+
+function hideClose(commentId){
+ $("#closeComment"+commentId)[0].style.display="none";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+
+<style type="text/css">
+
+.awesome-loading{
+  right: 29%;
+  margin-left: -55px;
+  border-bottom: 2px solid rgb(185, 185, 185);
+}
+
+.song-tag-icon
+{
+  position: absolute;
+  left: 30px;
+  height: 20px;
+  opacity: 0.4;
+  top: 10px;
+}
+
+#menu-icon
+{
+  cursor: pointer;
+  height: 25px;
+  margin-right: 10px;
+  margin-top: -4px;
+  opacity: 0.4;
+}
+
+#menu-icon:hover
+{
+  opacity: 1;
+}
+
+
+.search-input
+{
+  width: 190px;
+  height: 30px;
+  border-radius: 2px;
+}
+
+.popover.fade.bottom.in
+{
+  margin-top: 20px;
+}
+
+.notification:hover{
+  background-color: #E9E9E9;
+}
+.notification b{
+  text-transform: capitalize;
+}
+.notification{
+  cursor: pointer;
+  position: relative;
+}
+
+.not-date {
+  position: absolute;
+  right: 7px;
+  font-size: 10px;
+  bottom: 3px;
+  color: #BBB7B7;
+}
+
+.pic-comment-container .thumbnail{
+  display: inline-block;
+  margin-left: 5px;
+  padding: 0px;
+  max-width: 150px;
+  height: 159px;
+  width: 150px;
+  overflow-x: hidden;
+  background: transparent;
+  border: transparent;
+  overflow-y: scroll;
+}
+
+.pic-comment-container .thumbnail img{
+  max-width: 113px;
+  max-height: 200px;
+}
+
+#caching-pictures .thumbnail{
+  display: inline-block;
+}
+
+
+#caching-pictures .thumbnail img{
+  max-height: 100px;
+  max-width: 100px;
+}
+
+.file-uploader {
+   background: url("{{asset('pictures/icons/small-pic-black.png')}}") no-repeat;
+   cursor: pointer;
+}
+
+.file-uploader-container
+{
+  position: absolute;
+  top: -13px;
+  right: 0;
+  width: 25px;
+}
+
+.file-uploader input {
+   filter: alpha(opacity=0);
+   opacity: 0;
+}
+
+.play-btn
+{
+  height: 55px;
+}
+
+.pic-comment-container a img
+{
+  max-width: 150px;
+  height:150px;
+  cursor:pointer;
+  opacity:0.8;
+}
+
+
+.pic-comment-container img:hover
+{
+  opacity: 1;
+            -moz-border-radius: 2px;
+          -webkit-border-radius: 2px;
+          border-radius: 2px;
+          -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+          -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+      
+}
+
+.pic-comment-container
+{
+  height: 80px;
+  position: absolute;
+  top: 4px;
+  right: 2px;
+}
+.thumbnail .caption
+{
+  display: none;
+}
+.thumbnails{
+  position: absolute;
+  top: 0px;
+  left: 20px;
+ /* display: none;*/
+}
+
+.thumbnail>img, .thumbnail a>img {
+  margin-left: auto;
+  max-width: none;
+  display: inline-block;
+  margin-right: auto;
+}
+
+.modal
+{
+  overflow: hidden;
+}
+
+.main-comment-area
+{
+  opacity:0.5;
+  padding:0px;
+  margin-bottom:-3px;
+}
+
+textarea:focus{
+  background-color: white;
+}
+
+.main-comment-area:hover
+{
+  opacity: 1;
+}
+.comment-username
+{
+  position: absolute;
+  top: 5px;
+  left: 60px;
+  color: #2a6496;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+
+.upload-pic-btn
+{
+  height: 20px;
+  position: absolute;
+  top: 10px;
+  right: 7px;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.autocomplete-suggestion{
+  background-color: rgba(66, 139, 202, 0.84);
+  color: white;
+  padding: 5px;
+  padding-left: 12px;
+  font-size: 20px;
+  border-top: 1px solid rgb(177, 168, 168);
+  cursor: pointer;
+  box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.22), 0 0 200px 1px rgba(49, 49, 49, 0.01);
+}
+
+.autocomplete-suggestion:hover{
+  background-color: rgba(219, 239, 255, 0.84);
+  color: black;
+}
+.autocomplete-suggestion strong{
+  color: rgb(175, 226, 46);
+}
+
+
+.input-lg{
+        margin-bottom: 14px;
+        display: none;
+    }
+
+.btn-select-lines
+{
+  position: absolute;
+  right: 9px;
+  opacity: 0.5;
+  border-radius: 2px;
+}
+.btn-select-lines:hover
+{
+  opacity: 1;
+}
+
+
+.add-song-button:hover
+{
+  opacity: 1;
+}
+
+    body{
+        background-color: #F5F5F5;
+        overflow-x: hidden;
+    }
+
+#firstheader{
+      top: 0;
+      width: 100%;
+      z-index: 11;
+      position: fixed;
+      border: 1px solid #d7d7d7;
+      background-color: white;
+      min-height: 70px;
+    }
+
+.board-background{
+      width: 49%;
+      margin-bottom: 1%;
+    }
+
+.board-info{
+      /*position: absolute;*/
+      top: 10%;
+      padding-top: 5px;
+      /*border: 1px rgb(209, 209, 209) solid;*/
+      height: 89%;
+      width: 96%;
+      background-color: rgba(255, 255, 255, 0.89);
+      font-family: sans-serif;
+ }
+
+    .form-control{                
+        display: inline-block;
+        width: 100%;
+        height: 34px;
+        margin-right: 12px;
+        padding-left: 10px;
+        box-shadow: 0 0 0.5px rgba(0,0,0,0.3);
+        border: 1px solid #C9CED6;
+    }
+
+.commented-area
+{
+  padding-left: 60px;
+  margin-top: -11px;
+  min-height: 60px;
+  width: 100%;
+  border-radius: 0;
+  background-color: rgba(231, 231, 231, 0.72);
+  padding-top: 17px;
+  height: auto;
+  margin-bottom: 5px;
+  opacity: 1;
+  z-index: 120;
+  box-shadow: none;
+  font-family:sans-serif;
+ /* font-weight:bold;*/
+  /*min-height: 157px;*/
+  margin-top: -13px;
+}
+    .comment{
+        cursor: default;
+        max-width: 500px;
+    }
+    .popover-content{
+          text-align: center;
+        }
+    
+    .popover{
+      border-radius: 0px;
+    }
+    
+    .menu_item{
+      margin-right: 25px;
+    }
+
+    .popover.right .arrow:after{
+      border-right-color: #f7f7f7;
+    }
+
+    .popover.left .arrow:after{
+      border-left-color: #f7f7f7;
+    }
+
+    a{
+      cursor: pointer;
+    }
+
+    .menu-primary-options{
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+      height: 50px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      font-size: 15px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      background-color: #1f2228;
+      border-top: 1px solid #262930;
+      border-bottom: 1px solid #191b1f;
+      text-transform: uppercase;
+    }
+
+    .menu-primary-options:hover{
+        background-color: #f2f6f7;
+        border-color: #f2f6f7;
+        color: #5a6273;
+     }
+
+    .menu-primary-options li{
+      display: none;
+    }
+
+    .submenu{
+      background: #f2f6f7;
+      bottom: 0;
+      color: #494f5b;
+      height: 100%;
+      left: 60px;
+      padding: 0;
+      position: absolute;
+      top: 0;
+      width: 180px;
+      z-index: 10;
+    }
+
+    a:hover{
+      text-decoration:inherit;
+    }
+
+
+    #header{
+      top:20px;
+      padding-left:2px;
+      width: auto;
+      margin-right: 0px;
+      right: 0px;
+      padding-left:8px;
+      position: absolute;
+   }
+
+
+    .notification{
+      color: black;
+      box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.2), 0 0 2px 1px rgba(255, 255, 255, 0.5);
+      margin-bottom: 8px;
+      padding: 6px;
+      padding-bottom: 1px;
+      padding-left: 10px;
+      padding-right: 5px;
+      line-height: 1.428571429;
+      background-color: #fff;
+      display: block;
+    }
+
+    #header .popover .popover-title{
+      padding-right: 10px;
+    }
+
+    .message-content{
+      /*margin-right: 5px;*/
+      color: #A2A2A2;
+    }
+
+    .rotate-buttons{
+      margin-top: 20px;
+    }
+    .comment-owner{
+      margin-right: 5px;
+      font-weight: bold;
+    }
+
+        @font-face{
+            font-family:OpenSans-Light;
+            src:url("{{asset('fonts/OpenSans-Light.ttf')}}");
+        }
+
+        .new-board-preview-title{
+          color: #428bca;
+          display: block;
+          text-align: left;
+          position: relative;
+          font: 20px/1.5 Arial,Helvetica,sans-serif;
+        }
+
+        .new-board-preview img
+        {
+          margin-right: 2%;
+          opacity: 0.6;
+          cursor: pointer;
+        }
+
+        .new-board-preview img:hover
+        {
+          opacity: 1;
+        }
+        #song-input, #song-input-echo
+        {
+          margin-bottom: 1%;
+          width: 50%;
+          /*margin-left: 2%;*/
+         /* margin-right: 1%;*/ 
+          margin: -1px;
+          background-color: #FDFCFC;
+          border-radius: 2px;
+          width: 70%;
+        }
+
+        #song-input{
+          padding-left: 10px;
+          /*margin-top: -41px;*/
+        }
+
+        #song-input-echo
+        {
+          position: absolute;
+          /*display: none;*/
+          left: 11%;
+          width: 67%;
+          visibility: hidden;
+        }
+        #song-input:focus
+        {
+          opacity: 1;
+          background-color: white;
+        }
+        .new-board-preview{
+          min-height: 80px;
+          color: black;
+          margin-bottom: 30px;
+          font-family:OpenSans-Light;
+          padding-top: 15px;
+          background-color: white;
+          box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.2), 0 0 2px 1px rgba(255, 255, 255, 0.5);
+          padding-bottom: 30px;
+        }
+
+        .board-date
+        {
+          margin-bottom: -25px;
+          position: absolute;
+          left: -1%;
+          bottom: 0%;
+          color: grey;
+          font-size: 15px;
+          font-family:OpenSans-Light;
+        }
+
+        .user-thumnail
+        {
+          text-transform: capitalize;
+          background-color: white;
+          position: absolute;
+          top: -22%;
+          right: 1%;
+          border-left: 1px solid #eee;
+        }
+
+        .lyrics
+        {
+          white-space: pre-line;
+          margin-left: 6%;
+          cursor: pointer;
+        }
+
+        .lyrics.notSelected:hover
+        {
+          background-color: rgb(240, 240, 255);
+        }
+
+        .lyrics-limited
+        {
+          margin-top: -8%;
+          white-space: pre-line;
+          /*min-height: 122px;*/
+          margin-left: 11%;
+        }
+
+
+        td
+        {
+          padding-left: 10px;
+        }
+        .user-thumnail img
+        {
+          height: 60px;
+          margin-right: 0;
+        }
+        #add-song-button
+        {
+          border-radius: 3px;
+          width: 90px;
+          padding: 0px;
+          padding-left: 8px;
+          padding-right: 8px;
+          margin-bottom: 0;
+        }
+        #add-song-button b
+        {
+          font-family: monospace;
+          font-size: 24px;
+         /* margin-right: 4px;*/
+          line-height: 0;
+        }
+
+
+        #tag-group
+        {
+          opacity: 0.6;
+          position: absolute;
+          left: 0;
+          bottom: 0;
+        }
+
+        #tag-group button
+        {
+          border-radius: 1px;
+          font-size: 10px;
+          padding: 3px;
+          font-family: sans-serif;
+          font-weight: bold;
+        }
+        #hidden-form
+        {
+          display: block;
+          margin-top: -500%;
+        }
+
+        #hidden-form .new-board-preview-title
+        {
+          margin-left: 2%;
+        }
+        
+        .proposition-line
+        {
+          margin-top: 10px;
+           cursor: pointer;
+        }
+
+        .proposition-line:hover
+        {
+          background-color: rgb(240, 240, 255);
+        }
+        .instruction
+        {
+          cursor: pointer;
+          z-index: 10;
+          opacity: 1;
+          width: 100%;
+          display: none;
+          position: absolute;
+          left: 0;
+          top: 0;
+          text-align: center;
+          padding-bottom: 5%;
+          border: 0px;
+          border-top: 1px solid #eee;
+          border-radius: 0px;
+        }
+
+        .instruction b
+        {
+          margin-left: 3%;
+          font-family: sans-serif;
+        }
+
+        .lyrics-line img
+        {
+          margin-right: 0px;
+        }
+
+        .lyrics.notSelected
+        {
+          min-height: 0;
+          margin-left: 7%;
+          width: 65%;
+          background-color: white;
+          color: black;
+        }
+
+        .lyrics.selected
+        {
+          min-height: 0;
+          width: 65%;
+          margin-left: 7%;
+          background-color:#5cb85c;
+          color: white;
+        }
+
+        .dropdown{
+          position: absolute;
+          right: 0px;
+          margin-left: 21px;
+          top: 0px;
+        }
+
+
+        .dropdown-menu{
+          z-index: 20;
+        }
+
+        }
+        .menu_item{
+          margin-right: 25px;
+        }
+
+
+        .popover{
+          min-width: 300px;
+          border-radius: 0px;
+        }
+
+        .comment-thumbnail{
+          background-color: white;
+          -moz-border-radius: 2px;
+          -webkit-border-radius: 2px;
+          border-radius: 2px;
+          -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+          -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+          box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+          position: absolute;
+          top: 7px;
+          right: 10px;
+          max-height: 80px;
+          max-width: 100px;
+        }
+
+        #songsPropositions
+        {
+          margin-top: 10px;
+        }
+        .menu-hr {
+          display: flex;
+          margin-bottom: 10px;
+          margin-top: 10px;
+        }
+
+        .follow-button
+        {
+          position: absolute;
+          color: white;
+          top: -15px;
+          font-size: 10px;
+          padding: 5px;
+          right: -15px;
+          font-family: sans-serif;
+          font-weight: bold;
+          border-radius: 0px;
+          border-bottom-left-radius: 4px;
+          border: 0;
+          background-color: #9DBCFF;
+        }
+
+        .progress{
+          margin-bottom: 0px;
+          border-radius: 0px;
+        }
+
+        .btn-success.disabled
+        {
+          opacity:0.2;
+        }
+
+        .autocomplete-suggestions{
+          overflow: hidden;
+          box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.22), 0 0 200px 1px rgba(49, 49, 49, 0.01);
+        }
+
+        .autocomplete-suggestion{
+          text-overflow: ellipsis;
+          white-space: nowrap; 
+        }
+
+
+        .delete-comment
+        {
+          display: none;
+          position: absolute;
+          top: 3px;
+          right: 3px;
+          opacity: 0.2;
+          font-size: 16px;
+          font-weight: 700;
+          font-family: inherit;
+        }
+
+
+        .tag-input
+        {
+          margin-top: -11px;
+          width: 100%;
+          border-radius: 0;
+          border: 1px solid #C9CED6;
+          background-color: #F7F9FC;
+          padding-top: 17px;
+          height:auto;
+          margin-bottom:-1px;
+          padding-right:20px;
+          padding-left: 50px;
+          margin-bottom:0px;
+          border: 1px solid rgba(201, 206, 214, 0.6);
+          background-color: transparent;
+        }
+        .lb-number
+        {
+          display: none;
+          visibility: hidden;
+        }
+        .lightboxOverlay
+        {
+          position: fixed;
+          width: 100%;
+          height: 100%;
+          z-index: 12;
+        }
+
+        .lightbox
+        {
+          z-index: 13;
+        }
+
+        .spinner
+        {
+          margin-top: -23px;
+          margin-left: -220px;
+          display: block;
+        }
+
+
+.editArea
+{
+  min-height: 160px;
+  margin-left: 35px;
+  width: 90%;
+}
+
+#mood-slector{
+  color:rgba(128, 128, 128, 0.79);
+  border-color: transparent;
+}
+
+
+#mood-slector:hover{
+  box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.2), 0 0 2px 1px rgba(255, 255, 255, 0.5);
+  border-color:rgba(128, 128, 128, 0.31);
+}
+
+#add-song-loading
+{
+  display: none;
+}
+
+.introduction{
+  text-align: center;
+  font-size: 25px;
+  background-color: rgba(228, 228, 228, 0.31);
+  color: rgba(3, 3, 3, 0.48);
+  padding: 10px;
+  border-radius: 9px;
+  font-family: OpenSans-Light;
+  opacity: 1;
+}
+</style>
+</body>
+<script src="https://apis.google.com/js/client.js?onload=googleApiClientReady"></script>
+</html><!-- all righs reserved RuspeenA.com

@@ -1,0 +1,224 @@
+<route-loading-indicator></route-loading-indicator>
+<div class="row">
+<div data-columns class="col-md-8 col-sm-12 col-xs-12 col-md-offset-2 col-sm-offset-0 col-xs-offset-0 boards-container" ng-show="!isRouteLoading">
+  <div id="container" class=" cols" >
+        <div class="alert-info" ng-show="boards.length ==  0">Sorry no boards were found :( </div>
+      <a ng-repeat="board in boards" class="box board" href="/life/#/board/##board.boardurl##" >
+              <div ng-show="templateType != 3" style="text-transform: capitalize;font-family: sans-serif;font-weight: bold;position:absolute;margin-top:5px;margin-left:5px;">
+                <img ng-src="##board.ownerPic##" style="border-radius:50%;width:25px;margin-bottom: 10px;height:25px;">
+                <span>##board.ownerName##</span>
+              </div>
+              <span style="position:absolute;top:5px;right:5px;font-size: 9px;
+  color: grey;">
+                ##board.date## ago
+              </span>           
+              <img ng-show="board.coverurl" ng-src="##board.coverurl##" style="width: 100%;">
+              <img ng-show="!board.coverurl" src="{{asset('pictures/background/whitewood.jpg')}}" style="width: 100%;">
+               <div class="board-title">##board.title## </div>
+            <div class="board-info">
+                  <p class="board-description">##board.desc##</p>
+              <div class="likes-comments">  
+                <span ng-show="board.likes > 0">
+                  <img class="small-community" src="{{asset('pictures/icons/small-owner.png')}}" style="opacity:1">
+                  <span id="nbrOfComments">##board.likes##</span>
+                </span>
+                <span ng-show="board.comments > 0">
+                  <img  src="{{asset('pictures/icons/small-comment-black.png')}}"  class="like-buttons" style=";margin-left:10px;cursor:default;opacity:0.5;">        
+                  <span id="nbrOfComments">##board.comments## Scribbles</span>
+                </span>
+            </div>
+
+          <span class="pin-track" ng-show="templateType == 3">
+            <core-icon-button icon="av:my-library-music" id="core_icon_button1"></core-icon-button>
+          </span>
+        
+        <span ng-show="board.isProfil != 1">
+          <button class="btn btn-sm btn-detault pin-button" ng-show="!board.pinned" ng-click="pinBoard(board)">
+            <img title="Pin Bord to ScrapBook"  src="{{ asset('pictures/icons/pin-black.png') }}" style="height: 20px;cursor: pointer;"> 
+          </button>
+
+          <button class="btn btn-sm btn-detault pin-button pinned" ng-show="board.pinned" ng-click="unPinBoard(board)">
+            <img title="Unpin Bord from ScrapBook"  src="{{ asset('pictures/icons/pin-black.png') }}" style="height: 20px;cursor: pointer;"> 
+          </button>
+        </span>
+    </div>
+  <!-- endfor -->
+  
+  </a>
+</div>
+
+<style type="text/css">
+
+    hr{
+      margin-bottom: 10px;
+    }
+
+    .input-lg{
+        margin-bottom: 14px;
+        display: none;
+    }
+
+  #img-logo{
+   border-radius: 56%;
+    height: 58px;
+    margin-top: 3px;
+  }
+
+    
+
+    body{
+        background-color: #F5F5F5;
+        overflow-x: hidden;
+    }
+
+
+    .board-background{
+      width: 49%;
+      margin-bottom: 1%;
+
+    }
+
+    .board-info{
+      /*position: absolute;*/
+      top: 10%;
+      padding-top: 15px;
+      /*border: 1px rgb(209, 209, 209) solid;*/
+      height: 89%;
+      width: 96%;
+      background-color: rgba(255, 255, 255, 0.89);
+      font-family: sans-serif;
+ }
+
+  .board{
+      width: 100%;
+      line-height: 1.42857143;
+      background-color: #fff;
+      border: 0px;
+      padding-bottom: 10px;
+      position: relative;
+      margin-bottom: 10px;
+      display: inline-block;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+      border-radius: 2px;
+      border: 1px solid rgb(219, 219, 219);
+      /*-moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+      -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+      box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);*/
+    }
+
+    .board:hover{
+      opacity: 1;
+     }
+
+  .likes-comments{
+    font-family: serif;
+    font-size: 10px;
+    color: rgb(187, 187, 187);
+    text-align: right;
+  }
+
+
+    .likes-comments img{
+      height: 13px;
+      margin-top: -2.5px;
+    }
+
+  .small-community{
+    margin-right: 0px;
+    height: 13px;
+  }
+
+  
+    .board-description{
+      color: #3D3A3A;
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-bottom: 25px;
+      font-family: sans-serif;
+      max-height: 140px;
+      text-overflow: ellipsis;
+      white-space: normal;
+      overflow: hidden;
+    }
+
+    .boards-container{
+      padding: 15px 20px;
+    }
+
+    .board-title{
+      /*text-align: center;*/
+      color: black;
+      padding-left: 10px;
+      padding-right: 10px;
+      text-transform: capitalize;
+      font-family: sans-serif;
+      margin-bottom: -12px;
+      font-weight: bold;
+      font-size: 15px;
+      margin-top: 10px;
+    }
+    a{
+      text-decoration: initial;
+    }
+    a:focus
+    {
+      text-decoration: initial;
+    }
+    #container {
+        width: 100%;
+        max-width: 700px;
+        margin: 2em auto;
+    }
+    @media only screen and (min-width:500px)
+    {
+      .cols {
+          -moz-column-count:3;
+          -moz-column-gap: 3%;
+          -moz-column-width: 30%;
+          -webkit-column-count:3;
+          -webkit-column-gap: 3%;
+          -webkit-column-width: 30%;
+          column-count: 3;
+          column-gap: 3%;
+          column-width: 30%;
+      }
+    }
+
+    .pin-button
+    {
+      position: absolute;
+      bottom: 1px;
+      left: 8px;
+      opacity: 0.3;
+      margin-bottom: 3px;
+      background-color: transparent;
+      color: black;
+      border: 2px solid rgba(192, 191, 191, 0.83);
+      border-radius: 2px;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding: 2px;
+      font-weight: bold;
+      text-transform: capitalize;
+      font-family: sans-serif;
+    }
+    .pin-button:hover{
+      opacity:1;
+    }
+
+    .pinned
+    {
+      opacity:1;
+    }
+
+    .pin-track{
+      position: absolute;
+      bottom: 0;
+      left: 38px;
+      opacity:0.5;
+    }
+    .pin-track:hover{
+      opacity: 1;
+    }
+</style>

@@ -1,0 +1,27 @@
+parameters:
+#    soullifiedprofil.example.class: soullified\profilBundle\Example
+
+services:
+#    soullifiedprofil.example:
+#        class: %soullifiedprofil.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+services:
+    soullifiedprofil.roleflag:
+        class: soullified\profilBundle\roleflag\roleflag
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    soullifiedprofil.profilboardgenerator:
+        class: soullified\profilBundle\profilboardgenerator\profilboardgenerator
+
+    soullifiedprofil.lifelistboardgenerator:
+        class: soullified\profilBundle\profilboardgenerator\lifelistboardgenerator
+
+
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    # kernel.listener.logged_in_user_listener:
+    #         class: soullified\UserBundle\Listener\LoggedInUserListener
+    #         tags:
+    #             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+    #         arguments: [ @router, @service_container ] 

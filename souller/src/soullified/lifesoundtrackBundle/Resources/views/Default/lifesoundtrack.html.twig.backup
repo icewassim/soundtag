@@ -1,0 +1,2365 @@
+<route-loading-indicator></route-loading-indicator>
+<div id="soundtrack-main-container" onClick="hideAllNotifs()" ng-show="isRouteLoading==false">
+<core-header-panel style="position:absolute;width:100%;height:100px;left:0;top:0;background-color:transparent;" navigation flex mode="seamed">
+    <form flex id="add-song-form" style="col-md-offset-1 col-sm-offset-1 col-xs-offset-0 col-md-5 col-sm-5 col-xs-5" ng-submit="hello()">
+          <paper-input  id="song-input"  icon="settings-power" label="##searchMessage##">
+          </paper-input>
+          <input  id="song-input-echo" style="width:100%;position:absolute;left:0px;top: 15px;" placeholder="TypeSong Title" >
+    </form>
+</core-header-panel>
+<div id="add-song-loading" class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 sub-container new-track-preview" style="text-align: center;min-height: 60px;">
+      <img src="{{asset('pictures/icons/loading.gif')}}" >
+</div>
+    <div ng-show="tracksArray.length == 0" class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 new-track-preview" style="  font-size: 20px;text-align: center;padding-top: 45px;font-weight: initial;opacity: 1;padding-bottom: 35px;" >
+      Behind every song a <strong>story</strong><br>
+      whether it  describes your <strong> mood </strong>today,<br>
+      revives an <strong> old memory </strong>, <br>
+      or just a song that keep <strong>buzzing</strong> in your head.
+      <br>
+      <br>
+      If your life had a <strong>soundtrack </strong>,<br>
+      how does it sound like?
+    </div>
+ 
+  <span id="main-row" ng-repeat="track in tracksArray" id="tracks-row" >
+      <div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 main-comment-area" >
+                 <textarea id="comment-area##track.id##" type="text" class="form-control tag-input" placeholder="What do you think about when you listen to :##track.songTitle##?" value="" ng-model="track.freshSubmcomment"></textarea>
+                 <button ng-show="track.freshSubmcomment.length > 0" class="btn btn-sm btn-primary" style="position: absolute;top: -5px;right: 4px;border-radius: 3px;" ng-click="submitTrackComment(track)">submit</button>
+                      <img src="{{asset('pictures/icons/tag_music.jpg')}}"  class="song-tag-icon">
+      </div>
+              <div ng-repeat="comment in track.comments" class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 main-comment-area"  style="opacity:1;"  >
+                      <span class="input-group-addon" style="border: 0px;border-radius: 0px;background-color: white;">
+                        <a href="/life/#/scrapbook/##comment.ownerNickname##" class="comment-username" >
+                          ##comment.ownerFullname##
+                        </a><img style="box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);background-color:white;opacity:1;cursor:pointer;width:50px;position:absolute;top:2px;left:1px;" ng-src="##comment.ownerProfilPicture##"/>
+                      </span>
+                      <span id="comment-area##comment.id##" class="form-control commented-area" >
+                        ##comment.content##
+                      </span>
+                      <span id="closeComment##comment.id##" class="close delete-comment" onClick="deleteComment(##comment.id##)">x</span>
+              </div>
+      <div ng-class="{'col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 sub-container new-track-preview painted':track.photos.length != 0,'col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 sub-container new-track-preview':track.photos.length == 0}"  id="track-container##track.id##" >
+                {%  if app.user %}
+                    <span ng-show="user.nickName=='{{app.user.username}}'">
+                      <span class="file-uploader-container upload-track-true-container"  style="left:inherit;top:45px;opacity:0.8;" 
+                      ng-class="{uploadPhotoNoLyrics:track.lyrics == 'null',uploadPhotoNoLyrics2:track.lyrics != 'null'}"  
+                      onClick="fakeTrackUploadTrigger(##track.id##)">
+                              <img src="{{asset('pictures/icons/camera-big.png')}}" class="updaload-track-pic-img"  />
+                      </span>
+                      <span>
+                        
+                        <core-icon-button icon="av:my-library-music"   ng-show="track.photos.length == 0" ng-click='fakeBindTrigger(track)' title="Add to a board" id="bind-to-a-board"  ng-class="{bindNoLyrics:track.lyrics == 'null',bindNoLyrics2:track.lyrics != 'null'}"  style="right:5px;"
+                        /></core-icon-button>
+                        <core-icon-button ng-show="track.photos.length != 0" ng-click='fakeBindTrigger(track)' title="Add to a board" id="bind-to-a-board" 
+                        ng-class="{bindNoLyrics:track.lyrics == 'null',bindNoLyrics2:track.lyrics != 'null'}"  
+                         /></core-icon-button>
+                      </span>
+                      <button id="choose-lyrics-button##track.id##" class='btn btn-default btn-select-lines' onClick="chooseLyrics(##track.id##)" style="margin-top: 1%;"
+                      ng-class="{noLyricsChooseButton:track.lyrics == 'null',noLyricsChooseButton2:track.lyrics != 'null'}"  
+                      >
+                        <img src="{{asset('pictures/icons/lyrics.png')}}" />
+                        lyrics
+                      </button>
+                    </span>
+
+                    <button id="done-selecting-button##track.id##" class='btn btn-success btn-select-lines disabled' onClick="doneSelecting(##track.id##)" style="margin-top: 1%;display:none;" >
+                      Done selecting
+                    </button>
+                {%  endif %}
+                    <img src="{{asset('pictures/icons/lyrics.png')}}" style="top: -8%;opacity: 0;height: 55px;margin-left: 185px;cursor: auto;" />
+
+                    <span id="lyrics##track.id##" 
+                      class="##track.ready##"  ng-show="track.lyrics != 'null'">
+                      <p class="lyrics-limited">##track.lyrics##</p>
+                    </span>
+                    <span  class="board-date">##track.date## ago</span>
+                  <!--   <span ng-show="track.mood == 1" class="board-date">How i felt ##track.date## ago</span>
+                    <span ng-show="track.mood == 2" class="board-date" >song was buzzing in my head ##track.date## ago</span>
+                    <span ng-show="track.mood == 3" class="board-date" >Reminded me of an untold story ##track.date## ago</span>
+                    <span ng-show="track.mood == 4" class="board-date" >Reminded me of a memory ##track.date## ago</span> -->
+                    <span class="new-track-preview-title" >
+                    <img ng-show="track.photos.length == 0" id="playSong##track.songtrackId##"  src="{{asset('pictures/icons/big-play-black.png')}}" class="play-btn" onClick='playSong(##track.songtrackId##,"##track.youtubeId##")' style="margin-left: -7px;" >
+
+                      <img ng-show="track.photos.length != 0" id="playSong##track.songtrackId##"  src="{{asset('pictures/icons/play-button.png')}}" class="play-btn" onClick='playSong(##track.songtrackId##,"##track.youtubeId##")' style="margin-left: -7px;" >
+
+
+                      <span id="songtrackTitle##track.songtrackId##">##track.title##</span>
+                      </span>
+      </div>
+  </span>
+ 
+           
+  </div>
+</div>  
+<!-- Modal photos-->
+    <div class="modal fade" id="uploadingmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog md-content">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" class="close"  aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">The Story Behind The Song</h4>
+          </div>
+          <div class="modal-body">
+                      
+          </div>
+          <div class="modal-footer" >
+              <a data-dismiss="modal" class="btn btn-default md-close" >Cancel</a>
+              <button class="btn btn-primary" type="submit"> Save Changes</button> 
+
+     </form>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>
+ 
+<span id="youtubeframe"></span>
+
+
+
+
+
+<style type="text/css">
+
+#soundtrack-main-container{
+  position: absolute;
+/*  height: 100%; */
+  min-height: 100%;
+  width:100%;
+  top: 0px;
+  padding-top: 100px;
+}
+
+.awesome-loading{
+  right: 29%;
+  margin-left: -55px;
+  border-bottom: 2px solid rgb(185, 185, 185);
+}
+
+.song-tag-icon
+{
+  position: absolute;
+  left: 30px;
+  height: 20px;
+  opacity: 0.4;
+  top: 10px;
+}
+
+#menu-icon
+{
+  cursor: pointer;
+  height: 25px;
+  margin-right: 10px;
+  margin-top: -4px;
+  opacity: 0.4;
+}
+
+#menu-icon:hover
+{
+  opacity: 1;
+}
+
+
+.search-input
+{
+  width: 190px;
+  height: 30px;
+  border-radius: 2px;
+}
+
+.popover.fade.bottom.in
+{
+  margin-top: 20px;
+}
+
+.notification:hover{
+  background-color: #E9E9E9;
+}
+.notification b{
+  text-transform: capitalize;
+}
+.notification{
+  cursor: pointer;
+  position: relative;
+}
+
+.not-date {
+  position: absolute;
+  right: 7px;
+  font-size: 10px;
+  bottom: 3px;
+  color: #BBB7B7;
+}
+
+.pic-comment-container .thumbnail{
+  display: inline-block;
+  margin-left: 5px;
+  padding: 0px;
+  max-width: 150px;
+  height: 159px;
+  width: 150px;
+  overflow-x: hidden;
+  background: transparent;
+  border: transparent;
+  overflow-y: scroll;
+}
+
+.pic-comment-container .thumbnail img{
+  max-width: 113px;
+  max-height: 200px;
+}
+
+#caching-pictures .thumbnail{
+  display: inline-block;
+}
+
+
+#caching-pictures .thumbnail img{
+  max-height: 100px;
+  max-width: 100px;
+}
+
+.file-uploader {
+   background: url("{{asset('pictures/icons/small-pic-black.png')}}") no-repeat;
+   cursor: pointer;
+}
+
+.file-uploader-container
+{
+  position: absolute;
+  top: -13px;
+  right: 0;
+  width: 25px;
+}
+
+.file-uploader input {
+   filter: alpha(opacity=0);
+   opacity: 0;
+}
+
+.play-btn
+{
+  height: 55px;
+}
+
+.pic-comment-container a img
+{
+  max-width: 150px;
+  height:150px;
+  cursor:pointer;
+  opacity:0.8;
+}
+
+
+.pic-comment-container img:hover
+{
+  opacity: 1;
+            -moz-border-radius: 2px;
+          -webkit-border-radius: 2px;
+          border-radius: 2px;
+          -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+          -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+      
+}
+
+.pic-comment-container
+{
+  height: 80px;
+  position: absolute;
+  top: 4px;
+  right: 2px;
+}
+.thumbnail .caption
+{
+  display: none;
+}
+.thumbnails{
+  position: absolute;
+  top: 0px;
+  left: 20px;
+ /* display: none;*/
+}
+
+.thumbnail>img, .thumbnail a>img {
+  margin-left: auto;
+  max-width: none;
+  display: inline-block;
+  margin-right: auto;
+}
+
+.modal
+{
+  overflow: hidden;
+}
+
+.main-comment-area
+{
+  padding:0px;
+  margin-bottom:-3px;
+}
+
+textarea:focus{
+  background-color: white;
+}
+
+.main-comment-area:hover
+{
+  opacity: 1;
+}
+.comment-username
+{
+  position: absolute;
+  top: 5px;
+  left: 60px;
+  color: #2a6496;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+
+.upload-pic-btn
+{
+  height: 20px;
+  position: absolute;
+  top: 10px;
+  right: 7px;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.autocomplete-suggestion{
+  background-color: rgba(66, 139, 202, 0.84);
+  color: white;
+  padding: 5px;
+  padding-left: 12px;
+  font-size: 20px;
+  border-top: 1px solid rgb(177, 168, 168);
+  cursor: pointer;
+  box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.22), 0 0 200px 1px rgba(49, 49, 49, 0.01);
+}
+
+.autocomplete-suggestion:hover{
+  background-color: rgba(219, 239, 255, 0.84);
+  color: black;
+}
+.autocomplete-suggestion strong{
+  color: rgb(175, 226, 46);
+}
+
+
+.input-lg{
+        margin-bottom: 14px;
+        display: none;
+    }
+
+.btn-select-lines
+{
+  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  position: absolute;
+  right: 10px;
+  top: 94px;
+  opacity: 0.7;
+  border-radius: 2px;
+}
+
+.btn-select-lines:hover
+{
+  opacity: 1;
+}
+
+
+.add-song-button:hover
+{
+  opacity: 1;
+}
+
+.board-background{
+      width: 49%;
+      margin-bottom: 1%;
+    }
+
+.board-info{
+      /*position: absolute;*/
+      top: 10%;
+      padding-top: 5px;
+      /*border: 1px rgb(209, 209, 209) solid;*/
+      height: 89%;
+      width: 96%;
+      font-family: sans-serif;
+ }
+
+    .form-control{                
+        display: inline-block;
+        width: 100%;
+        height: 34px;
+        margin-right: 12px;
+        padding-left: 10px;
+        box-shadow: 0 0 0.5px rgba(0,0,0,0.3);
+        border: 1px solid #C9CED6;
+    }
+
+.commented-area
+{
+  padding-left: 60px;
+  margin-top: -11px;
+  min-height: 60px;
+  width: 100%;
+  border-radius: 0;
+  background-color: rgba(231, 231, 231, 0.97);
+  padding-top: 17px;
+  height: auto;
+  margin-bottom: 5px;
+  opacity: 1;
+  z-index: 120;
+  box-shadow: none;
+  font-family:sans-serif;
+  font-weight:bold;
+  /*min-height: 157px;*/
+  margin-top: -14px;
+}
+    .comment{
+        cursor: default;
+        max-width: 500px;
+    }
+    .popover-content{
+          text-align: center;
+        }
+    
+    .popover{
+      border-radius: 0px;
+    }
+    
+    .menu_item{
+      margin-right: 25px;
+    }
+
+    .popover.right .arrow:after{
+      border-right-color: #f7f7f7;
+    }
+
+    .popover.left .arrow:after{
+      border-left-color: #f7f7f7;
+    }
+
+    a{
+      cursor: pointer;
+    }
+
+    .menu-primary-options{
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+      height: 50px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      font-size: 15px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      background-color: #1f2228;
+      border-top: 1px solid #262930;
+      border-bottom: 1px solid #191b1f;
+      text-transform: uppercase;
+    }
+
+    .menu-primary-options:hover{
+        background-color: #f2f6f7;
+        border-color: #f2f6f7;
+        color: #5a6273;
+     }
+
+    .menu-primary-options li{
+      display: none;
+    }
+
+    .submenu{
+      background: #f2f6f7;
+      bottom: 0;
+      color: #494f5b;
+      height: 100%;
+      left: 60px;
+      padding: 0;
+      position: absolute;
+      top: 0;
+      width: 180px;
+      z-index: 10;
+    }
+
+    a:hover{
+      text-decoration:inherit;
+    }
+
+    .notification{
+      color: black;
+      box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.2), 0 0 2px 1px rgba(255, 255, 255, 0.5);
+      margin-bottom: 8px;
+      padding: 6px;
+      padding-bottom: 1px;
+      padding-left: 10px;
+      padding-right: 5px;
+      line-height: 1.428571429;
+      background-color: #fff;
+      display: block;
+    }
+
+    #header .popover .popover-title{
+      padding-right: 10px;
+    }
+
+    .message-content{
+      /*margin-right: 5px;*/
+      color: #A2A2A2;
+    }
+
+    .rotate-buttons{
+      margin-top: 20px;
+    }
+    .comment-owner{
+      margin-right: 5px;
+      font-weight: bold;
+    }
+
+    @font-face{
+        font-family:OpenSans-Light;
+        src:url("{{asset('fonts/OpenSans-Light.ttf')}}");
+    }
+
+    .new-track-preview-title{
+      text-overflow: ellipsis;
+      display: block;
+      overflow-y: hidden;
+      height: 48px;
+      text-align: left;
+      font-family: sans-serif;
+      font-size: 20px;
+      font-weight: normal;
+      bottom: 12px;
+      position: absolute;
+      border-top: 1px solid rgb(218, 218, 218);
+    }
+
+    .new-track-preview img
+    {
+      margin-right: 0px;
+      opacity: 0.9;
+      cursor: pointer;
+    }
+
+   .new-track-preview img:hover
+    {
+      opacity: 1;
+    }
+        #song-input, #song-input-echo
+        {
+         /* margin-bottom: 1%;
+          width: 50%;
+          margin: -1px;
+          background-color: #FDFCFC;
+          border-radius: 2px;
+          width: 70%;*/
+        }
+
+        #song-input{
+          padding-left: 10px;
+          /*margin-top: -41px;*/
+        }
+
+        #song-input-echo
+        {
+          position: absolute;
+          /*display: none;*/
+          left: 11%;
+          width: 67%;
+          visibility: hidden;
+        }
+
+        #song-input:focus
+        {
+          background-color: white;
+        }
+
+
+        .new-track-preview hr{
+          margin-top: 10px;
+          margin-bottom: 0px;
+          border-top: 1px solid rgba(0, 0, 0, 0.17);
+          border-top: 1px solid rgba(194, 191, 191, 0.84);
+        }
+        .board-date
+        {
+          position: absolute;
+          right: 7px;
+          bottom: 5px;
+          font-size: 10px;
+          font-family: OpenSans-Light;
+        }
+
+        .user-thumnail
+        {
+          text-transform: capitalize;
+          background-color: white;
+          position: absolute;
+          top: -22%;
+          right: 1%;
+          border-left: 1px solid #eee;
+        }
+
+        .lyrics
+        {
+          white-space: pre-line;
+          margin-left: 6%;
+          cursor: pointer;
+        }
+
+        .lyrics.notSelected:hover
+        {
+          background-color: rgb(240, 240, 255);
+        }
+
+        .lyrics-limited
+        {
+          margin-top: -8%;
+          white-space: pre-line;
+          font-weight: normal;
+        }
+
+        td
+        {
+          padding-left: 10px;
+        }
+        .user-thumnail img
+        {
+          box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+          cursor: pointer;
+          position: absolute;
+          top: 4px;
+          right: 0px;
+          height: 53px;
+        }
+        #add-song-button
+        {
+          border-radius: 3px;
+          width: 145px;
+          padding: 0px;
+          padding-left: 8px;
+          padding-right: 8px;
+          margin-bottom: 0;
+        }
+        #add-song-button b
+        {
+          font-family: monospace;
+          font-size: 24px;
+         /* margin-right: 4px;*/
+          line-height: 0;
+        }
+        
+        #hidden-form
+        {
+          display: block;
+          margin-top: -500%;
+        }
+
+        #hidden-form .new-track-preview-title
+        {
+          margin-left: 2%;
+        }
+        
+        .proposition-line
+        {
+          margin-top: 10px;
+           cursor: pointer;
+        }
+
+        .proposition-line:hover
+        {
+          background-color: rgb(240, 240, 255);
+        }
+        .instruction
+        {
+          cursor: pointer;
+          z-index: 10;
+          opacity: 1;
+          width: 100%;
+          display: none;
+          position: absolute;
+          left: 0;
+          top: 0;
+          text-align: center;
+          padding-bottom: 5%;
+          border: 0px;
+          border-top: 1px solid #eee;
+          border-radius: 0px;
+        }
+
+        .instruction b
+        {
+          margin-left: 3%;
+          font-family: sans-serif;
+        }
+
+        .lyrics-line img
+        {
+          margin-right: 0px;
+        }
+
+        .lyrics.notSelected
+        {
+          min-height: 0;
+          margin-left: 1%;
+          width: 80%;
+          background-color: transparent;
+          color: black;
+        }
+        .lyrics.notSelected img
+        {
+          opacity:0;
+        }
+
+        .lyrics.selected
+        {
+          min-height: 0;
+          margin-left: 1%;
+          width: 80%;
+          background-color:#5cb85c;
+          color: white;
+        }
+
+        .dropdown{
+          position: absolute;
+          right: 0px;
+          margin-left: 21px;
+          top: 0px;
+        }
+
+
+        .dropdown-menu{
+          z-index: 20;
+        }
+
+        }
+        .menu_item{
+          margin-right: 25px;
+        }
+
+
+        .popover{
+          min-width: 300px;
+          border-radius: 0px;
+        }
+
+        .comment-thumbnail{
+          background-color: white;
+          -moz-border-radius: 2px;
+          -webkit-border-radius: 2px;
+          border-radius: 2px;
+          -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+          -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+          box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+          position: absolute;
+          top: 7px;
+          right: 10px;
+          max-height: 80px;
+          max-width: 100px;
+        }
+
+        #songsPropositions
+        {
+          margin-top: 10px;
+        }
+        .menu-hr {
+          display: flex;
+          margin-bottom: 10px;
+          margin-top: 10px;
+        }
+
+        .follow-button
+        {
+          position: absolute;
+          color: white;
+          top: 0;
+          font-size: 10px;
+          padding: 5px;
+          right: 0;
+          font-family: sans-serif;
+          font-weight: bold;
+          border-radius: 0px;
+          border-bottom-left-radius: 4px;
+          border: 0;
+          background-color: #9DBCFF;
+        }
+
+        .progress{
+          margin-bottom: 0px;
+          border-radius: 0px;
+        }
+
+        .btn-success.disabled
+        {
+          opacity:0.2;
+        }
+
+        .autocomplete-suggestions{
+          overflow: hidden;
+          box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.22), 0 0 200px 1px rgba(49, 49, 49, 0.01);
+        }
+
+        .autocomplete-suggestion{
+          text-overflow: ellipsis;
+          white-space: nowrap; 
+        }
+
+
+        .delete-comment
+        {
+          display: none;
+          position: absolute;
+          top: 3px;
+          right: 3px;
+          opacity: 0.2;
+          font-size: 16px;
+          font-weight: 700;
+          font-family: inherit;
+        }
+
+
+        .tag-input
+        {
+          margin-top: -8px;
+          width: 100%;
+          border-radius: 0;
+          border: none;
+          min-height: 70px;
+          border-bottom: 1px solid #C9CED6;
+          padding-top: 17px;
+          padding-right: 20px;
+          padding-left: 50px;
+          margin-bottom: 0px;
+          background-color: #F7F9FC;
+          font-size: 13px;
+        }
+
+        .tag-input:hover{
+          background-color: white;
+        }
+        textarea.form-control{
+          height: 50px;
+        }
+        .lb-number
+        {
+          display: none;
+          visibility: hidden;
+        }
+        .lightboxOverlay
+        {
+          position: fixed;
+          width: 100%;
+          height: 100%;
+          z-index: 12;
+        }
+
+        .lightbox
+        {
+          z-index: 13;
+        }
+
+        .spinner
+        {
+          margin-top: -23px;
+          margin-left: -220px;
+          display: block;
+        }
+
+
+.editArea
+{
+  min-height: 160px;
+  margin-left: 35px;
+  width: 90%;
+}
+
+#mood-slector{
+  color:rgba(128, 128, 128, 0.79);
+  border-color: transparent;
+}
+
+
+#mood-slector:hover{
+  box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.2), 0 0 2px 1px rgba(255, 255, 255, 0.5);
+  border-color:rgba(128, 128, 128, 0.31);
+}
+
+#add-song-loading
+{
+  display: none;
+}
+
+.introduction{
+  text-align: center;
+  font-size: 25px;
+  background-color: rgba(255, 255, 255, 0.84);
+  color: rgba(3, 3, 3, 0.48);
+  padding: 10px;
+  border-radius: 2px;
+  font-family: OpenSans-Light;
+  font-weight: bolder;
+  box-shadow:0 4px 10px 0px rgba(0, 0, 0, 0.48), 0 0 2px 1px rgba(255, 255, 255, 0.5);
+}
+
+.btn-select-lines img{
+  height: 36px;
+  margin-left: -13px;
+  margin-top: -15px;
+  margin-bottom: -15px;
+  margin-right: -7px;
+}
+
+.updaload-track-pic-img{
+  border: 3px dotted rgba(0, 0, 0, 0.45);
+  padding-left: 5px;
+  border-radius: 3px;
+  padding-right: 5px;
+  padding-top: 1px;
+  background-color: white;
+  padding-bottom: 1px;
+  opacity: 1;
+}
+.upload-track-true-container{
+  top:15px;
+  right:35px;
+  left:inherit;
+}
+.painted{
+  color: white;
+  min-height: 360px;
+  color: white;
+  height: auto;
+  box-shadow: rgba(0, 0, 0, 0.619608) 2px -75px 159px inset;
+  background-position: 50% 50%;
+}
+
+.painted span p{
+  background-color: rgba(0, 0, 0, 0.19);
+  padding: 9px;
+  padding-top: 0;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.39);
+}
+
+.bindNoLyrics{
+  top: 0px;
+  left: 21px;
+  right:initial;
+  position: absolute;
+}
+
+.bindNoLyrics2{
+  top: 0px;
+  position: absolute;
+  right: 21px;
+  left:initial;
+}
+
+.uploadPhotoNoLyrics
+{
+  left: inherit;
+  margin-top : -30px;
+  right: 51%;
+}
+
+.noLyricsChooseButton
+{
+  top: 5px;
+}
+</style>
+<script src="https://apis.google.com/js/client.js?onload=googleApiClientReady"></script>
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+    <link rel="icon" href="{{asset('pictures/icons/soulicon.ico')}}" type="image/x-icon" />
+    <link rel="shortcut icon" href="{{asset('pictures/icons/soulicon.ico')}}" type="image/x-icon" />
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="viewport" content="width=800, user-scalable=no">
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css')}} ">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/avgrund.css')}} " >
+
+    <script type="text/javascript" src="{{ asset('js/jquery-1.7.2.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}" ></script>    
+    <title>{{profil.fullname}} - Soundtrack</title>
+</head>
+
+
+<body>
+    <div id="firstheader" style="color: rgb(51, 51, 54);padding-top: 20px;font-family:sans-serif;">
+    
+        <a href="/app_dev.php/home" style="margin-left: 7%;margin-top: 11px;margin-right: 20px;">
+              <img id="home" src="{{asset('pictures/icons/home-small-black.png')}}" style="opacity:0.3;" />
+              Home
+        </a>
+      <a href="#">
+        <img id="Friend-requests" src="{{asset('pictures/icons/flag-black.png')}}" style="opacity: 0.3;"/>
+        Notifications
+      </a>
+
+    <span style="display:none;">
+
+                Earth blinking when someone achieve something 
+
+                something that will be remebred because
+
+                Motto/SEO-> helping u focus on what is important in life
+
+                actualité -> jack is 0.5 % closer to achieve ....
+                when u hit the 100% u neeed to upload a photo or film  your self doing 
+                u need to Updoad a photo or a video showing your self doing that when he finaly crossed
+                          board-> like 
+                          accomplishment -> thumbs up !! 
+
+                Actualité -> community
+                          -> Friends
+
+                in the header -> like twitter /life according to me , #explore and search
+                              -> change the flag to a bell
+
+                after a user just signed up he have to be redirected to life according to .... 
+                              -> my Soundtrack 
+                              -> about me 
+                              -> this is me 
+  </span>
+    
+
+            <div id="header">     
+                      {% include "soullifiedboardBundle:templates:UserMenuTemplate.html.twig" %}
+                     
+                     <a id="myname" onClick="displayMainMenue()" >
+                                        {{app.user.profil.Fullname}}
+                                        <img id="profilpicthumb" style="opacity:1;cursor: pointer;height: 25px;margin-right: 10px;"
+                                    
+
+                                    {%  if app.user.profil.photourl %}
+                                        src="{{asset('web/uploads/tmp/attachments/')}}{{app.user.profil.photourl.album.folder}}/small/{{app.user.profil.photourl.url}}"
+                                    {% elseif app.user.profil.Photoconnect %}
+                                          src="{{app.user.profil.Photoconnect}}"
+                                   
+                                    {%  else %}
+                                          ssrc="{{asset('pictures/icons/tinyUserBlack.png')}}"
+                                    {%  endif %}
+
+                                          />
+                                         </a>
+
+    </div>
+
+       
+            </div>
+
+
+
+
+<br>
+<br>
+<br>
+<br>
+<div id="main-container">
+<div class="row">
+  <span class="col-md-2 col-sm-1 col-xs-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-3 sub-container new-board-preview" style="position:fixed;width: 15%;">
+    <a class="new-board-preview-title" href="{{path('pingsteprofil',{id:profil.user.username})}}">{{profil.fullname}}
+        <img id="profilpicthumb" style="opacity:1;width:160px;"
+                            {%  if profil.photourl %}
+                                src="{{asset('web/uploads/tmp/attachments/')}}{{profil.photourl.album.folder}}/small/{{profil.photourl.url}}"
+                            {% elseif profil.Photoconnect %}
+                                  src="{{profil.Photoconnect}}"
+                            {%  else %}
+                                  ssrc="{{asset('pictures/icons/tinyUserBlack.png')}}"
+                            {%  endif %}
+                          />
+        <hr>
+    </a>
+  </span>
+</div>
+<div class="row">
+  <div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 sub-container new-board-preview" >
+      <input  id="song-input" class="form-control input-lg col-md-offset-1 col-sm-offset-1 col-xs-offset-0 col-md-4" placeholder="Song Title">
+      <input  id="url-input" class="form-control input-lg col-md-4" placeholder="Url">
+      <button id="add-song-button" class="form-control input-lg btn-primary" onClick="addSong()">Add Song <b> > </b> </button>
+      <span id="tag-group" class="btn-group btn-small ">
+        <button class="btn btn-success"disabled>@Tag a</button>
+        <button class="btn btn-default">Memory</button>
+        <button class="btn btn-default">Friend</button>
+        <button class="btn btn-default">Place</button>
+      </span>
+
+
+  </div>
+</div>
+<div id="main-row" class="row">
+
+
+
+
+
+ <div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 sub-container new-board-preview" >
+                  <span class="board-date">Posted 2 min ago</span>
+                  <iframe width="420" height="315" style="display:none;" src="//www.youtube.com/embed/xPU8OAjjS4k" frameborder="0" allowfullscreen></iframe>
+                  <p class="lyrics" >
+                    <img src="{{asset('pictures/icons/lyrics.png')}}" style="position: absolute;top: 3%;left: 1%;opacity: 0.4;" />
+                      I feel there is nothing I can do, yeah
+                      <br>
+                      I watched the world float
+                      <br>
+                      To the dark side of the moon
+                      <br>
+                      After all I knew it had to be
+                      <br>
+                      Something to do with you
+                      <br>
+                      I really don’t mind what happens now and then
+                      <br>
+                      As long as you’ll be my friend at the end
+                    </p>
+                    <hr>
+                    <span class="new-board-preview-title" href="{{path('pingsteprofil',{id:profil.user.username})}}">
+                      <img src="{{asset('pictures/icons/big-play.png')}}" >Kryptonite -  Three days grace
+    
+                        <table class="user-thumnail">
+                        <tr>
+                          <td>
+                            {{profil.Fullname}}
+                          </td>
+                        <tr>
+                          <td>  
+                            <img id="profilpicthumb" style="opacity:1" 
+                            {%  if profil.photourl %}
+                                src="{{asset('web/uploads/tmp/attachments/')}}{{profil.photourl.album.folder}}/small/{{profil.photourl.url}}"
+                            {% elseif profil.Photoconnect %}
+                                  src="{{profil.Photoconnect}}"
+                           
+                            {%  else %}
+                                  ssrc="{{asset('pictures/icons/tinyUserBlack.png')}}"
+                            {%  endif %}
+
+                          />
+                         </td>
+                        </tr>
+                      </table>
+                    </span>
+</div>
+ 
+
+
+  <div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 sub-container new-board-preview">
+                  <span class="board-date">Posted 2 min ago</span>
+                  <iframe width="420" height="315" style="display:none;" src="//www.youtube.com/embed/xPU8OAjjS4k" frameborder="0" allowfullscreen></iframe>
+                  <p class="lyrics" >
+                    <img src="{{asset('pictures/icons/lyrics.png')}}" style="position: absolute;top: 3%;left: 1%;opacity: 0.4;" />
+                      I feel there is nothing I can do, yeah
+                      <br>
+                      I watched the world float
+                      <br>
+                      To the dark side of the moon
+                      <br>
+                      After all I knew it had to be
+                      <br>
+                      Something to do with you
+                      <br>
+                      I really don’t mind what happens now and then
+                      <br>
+                      As long as you’ll be my friend at the end
+                    </p>
+                    <hr>
+                    <span class="new-board-preview-title" href="{{path('pingsteprofil',{id:profil.user.username})}}">
+                      <img src="{{asset('pictures/icons/big-play.png')}}" >Kryptonite -  Three days grace
+    
+                        <table class="user-thumnail">
+                        <tr>
+                          <td>
+                            {{profil.Fullname}}
+                          </td>
+                        <tr>
+                          <td>  
+                            <img id="profilpicthumb" style="opacity:1" 
+                            {%  if profil.photourl %}
+                                src="{{asset('web/uploads/tmp/attachments/')}}{{profil.photourl.album.folder}}/small/{{profil.photourl.url}}"
+                            {% elseif profil.Photoconnect %}
+                                  src="{{profil.Photoconnect}}"
+                           
+                            {%  else %}
+                                  ssrc="{{asset('pictures/icons/tinyUserBlack.png')}}"
+                            {%  endif %}
+
+                          />
+                         </td>
+                        </tr>
+                      </table>
+                    </span>
+</div>
+ 
+           
+  </div>
+</div>  
+
+
+</div>
+ 
+
+<script type="text/javascript">
+
+
+function displayMainMenue(){
+  $("#main-menu-dropdown").fadeIn();
+  $("#myname").attr("onClick","hideMainMenue()");
+}
+
+function hideMainMenue(){
+  $("#main-menu-dropdown").fadeOut();
+  $("#myname").attr("onClick","displayMainMenue()");
+}
+var keyWord="";
+function addSong()
+{
+  $("#validate-lyrics-button").fadeIn();
+  //getLyrics($("#song-input").val());
+  keyWord=$("#song-input").val();
+
+
+ {%  if profil.photourl %}
+   var src="{{asset('web/uploads/tmp/attachments/')}}{{profil.photourl.album.folder}}/small/{{profil.photourl.url}}"
+ {% elseif profil.Photoconnect %}
+   var src="{{profil.Photoconnect}}"                       
+ {%  else %}
+   var src="{{asset('pictures/icons/tinyUserBlack.png')}}"
+ {%  endif %}
+
+
+
+
+  var url='http://api.lyricsnmusic.com/songs?api_key=0ece71190cce454fd5beea3db7ec22&q='+encodeURI(keyWord);
+  //console.log(url);
+  $.ajax({
+  crossDomain: true,
+  contentType: "json; charset=utf-8",
+  dataType : "jsonp",
+  url: url,
+  }).done(function( data ) {
+     // console.log(data);
+     console.log(data)
+     // console.log(data.data[0]);
+      //$("#hidden-lyrics")[0].innerHTML=data.data[0].snippet.split("\n").join("<br>").replace("\n","<br>");
+      var lyrics=data.data[0].snippet.split("\n").join("<br>").replace("\n","<br>");
+      myhtml='<div class="col-md-6 col-sm-10 col-xs-10 col-md-offset-3 col-sm-offset-1 col-xs-offset-1 sub-container new-board-preview" ><span class="board-date">Playing now </span><p class="lyrics" ><img src='+"{{asset('pictures/icons/lyrics.png')}}"+' style="position: absolute;top: 3%;left: 1%;opacity: 0.4;" />'+lyrics+'</p><hr><span class="new-board-preview-title" href='+"{{path('pingsteprofil',{id:profil.user.username})}}"+'><img src='+"{{asset('pictures/icons/big-play.png')}}"+' >'+data.data[0].artist.name+' -  '+data.data[0].title +'<table class="user-thumnail"><tr><td>{{profil.Fullname}}</td><tr><td><img id="profilpicthumb" style="opacity:1" src='+src+' /></td></tr></table></span></div>'
+
+      $("#main-row").prepend(myhtml);
+      console.log(myhtml)
+    }
+  );
+
+
+
+
+}
+
+function select(id)
+{
+  var elt=$("#l"+id);
+  elt.find("img").fadeIn();
+  elt[0].style.backgroundColor="#5cb85c";
+  elt[0].style.color="white";
+  elt[0].getAttribute.class="lyrics-line selected";
+  elt.attr("class","lyrics-line selected");
+  elt.attr("onClick","deselect("+id+")");
+}
+
+function deselect(id)
+{
+  var elt=$("#l"+id);
+  elt[0].style.backgroundColor="white";
+  elt[0].style.color="black";
+  elt.attr("class","lyrics-line notSelected");
+  elt.attr("onClick","select("+id+")");
+  elt.find("img").fadeOut(0);
+
+}
+
+function doneSelecting()
+{
+  $(".lyrics-line.notSelected").fadeOut();
+  $(".lyrics-line.selected").css('background-color','white');
+  $(".lyrics-line.selected").css('color','black');
+  $("#validate-lyrics-button").fadeOut(200);
+}
+
+
+</script>
+
+
+
+    <style type="text/css">
+
+    .input-lg{
+        margin-bottom: 14px;
+        display: none;
+    }
+
+  #img-logo{
+   border-radius: 56%;
+    height: 58px;
+    margin-top: 3px;
+  }
+
+      #grid[data-columns]::before {
+        content: '4 .column.size-1of4';
+      }
+
+      /* These are the classes that are going to be applied: */
+      .column { float: left; }
+      .size-1of4{
+       width: 23%;
+       margin-left: 10px;
+       }
+
+      @media screen and (max-width: 480px){
+        #grid[data-columns]::before {
+          content: '1 .column.size-1of1';
+        }
+      }
+
+      @media screen and (min-width: 481px) and (max-width: 700px) {
+        #grid[data-columns]::before {
+          content: '2 .column.size-1of2';
+        }
+      }
+      @media screen and (min-width: 400px) {
+        #grid[data-columns]::before {
+          content: '3 .column.size-1of3';
+        }
+      }
+
+      @media screen and (min-width: 400px) {
+        #grid[data-columns]::before {
+          content: '4 .column.size-1of4';
+        }
+      }
+
+
+    body{
+        background-color: #F5F5F5;
+        overflow-x: hidden;
+    }
+
+    #firstheader{
+      top: 0;
+      width: 100%;
+      z-index: 11;
+      position: fixed;
+      border: 1px solid #d7d7d7;
+      background-color: white;
+      min-height: 70px;
+    }
+
+    .board-background{
+      width: 49%;
+      margin-bottom: 1%;
+
+    }
+
+    .board-info{
+      /*position: absolute;*/
+      top: 10%;
+      padding-top: 5px;
+      /*border: 1px rgb(209, 209, 209) solid;*/
+      height: 89%;
+      width: 96%;
+      background-color: rgba(255, 255, 255, 0.89);
+      font-family: sans-serif;
+ }
+
+  .board{
+      width: 100%;
+      border: 0px;
+      padding: 10px;
+      position: relative;
+      margin-left: 5px;
+      margin-bottom: 10px;
+      display: inline-block;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+      border-radius: 2px;
+      -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+      -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+      box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .board:hover{
+      opacity: 1;
+     }
+
+  .likes-comments{
+    font-family: serif;
+    font-size: 10px;
+    color: grey;
+    text-align: right;
+    position: absolute;
+    top: 8px;
+    right: 10px;
+  }
+
+
+    .likes-comments img{
+      height: 13px;
+      margin-top: -2.5px;
+    }
+
+  .small-community{
+    margin-right: -8px;
+    height: 13px;
+    opacity: 0.5;
+  }
+
+  .small-community:hover{
+    opacity: 1;
+  }
+    .board-description{
+      color: #ACACAC;
+    }
+
+    .boards-container{
+      width: 100%;
+      -webkit-border-bottom-right-radius: 4px;
+      -webkit-border-bottom-left-radius: 4px;
+      -moz-border-radius-bottomright: 4px;
+      -moz-border-radius-bottomleft: 4px;
+      border-bottom-right-radius: 4px;
+      border-bottom-left-radius: 4px;
+      border-collapse: separate;
+      padding: 15px 20px;
+     
+    }
+
+    .board-title{
+      /*text-align: center;*/
+      color: black;
+      text-align: left;
+      margin-left: 15%;
+      font-family: sans-serif;
+      margin-bottom: -12px;
+      font-weight: bold;
+      font-size: 15px;
+      margin-top: 20px;
+    }
+    #singupContainer{
+        width: 730px;
+        -webkit-border-bottom-right-radius: 4px;
+        -webkit-border-bottom-left-radius: 4px;
+        -moz-border-radius-bottomright: 4px;
+        -moz-border-radius-bottomleft: 4px;
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 4px;
+        -moz-box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.1);
+        -webkit-box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.1);
+        box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.1);
+        border-collapse: separate;
+        background-color: #fff;
+        padding: 15px 20px;
+        border: 1px solid #d7d7d7;
+        margin-top: 70px;
+        margin-left: 30px;
+        background-color: #F5F5F5;
+    }
+
+    .form-control{                
+        display: inline-block;
+        width: 34%;
+        height: 34px;
+        margin-right: 12px;
+        padding-left: 10px;
+        box-shadow: 0 0 0.5px rgba(0,0,0,0.3);
+        border: 1px solid #C9CED6;
+    }
+
+    .login-form{
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        display: inline-flex;
+    }
+
+
+    .inputname{
+        height: 80px;
+        font-weight: 100;
+        font-size: 60px;
+        border-collapse: separate;
+    }
+
+    #footer{
+        position: absolute;
+        bottom: 0px;
+        right: 0;
+    }
+
+
+
+    .sr-only{
+      background-color: #B8CCFF;
+    }
+
+    .textarea{
+      width: auto;
+    }
+
+
+    .album{
+      width: 100px;
+      position: absolute;
+      cursor: pointer;
+      left: 566px;
+      top: 160px;
+    }
+
+    #arrows{
+      display: none;
+    }
+
+
+    .albumtitle{
+      font-size: 46px;
+      position: absolute;
+      /*top: 448px;*/
+      /*left: 372px;*/
+      bottom: 50px;
+      left: 10px;
+      font-family: JennaSue;
+    }
+
+    .albumphotos{
+      -webkit-transform: rotate(0deg);
+      padding: 7px;
+      /*padding-bottom: 73px;*/
+      height: 220px;
+      border-radius: 0px;
+      box-shadow: 0 3px 10px 1px rgba(0, 0, 0, 0.6), 0 0 20px 1px rgba(255, 255, 255, 0.5);
+    }
+
+
+    #slider{
+       display: inline-block;
+       width: 134%;
+       cursor:pointer;
+       margin-left: -37px;
+    }
+    #rotate
+    {
+       width: 40%;
+       cursor:pointer;
+    }
+     #right-side-menue{
+        position: fixed;
+        height: 78%;
+        top: 70px;
+        background-color: black;
+      }
+
+    #comment-container{
+        display: none;
+        width: 500px;
+        position: absolute;
+        top:200px;
+        left: 300px;
+        background-color: rgba(122, 122, 122, 0.37);
+        box-shadow: 0 5px 12px -1px rgba(0, 0, 0, 0.6), 0 0 200px 1px rgba(255, 255, 255, 0.5);
+      }
+
+
+     body{
+      height: 100%;
+
+     }
+
+     .secondary-container{
+      margin-left: 10%;
+      margin-top: 80px;
+     }
+
+
+     #lifetrack{
+      display: inline-block;
+      margin-top: -25px;
+      vertical-align: -15px;
+     }
+
+    #slider-container{
+      margin: 0 auto;
+      padding: 14px;
+      padding: 20px00 0;
+      opacity: 0.8;
+      position: absolute;
+      margin-top: -77px;
+      box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.6), 0 0 200px 1px rgba(255, 255, 255, 0.5);
+    }
+
+    .comment{
+        cursor: default;
+        max-width: 500px;
+    }
+    .popover-content{
+          text-align: center;
+        }
+    
+    .popover{
+      border-radius: 0px;
+    }
+    
+    .menu_item{
+      margin-right: 25px;
+    }
+
+    .popover.right .arrow:after{
+      border-right-color: #f7f7f7;
+    }
+
+    .popover.left .arrow:after{
+      border-left-color: #f7f7f7;
+    }
+
+    a{
+      cursor: pointer;
+    }
+
+    #comment-form-header{
+      background-color: rgba(255, 255, 255, 0.38);
+      width: 100%;
+      padding-left: 10px;
+    }
+
+    #comment-form-header ul{
+      list-style-type: none;
+      font-size: 16px;
+      font-weight: bold;
+      min-width: 134px;
+      margin-bottom: 0px;
+      margin-top: 0px;
+      display: inline-block;
+    }
+
+
+    #comment-form-header ul:hover{
+      background-color: white;
+    }
+    #font-selector{
+      display: inline-block;
+      height: 28px;
+      margin-left: -39px;
+      line-height: 28px;
+      border: 1px solid #aaa;
+      padding: 4px;
+      color: #555;
+    }
+
+    .send-frequest{
+      background-color:rgb(226, 255, 199);
+    }
+
+    .send-frequest:hover{
+      background-color: rgb(195, 255, 139);
+    }
+
+
+    #myname{
+      text-decoration: none;
+      font-size: 13px;
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+      cursor: pointer;
+    }
+
+    #myname:hover{
+      opacity: 1;
+    }
+    .description{
+      min-height: 170px;
+    }
+
+    .modal-body input{
+      width: 50%;
+    }
+
+
+    .modal-body{
+      background-color: #F7F7F7;
+      margin-bottom: -15px;
+      padding-top: 2%;
+      width: 60%;
+      margin-left: 19%;
+    }
+
+    .modal-footer{
+      width: 60%;
+      margin-left: 19%;
+    }
+    .side-main-menu{
+      display: none;
+      z-index: 11;
+      -webkit-box-shadow: 0 0 19px -1px rgba(0, 0, 0, 0.1);
+      -moz-box-shadow: 0 0 19px -1px rgba(0, 0, 0, 0.1);
+      -ms-box-shadow: 0 0 19px -1px rgba(0, 0, 0, 0.1);
+      -o-box-shadow: 0 0 19px -1px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 19px -1px rgba(0, 0, 0, 0.1);
+      -webkit-transition: width 0.25s;
+      -moz-transition: width 0.25s;
+      -ms-transition: width 0.25s;
+      -o-transition: width 0.25s;
+      transition: width 0.25s;
+      -webkit-transform: translate3d(0, 0, 0);
+      -moz-transform: translate3d(0, 0, 0);
+      -ms-transform: translate3d(0, 0, 0);
+      -o-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      background: #191B1F;
+      bottom: 0;
+      position: fixed;
+      top: 0;
+      width: 240px;
+      height: 100%;
+      box-shadow: 0 3px 10px 1px rgba(0, 0, 0, 0.6), 0 0 20px 1px rgba(255, 255, 255, 0.5);
+    }
+
+    .sosNeticonWhite {
+      display: inline-block;
+      width: 45px;
+      vertical-align: -17px;
+      height: 45px;
+      background-image: url("{{asset('pictures/icons/transparent-preview.png')}}");
+      transition-property:background-image;
+      transition-duration: 0.5s;
+    }
+
+    .sosNeticonBlack {
+      display: inline-block;
+      width: 45px;
+      vertical-align: -17px;
+      height: 45px;
+      background-image: url("{{asset('pictures/icons/transparent-preview-black.png')}}");
+      transition-property:background-image;
+      transition-duration: 0.5s;
+    }
+
+
+    .smallSosNeticonBlack {
+      display: inline-block;
+      width: 45px;
+      vertical-align: -17px;
+      height: 45px;
+      background-image: url("{{asset('pictures/icons/transparent-preview-black.png')}}");
+      transition-property:background-image;
+      transition-duration: 0.5s;
+    }
+
+
+    .sosNeticonWhite:hover{
+      background-image: url("{{asset('pictures/icons/transparent-preview-black.png')}}");
+    }
+
+    .settingicon {
+      background-position:-154px -120px;
+    }
+
+    .boardicon {
+      background-position: -154px -550px;
+    }
+
+    .ownericon {
+      background-position: -924px -1390px;
+    }
+
+    .commentsicon{
+     background-position:  186px -301px;
+    }
+    .likeicon{
+      background-position: 0px -180px;
+    }
+
+    .unlikeicon{
+      background-position: 0px -180px;
+    }
+    .compressicon{
+      background-position: 261px 474px;
+    }
+
+    #compress-menu{
+      margin-left: 0px;
+      position: absolute;
+      bottom: 0px;
+      right: -8px;
+      cursor: pointer;
+    }
+
+
+    .menu-primary-options{
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+      height: 50px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      font-size: 15px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      background-color: #1f2228;
+      border-top: 1px solid #262930;
+      border-bottom: 1px solid #191b1f;
+      text-transform: uppercase;
+    }
+
+    .menu-primary-options:hover{
+        background-color: #f2f6f7;
+        border-color: #f2f6f7;
+        color: #5a6273;
+     }
+
+    .menu-primary-options li{
+      display: none;
+    }
+
+    .submenu{
+      background: #f2f6f7;
+      bottom: 0;
+      color: #494f5b;
+      height: 100%;
+      left: 60px;
+      padding: 0;
+      position: absolute;
+      top: 0;
+      width: 180px;
+      z-index: 10;
+    }
+
+    a:hover{
+      text-decoration:inherit;
+    }
+
+    .logo-side{
+      font-size: 26px;
+      color: white;
+      text-align: center;
+      margin-left: -50px;
+      margin-top: 40px;
+      min-height: 70px;
+      list-style:none;
+
+    }
+
+    .submenu-header{
+      background: transparent;
+      border-bottom: 1px solid white;
+      min-height: 173px;
+      padding: 1px 20px;
+      margin-bottom: 0px;
+      width: auto;
+    }
+
+
+    .submenu-header:hover{
+      background-color: white;
+    }
+
+
+    .submenu-header p{
+      color: #a8adb0;
+      font-weight: none;
+      font-size: 12px;
+      line-height: 16px;
+      margin: 18px 0 0 0;
+      padding: 0;
+      width: auto;
+    }
+
+
+    .submenu-item{
+      display: flex;
+      background: transparent;
+      border-bottom: 1px solid white;
+      min-height: 100px;
+      min-height: 85px;
+      padding: 18px 14px;
+      width: auto;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .submenu-item:hover{
+      background-color: white;
+    }
+
+
+    .submenu-icons{
+      margin-right: 10px;
+       display: inline-block;
+      width: 60px;
+      vertical-align: -17px;
+      height: 45px;
+      background-image: url("{{asset('pictures/icons/transparent-preview-black.png')}}");
+    }
+
+    .comment-icon{
+        background-position: -233px -550px;
+    }
+
+    .plus-icon{
+    background-position: 802px -427px;
+    }
+
+    .plus-icon{}
+    .everyone-icon{
+      background-position: -63px -899px;
+    }
+
+    .onlyme-icon{
+      background-position: -835px -494px;
+    }
+    .friends-icon{
+      background-position:-760px -490px;
+    }
+    .message-icon{
+      background-position: -693px -304px;
+    }
+
+    .song-icon{
+      background-position:  -1033px -1205px;
+    }
+
+    .photo-icon{
+     background-position:  417px -1984px;
+    }
+
+    .join-icon{
+     background-position:  -80px 346px;
+    }
+
+
+    .background-icon{
+     background-position: -154px 164px;
+    }
+
+    #header{
+      top:20px;
+      padding-left:2px;
+      width: auto;
+      margin-right: 0px;
+      right: 0px;
+      padding-left:8px;
+      position: absolute;
+   }
+
+
+    .small-menu-icons{
+      display: none;
+      position: absolute;
+      top: 2px;
+      right: 4px;
+      height: 19px;
+      width: 65px;
+      background-color: rgba(255, 255, 255, 0.58);
+    }
+
+    .small-menu-icons img{
+      cursor: pointer;
+      padding-left: 3px;
+      opacity:0.5;
+    }
+
+    .small-menu-icons img:hover{
+      opacity:1;
+    }
+
+    .arrow-prview{
+      display: inline;
+      margin-left: 3px;
+      border:1px solid;
+    }
+
+    .comment-only{
+      position: absolute;
+      left: 71%;
+      top: 6px;
+      opacity: 0.8;
+      cursor:pointer;
+    }
+
+
+    #color-select-frame{
+      margin-left: -34px;
+    }
+
+
+    #color-select-frame button{
+      width: 20px;
+      height: 20px;
+
+    }
+    .comment-only:hover{
+      opacity: 1;
+    }
+
+    .notification{
+      color: black;
+      box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.2), 0 0 2px 1px rgba(255, 255, 255, 0.5);
+      margin-bottom: 8px;
+      padding: 6px;
+      padding-left: 10px;
+      padding-right: 5px;
+      line-height: 1.428571429;
+      background-color: #fff;
+      display: block;
+    }
+
+    .songnot{
+      font-size: 20px;
+      color: grey;
+      font-weight: 100;
+      background-color: #F7F7F7;
+    }
+
+    .nothover{ 
+      padding-right: 10px;
+      cursor: pointer;
+    }
+
+    .notiseen{
+      background-color: #E9E9E9;
+    }
+
+    .nothover:hover{
+      background-color: #E9E9E9;
+    }
+
+    .like{
+      margin-left: 123px;
+      margin-right: 6px;
+      background-color: #EDF8EC;
+    }
+
+    .like:hover{
+      background-color: #C4DBC2;
+    }
+    .unlike{
+      background-color: #F8ECEC;
+    }
+
+    .unlike:hover{
+      background-color: #DBC2C2;
+    }
+
+    #header .popover .popover-title{
+      padding-right: 10px;
+    }
+
+    .message-content{
+      /*margin-right: 5px;*/
+      color: #A2A2A2;
+    }
+
+    .rotate-buttons{
+      margin-top: 20px;
+    }
+    .comment-owner{
+      margin-right: 5px;
+      font-weight: bold;
+    }
+
+    slider a{
+      display: none;
+    }
+
+    .modal-body input{
+      margin-bottom: 10px;
+    }
+
+    .message-area{  
+      width: 536px;
+      min-height: 247px;
+    }
+
+    #board-owner{
+      font-family: comesinhandy;
+      color: black;
+      margin-left: 30px;
+    }
+
+    .controls-buttons{
+      display: none;
+      text-align: right;
+    }
+
+    .alert {
+        width: 200px;
+        background-color: black;
+        background-color: rgba(30, 30, 30, 0.9);
+        text-shadow: 1px 1px black;
+        color: #eee;
+        padding-left: 65px;
+        box-shadow: 4px 3px 15px rgba(0,0,0,0.9);
+        border: 0;
+        background-repeat: no-repeat;
+        background-position: 15px 50%;
+        display: none;
+        z-index: 1000;
+    }
+     
+    .alert .close {
+        color: white;
+        color: rgba(255, 255, 255, 0.8);
+        text-shadow: 0 1px 0 #000;
+        opacity: 1;
+    }
+
+.avgrund-contents{
+  padding: inherit;
+  max-width: inherit;
+}
+
+    #board-tools-menue img{
+      cursor: pointer;
+      height: 25px;
+    }
+
+
+    .side-menu{
+      position: fixed;
+      left: 10px;
+      top: 100px;
+      font-weight: bold;
+    }
+
+    .nav-tabs >li{
+      border-radius: 0px;
+      float: none;
+    }
+
+
+  .nav-tabs>li>a{
+      border-radius: 0px;
+    }
+    .active{
+      border-radius: 2px 2px 2px 2px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .nav-tabs{
+      border-bottom: none;
+      float: none;
+      font-size: 12px;
+    }
+
+
+        @font-face{
+            font-family:OpenSans-Light;
+            src:url("{{asset('fonts/OpenSans-Light.ttf')}}");
+        }
+
+        .new-board-preview-title{
+          color: #428bca;
+          font-family:OpenSans-Light;
+          display: block;
+          font-size: 20px;
+          text-align: left;
+          position: relative;
+        }
+
+        .new-board-preview img
+        {
+          margin-right: 2%;
+          opacity: 0.6;
+          cursor: pointer;
+        }
+
+        .new-board-preview img:hover
+        {
+          opacity: 1;
+        }
+        #song-input,#url-input
+        {
+          margin-bottom: 1%;
+          width: 25%;
+          margin-left: 2%;
+          margin-right: 1%;
+          background-color: #FDFCFC;
+          border-radius: 2px;
+        }
+        #song-input:focus
+        {
+          opacity: 1;
+          background-color: white;
+        }
+        .new-board-preview{
+          min-height: 80px;
+          color: black;
+          margin-bottom: 1%;
+          font-family:OpenSans-Light;
+          padding-top: 15px;
+          background-color: white;
+          box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.2), 0 0 2px 1px rgba(255, 255, 255, 0.5);
+          padding-bottom: 30px;
+        }
+
+        .board-date
+        {
+          position: absolute;
+          right: 1%;
+          top: 0%;
+          color: grey;
+          font-size: 15px;
+        }
+
+        .user-thumnail
+        {
+          background-color: white;
+          position: absolute;
+          top: -22%;
+          right: 1%;
+          border-left: 1px solid #eee;
+        }
+
+        .lyrics
+        {
+          margin-left: 11%;
+        }
+
+        td
+        {
+          padding-left: 10px;
+        }
+        .user-thumnail img
+        {
+          height: 70px;
+          margin-right: 0;
+        }
+        #add-song-button
+        {
+          margin-bottom: 0;
+          padding: 0.5%;
+          border-radius: 3px;
+        }
+        #add-song-button b
+        {
+          margin-left: 3%;
+          font-family: sans-serif;
+        }
+
+
+        #tag-group
+        {
+          position: absolute;
+          left: 0;
+          bottom: 0;
+        }
+
+        #tag-group button
+        {
+          border-radius: 1px;
+          font-size: 10px;
+          padding: 3px;
+          font-family: sans-serif;
+          font-weight: bold;
+        }
+        #hidden-form
+        {
+          display: block;
+          margin-top: -500%;
+        }
+
+        #hidden-form .new-board-preview-title
+        {
+          margin-left: 2%;
+        }
+        
+        .lyrics-line
+        {
+          margin-left: 12%;
+          cursor: pointer;
+        }
+
+        .lyrics-line:hover
+        {
+          background-color: rgb(240, 240, 255);
+        }
+        .instruction
+        {
+          cursor: pointer;
+          z-index: 10;
+          opacity: 1;
+          width: 100%;
+          display: none;
+          position: absolute;
+          left: 0;
+          top: 0;
+          text-align: center;
+          padding-bottom: 5%;
+          border: 0px;
+          border-top: 1px solid #eee;
+          border-radius: 0px;
+        }
+
+        .instruction b
+        {
+          margin-left: 3%;
+          font-family: sans-serif;
+        }
+
+        .lyrics-line img
+        {
+          margin-right: 0px;
+          display: none;
+        }
+
+        .lyrics-line.selected
+        {
+          margin-left: 9%;
+        }
+
+        .dropdown{
+          position: absolute;
+          right: 0px;
+          margin-left: 21px;
+          top: 0px;
+        }
+
+
+        .dropdown-menu{
+          z-index: 20;
+        }
+
+        }
+        .menu_item{
+          margin-right: 25px;
+        }
+
+
+        .popover{
+          min-width: 300px;
+          border-radius: 0px;
+        }
+
+        .comment-thumbnail{
+          background-color: white;
+          -moz-border-radius: 2px;
+          -webkit-border-radius: 2px;
+          border-radius: 2px;
+          -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+          -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+          box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+          position: absolute;
+          top: 7px;
+          right: 10px;
+          max-height: 80px;
+          max-width: 100px;
+        }
+
+
+        .menu-hr {
+          display: flex;
+          margin-bottom: 10px;
+          margin-top: 10px;
+        }
+</style>
+</body>
+
+</html><!-- all righs reserved RuspeenA.com

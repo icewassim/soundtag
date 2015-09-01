@@ -1,0 +1,61 @@
+<?php
+
+namespace soullified\boardBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * dashboard
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="soullified\boardBundle\Entity\dashboardRepository")
+ */
+class dashboard
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="about", type="boolean",nullable=true)
+     */
+    private $about;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="avatar", type="boolean",nullable=true)
+     */
+    private $avatar;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="lifesoundtrack", type="boolean",nullable=true)
+     */
+    private $lifesoundtrack;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="todolist", type="boolean",nullable=true)
+     */
+    private $todolist;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}
