@@ -1,2 +1,2 @@
-# souller
-source code for souller.com
+# SouLler - Your Life Soundtrack
+Source code of www.souller.com
