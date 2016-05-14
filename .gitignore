@@ -3,3 +3,4 @@ build/*
 release/*
 src/uploaded-icons/*
 bower_components/*
+dist/*
