@@ -18,6 +18,21 @@
   "homepage": "https://github.com/icewassim/souller#readme",
   "devDependencies": {
     "bower": "^1.7.9",
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "gulp-inject": "^1.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-tslint": "^5.0.0",
+    "gulp-typescript": "^2.13.4",
+    "gulp-rimraf": "^0.1.1",
+    "gulp-mocha": "^2.2.0",
+    "tslint": "^3.10.2",
+    "typescript": "^1.8.10",
+    "wrench": "^1.5.9"
+  },
+  "dependencies": {
+    "consolidate": "^0.14.1",
+    "express": "^4.13.4",
+    "gulp-sourcemaps": "^1.6.0",
+    "handlebars": "^4.0.5"
   }
 }
