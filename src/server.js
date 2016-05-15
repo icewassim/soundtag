@@ -8,7 +8,9 @@ var port = process.env.PORT || 3000;
 app.engine('html', consolidate.handlebars);
 app.use('/pics', express.static(__dirname + '/assets/pics'));
 
-app.use('/js', express.static(__dirname + '/../assets/release'));
+console.log(__dirname + '/../dist');
+app.use('/js', express.static(__dirname + '/../dist'));
+app.use('/bower', express.static(__dirname + '/../bower_components'));
 
 app.use('/seiyria-bootstrap-slider', express.static(__dirname + '/../bower_components/seiyria-bootstrap-slider/dist'));
 app.use('/color-picker', express.static(__dirname + '/../bower_components/mjolnic-bootstrap-colorpicker/dist'));

@@ -3,7 +3,14 @@
 <head>
 	<title>SoundTags | The soundtrack of my life </title>
 </head>
-<body>
+<body ng-app="app.core" data-framework="typescript">
 
+	<div ng-controller="playlistController">
+		<song song="song"></song>
+	</div>
+
+<script src="/bower/jquery/dist/jquery.js"></script>
+<script src="/bower/angular/angular.js"></script>
+<script src="/js/core.js"></script>
 </body>
 </html>
