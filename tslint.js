@@ -27,6 +27,7 @@
     "no-string-literal": false,
     "no-trailing-comma": true,
     "no-trailing-whitespace": true,
+    "no-internal-module":false,
     "no-unused-variable": false,
     "no-unreachable": true,
     "no-use-before-declare": true,

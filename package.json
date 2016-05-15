@@ -32,6 +32,7 @@
   "dependencies": {
     "consolidate": "^0.14.1",
     "express": "^4.13.4",
+    "gulp-concat": "^2.6.0",
     "gulp-sourcemaps": "^1.6.0",
     "handlebars": "^4.0.5"
   }
