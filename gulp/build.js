@@ -15,8 +15,8 @@ gulp.task('ts-compile', function() {
     .pipe(tsc({
       target: 'ES5',
       sortOutput: true,
-      declarationFiles: false,
-      noExternalResolve: false,
+      module: "amd",
+      preserveConstEnums: true,
     }));
 
   // tsResult.pipe(ts.filter(tsProject, filterSettings));

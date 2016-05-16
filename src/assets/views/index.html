@@ -3,10 +3,10 @@
 <head>
 	<title>SoundTags | The soundtrack of my life </title>
 </head>
-<body ng-app="app.core" data-framework="typescript">
+<body ng-app="app" data-framework="typescript">
 
-	<div ng-controller="playlistController">
-		<song song="song"></song>
+	<div ng-controller="playlistController as vm">
+		<song song="vm.song"></song>
 	</div>
 
 <script src="/bower/jquery/dist/jquery.js"></script>
