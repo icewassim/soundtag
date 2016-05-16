@@ -1,12 +1,12 @@
-/// <reference path='../../_all.ts' />
+/// <reference path="../../_all.ts"/>
 
-namespace playlist {
+namespace soundTags {
   "use strict";
 
-  function todoEscape(): ng.IDirective {
-    return{
+  export function songDirective(): ng.IDirective {
+    return {
       restrict: "E",
-      templateUrl: "song.html",
+      templateUrl: "/components/song/song.html",
       scope: {
         song: "=song"
       }
