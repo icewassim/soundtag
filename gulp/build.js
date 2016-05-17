@@ -5,7 +5,8 @@ let gulp = require('gulp'),
   conf = require('./conf'),
   sourcemaps = require('gulp-sourcemaps'),
   wrench = require('wrench'),
-	concat = require('gulp-concat'),
+  del = require('del'),
+  concat = require('gulp-concat'),
   tslint = require('gulp-tslint');
 
 
@@ -19,8 +20,6 @@ gulp.task('ts-compile', function() {
       noExternalResolve: false,
     }));
 
-  // tsResult.pipe(ts.filter(tsProject, filterSettings));
-  //tsResult.dts.pipe(gulp.dest("./dest"));
   return tsResult.js
 		.pipe(concat(conf.paths.distCoreJS))
     .pipe(sourcemaps.write('.'))
@@ -35,7 +34,7 @@ gulp.task('ts-lint', function() {
 });
 
 gulp.task('ts-clean', function() {
-  return wrench.rmdirSyncRecursive(conf.paths.dist);
+  return del(['dist/**/*']);
 });
 
 gulp.task('build', ['ts-clean', 'ts-lint', 'ts-compile']);
