@@ -4,7 +4,8 @@
   "description": "your life soundtrack",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "gulp build"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   "devDependencies": {
     "bower": "^1.7.9",
     "gulp": "^3.9.1",
+    "gulp-nodemon":"2.0.7",
     "gulp-inject": "^1.2.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-tslint": "^5.0.0",
@@ -27,13 +29,13 @@
     "gulp-mocha": "^2.2.0",
     "tslint": "^3.10.2",
     "typescript": "^1.8.10",
-    "wrench": "^1.5.9"
-  },
-  "dependencies": {
+    "wrench": "^1.5.9",
     "consolidate": "^0.14.1",
     "express": "^4.13.4",
     "gulp-concat": "^2.6.0",
     "gulp-sourcemaps": "^1.6.0",
     "handlebars": "^4.0.5"
+  },
+  "dependencies": {
   }
 }

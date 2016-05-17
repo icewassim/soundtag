@@ -1,15 +1,26 @@
-/// <reference path="../../_all.ts"/>
+/// <reference path="../components.module.ts"/>
 
-namespace soundTags {
+namespace app.components {
   "use strict";
 
-  export function songDirective(): ng.IDirective {
+  interface ISong {
+    title: string;
+    artist: string;
+    prevLyrics: string;
+    soundCloudId?: string;
+    albumThumbnail?: string;
+    soundCloudPermalink?: string;
+  }
+
+  export function song(): ng.IDirective {
     return {
       restrict: "E",
       templateUrl: "/components/song/song.html",
       scope: {
-        song: "=song"
+        song: "="
       }
     };
   }
+
+  angular.module("app.components").directive("song", song);
 }
