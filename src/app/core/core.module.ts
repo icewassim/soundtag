@@ -1,4 +1,3 @@
-/// <reference path='../_all.ts' />
 
 namespace app.core {
   "use strict";
