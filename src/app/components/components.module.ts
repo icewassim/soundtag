@@ -4,3 +4,5 @@ namespace app.components {
 
   angular.module("app.components", []);
 }
+
+/// <reference path="./song/song.directive.ts"/>
