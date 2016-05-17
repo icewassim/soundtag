@@ -1,6 +1,6 @@
 let gulp = require('gulp'),
-	nodemon = require('gulp-nodemon'),
-	express = require('express');
+		nodemon = require('gulp-nodemon'),
+		express = require('express');
 
 
 gulp.task('run-server', function() {
