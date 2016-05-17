@@ -17,7 +17,9 @@ gulp.task('ts-compile', function() {
       target: 'ES5',
       sortOutput: true,
       module: "amd",
-      preserveConstEnums: true,
+      noResolve: false,
+      removeComments: true,
+      preserveConstEnums: false,
     }));
 
   return tsResult.js
