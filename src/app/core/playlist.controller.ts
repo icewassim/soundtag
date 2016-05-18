@@ -5,7 +5,7 @@ namespace  app.core {
   export class PlaylistController {
     public tracks: Array<app.components.ITrack>;
     constructor(private playlistService: app.core.IPlaylistService) {
-      this.playlistService.getSongs().then((result: Array<app.components.ITrack>) => {
+      this.playlistService.getTrackList().then((result: Array<app.components.ITrack>) => {
         this.tracks = result;
       });
     }

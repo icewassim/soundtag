@@ -2,17 +2,28 @@ namespace app.core {
   "use strict";
 
   export interface IPlaylistService {
-    getSongs: () => ng.IPromise<any>;
+    getTrackList: () => ng.IPromise<any>;
+    getCurrentTrack: () => app.components.ITrack;
+    setCurrentTrack: (track: app.components.ITrack) => void;
   }
 
   export class PlaylistService implements IPlaylistService {
     static IID = "playlistService";
+    private currentTrack: app.components.ITrack;
     static $inject: Array<string> = ["$http"];
 
     constructor(private $http: ng.IHttpService) {
     };
 
-    getSongs: () => ng.IPromise<any> = () => {
+    setCurrentTrack: (track: app.components.ITrack) => void = (track: app.components.ITrack) => {
+      this.currentTrack = track;
+    };
+
+    getCurrentTrack: () => app.components.ITrack  = () => {
+      return this.currentTrack;
+    };
+
+    getTrackList: () => ng.IPromise<any> = () => {
       let playlistUrl = "/mocks/playlistMock.json";
       return this.$http.get(playlistUrl)
                         .then((response: any) => {
@@ -22,7 +33,6 @@ namespace app.core {
                           console.error("$http.get Failed with error", error);
                         });
     };
-
   }
 
   angular.module("app.core").service(PlaylistService.IID, PlaylistService);
