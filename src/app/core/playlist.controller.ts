@@ -2,20 +2,10 @@
 namespace  app.core {
   "use strict";
 
-  interface ITrack {
-    title: string;
-    artist: string;
-    prevLyrics: string;
-    soundCloudId?: string;
-    albumThumbnail?: string;
-    soundCloudPermalink?: string;
-  }
-
-
   export class PlaylistController {
-    public tracks: Array<ITrack>;
+    public tracks: Array<app.components.ITrack>;
     constructor(private playlistService: app.core.IPlaylistService) {
-      this.playlistService.getSongs().then((result: Array<ITrack>) => {
+      this.playlistService.getSongs().then((result: Array<app.components.ITrack>) => {
         this.tracks = result;
       });
     }

@@ -3,7 +3,7 @@ namespace app.components {
   "use strict";
 
   interface ITrackScope extends ng.IScope {
-      playTrack(song: any): void;
+      playTrack(song: ITrack): void;
   }
 
   export function track(): ng.IDirective {
@@ -14,7 +14,7 @@ namespace app.components {
         track: "="
       },
       link: ($scope: ITrackScope) => {
-        $scope.playTrack = function(song: any){
+        $scope.playTrack = function(song: ITrack){
           console.log("playing the song", song.title, song.artist);
         };
       }
