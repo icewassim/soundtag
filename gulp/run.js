@@ -1,3 +1,5 @@
+"use strict";
+
 let gulp = require('gulp'),
 		nodemon = require('gulp-nodemon'),
 		express = require('express');
