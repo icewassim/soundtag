@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>SoundTags | The soundtrack of my life </title>
 </head>
-<body ng-app="app" data-framework="typescript">
 
+<body ng-app="app" data-framework="typescript">
 	<div ng-controller="playlistController as vm">
+		<giraffePlayer song="vm.tracks[0]"></giraffePlayer>
+		<br />
+		<br />
 		<track ng-repeat="track in vm.tracks" track="track"></track>
 	</div>
 
-<script src="/bower/jquery/dist/jquery.js"></script>
-<script src="/bower/angular/angular.js"></script>
-<script src="/js/core.js"></script>
+	<script src="/bower/jquery/dist/jquery.js"></script>
+	<script src="/bower/angular/angular.js"></script>
+	<script src="/js/core.js"></script>
 </body>
+
 </html>

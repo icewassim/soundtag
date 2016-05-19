@@ -2,7 +2,10 @@ namespace app.components {
   "use strict";
 
   interface IPlayerScope extends ng.IScope {
-      playTrack(song: ITrack): void;
+      isPlaying: boolean;
+      currenPosition: number;
+      start(song: ITrack): void;
+      stop(): void;
   }
 
   export function giraffePlayer(): ng.IDirective {
@@ -13,8 +16,12 @@ namespace app.components {
         track: "="
       },
       link: ($scope: IPlayerScope) => {
-        $scope.playTrack = function(song: ITrack){
+        $scope.start = function(song: ITrack){
+          $scope.isPlaying = true;
           console.log("playing the song", song.title, song.artist);
+        };
+        $scope.stop = function() {
+          $scope.isPlaying = false;
         };
       }
     };
