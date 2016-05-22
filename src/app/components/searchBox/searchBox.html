@@ -1,1 +1,11 @@
-<inpt type="text" placeholder="enter song or artist name"></inpt>
+<input type="text" ng-model="searchTerm" placeholder="enter song or artist name"></input>
+focusIndex: {{focusIndex}}
+<br />
+
+<div ng-repeat="suggestion in searchSuggestions">
+  ---------------------------------------------------------------------------
+  <div >{{suggestion.artist}} - {{suggestion.title}}  <span ng-show="focusIndex === $index + 1" > <== </span></div>
+</div>
+
+<br />
+<br />

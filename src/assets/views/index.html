@@ -6,6 +6,9 @@
 </head>
 
 <body ng-app="app" data-framework="typescript">
+	<div ng-controller="searchController as search">
+		<search-box></search-box>
+	</div>
 	<div ng-controller="playlistController as vm">
 		<giraffe-player track="vm.tracks[0]"></giraffe-player>
 		<br />

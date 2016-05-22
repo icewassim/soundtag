@@ -3,6 +3,7 @@ namespace app.core {
 
   export interface IPlaylistService {
     getTrackList: () => ng.IPromise<any>;
+    addTrack: (track: app.components.ITrack) => void;
     getCurrentTrack: () => app.components.ITrack;
     setCurrentTrack: (track: app.components.ITrack) => void;
   }
@@ -22,6 +23,10 @@ namespace app.core {
     getCurrentTrack: () => app.components.ITrack  = () => {
       return this.currentTrack;
     };
+
+    addTrack: (track: app.components.ITrack) => void = (track: any) => {
+      console.log("adding to track", track);
+    }
 
     getTrackList: () => ng.IPromise<any> = () => {
       let playlistUrl = "/mocks/playlistMock.json";
