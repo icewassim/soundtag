@@ -7,7 +7,7 @@
 
 <body ng-app="app" data-framework="typescript">
 	<div ng-controller="playlistController as vm">
-		<giraffePlayer song="vm.tracks[0]"></giraffePlayer>
+		<giraffe-player track="vm.tracks[0]"></giraffe-player>
 		<br />
 		<br />
 		<track ng-repeat="track in vm.tracks" track="track"></track>

@@ -7,3 +7,4 @@ namespace app.components {
 
 /// <reference path="./track/track.directive.ts"/>
 /// <reference path="./giraffePlayer/giraffePlayer.directive.ts"/>
+/// <reference path="./searchBox/searchBox.directive.ts"/>
