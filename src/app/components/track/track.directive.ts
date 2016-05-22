@@ -14,7 +14,7 @@ namespace app.components {
         track: "="
       },
       link: ($scope: ITrackScope) => {
-        $scope.playTrack = function(song: ITrack){
+        $scope.playTrack = (song: ITrack) => {
           console.log("playing the song", song.title, song.artist);
         };
       }

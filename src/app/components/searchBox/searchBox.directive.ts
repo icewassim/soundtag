@@ -6,9 +6,10 @@ namespace app.components {
   const ENTER_KEY = 13;
 
   interface ISearchScope extends ng.IScope {
-    searchTerm: any;
+    searchTerm: string;
     focusIndex: number;
     searchSuggestions: Array<app.components.ITrack>;
+    selectSuggestion: (suggestion: app.components.ITrack) => void;
   }
 
   export function searchBox(searchService: app.core.ISearchService, playlistService: app.core.IPlaylistService): ng.IDirective {
@@ -41,6 +42,13 @@ namespace app.components {
           $scope.searchTerm = $scope.searchSuggestions[$scope.focusIndex - 1].artist + " - " + $scope.searchSuggestions[$scope.focusIndex - 1].title;
           $scope.$apply();
         };
+
+        $scope.selectSuggestion = (suggestion: app.components.ITrack) => {
+          playlistService.addTrack(suggestion);
+          $scope.searchSuggestions = [];
+          $scope.searchTerm = "";
+          $scope.focusIndex = 0;
+        };
         element.bind("keydown", (event) => {
           // console.log(event.keyCode);
           switch (event.keyCode) {
@@ -63,10 +71,7 @@ namespace app.components {
               });
             break;
             case ENTER_KEY:
-              playlistService.addTrack($scope.searchSuggestions[$scope.focusIndex - 1]);
-              $scope.searchSuggestions = [];
-              $scope.searchTerm = "";
-              $scope.focusIndex = 0;
+              $scope.selectSuggestion($scope.searchSuggestions[$scope.focusIndex - 1]);
               $scope.$apply();
             break;
           }

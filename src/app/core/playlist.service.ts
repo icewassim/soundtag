@@ -11,9 +11,9 @@ namespace app.core {
   export class PlaylistService implements IPlaylistService {
     static IID = "playlistService";
     private currentTrack: app.components.ITrack;
-    static $inject: Array<string> = ["$http"];
+    static $inject: Array<string> = ["$http", "$rootScope"];
 
-    constructor(private $http: ng.IHttpService) {
+    constructor(private $http: ng.IHttpService, private $rootScope: ng.IRootScopeService) {
     };
 
     setCurrentTrack: (track: app.components.ITrack) => void = (track: app.components.ITrack) => {
@@ -24,8 +24,8 @@ namespace app.core {
       return this.currentTrack;
     };
 
-    addTrack: (track: app.components.ITrack) => void = (track: any) => {
-      console.log("adding to track", track);
+    addTrack: (track: app.components.ITrack) => void = (track: app.components.ITrack) => {
+      this.$rootScope.$broadcast("newTrackAdded", track);
     }
 
     getTrackList: () => ng.IPromise<any> = () => {
