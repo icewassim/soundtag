@@ -39,4 +39,4 @@ gulp.task('ts-clean', function() {
   return del(['dist/**/*']);
 });
 
-gulp.task('build', ['ts-clean', 'ts-lint', 'ts-compile']);
+gulp.task('build', ['ts-clean', 'ts-lint', 'ts-compile', 'sass']);
