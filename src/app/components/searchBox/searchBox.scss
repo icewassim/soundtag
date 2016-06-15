@@ -1,7 +1,78 @@
-$font-stack:    Helvetica, sans-serif;
-$primary-color: #333;
+@import "../../layout/common";
 
-body {
-  font: 100% $font-stack;
-  color: $primary-color;
+.search-box-container{
+  @extend .central-container;
+  margin-top: 30px;
+}
+
+.search-box-container .input-group-item {
+  position: relative;
+  @extend .standart-font;
+  border-bottom: 1px solid grey;
+  font-size: 30px;
+  color: white;
+  text-align: left;
+}
+.search-box-container .input-group-item .label {
+  top: 10px;
+  left: 0px;
+  color: grey;
+  font-size: 20px;
+  position: absolute;
+  width: 100%;
+  z-index: 0;
+}
+
+.selected-input:after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0px;
+  margin: auto;
+  height: 3px;
+  width: 0px;
+  float: left;
+  background: #4875ad;
+  animation: expand 0.5s ease forwards;
+}
+
+.selected-input .label {
+  animation: label_up 0.5s ease forwards;
+}
+
+#search-box {
+  border:none;
+  background-color: transparent;
+  box-shadow: none;
+  outline: none;
+  font-family: $openSans;
+  padding: 2px;
+  font-size: 20px;
+  margin: auto;
+  width: 60%;
+}
+
+.search-box-suggestion {
+  font-size: 20px;
+  text-align: left;
+  width: 100%;
+  display: block;
+  background-color: rgba(66, 139, 202, 0.84);
+  border-top: 0.2px solid #cccccc;
+  color:white;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  padding-left: 10px;
+  cursor: pointer;
+  opacity: .7;
+}
+
+.search-box-suggestion:hover,.focused-suggestion{
+  background-color: rgba(219, 239, 255, 0.84);
+  color: black;
+}
+
+.suggestions-container{
+  @extend .standart-font;
+  box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.22), 0 0 200px 1px rgba(49, 49, 49, 0.01);
 }

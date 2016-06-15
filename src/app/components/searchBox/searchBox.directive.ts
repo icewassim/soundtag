@@ -10,6 +10,7 @@ namespace app.components {
     focusIndex: number;
     searchSuggestions: Array<app.components.ITrack>;
     selectSuggestion: (suggestion: app.components.ITrack) => void;
+    triggerSelectInput: () => void;
   }
 
   export function searchBox(searchService: app.core.ISearchService, playlistService: app.core.IPlaylistService): ng.IDirective {
@@ -41,6 +42,12 @@ namespace app.components {
         let refreshDisplay = () => {
           $scope.searchTerm = $scope.searchSuggestions[$scope.focusIndex - 1].artist + " - " + $scope.searchSuggestions[$scope.focusIndex - 1].title;
           $scope.$apply();
+        };
+
+        $scope.triggerSelectInput = () => {
+          let searchBoxElm = document.getElementById("search-ipnut-group");
+          searchBoxElm.setAttribute("class", "selected-input input-group-item");
+          document.getElementById("search-box").focus();
         };
 
         $scope.selectSuggestion = (suggestion: app.components.ITrack) => {

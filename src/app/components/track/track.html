@@ -1,6 +1,29 @@
-title : ##track.title## ,<br />
-artist : ##track.artist## , <br />
+<div class="songtrack-container">
+  <div class="float-right">
+    <div class="triangle"></div>
+    <div class="songcover"></div>
+    <div class="song_map"></div>
+    <div class="songtrack-content">
+      <div class="songtrack-track-title"><span class="songtrack-date">Just Now</span>
+        <button class="edit-button">Edit Lyrics</button>
+        <a ng-click="playTrack(track)"><img class="play-btn" ng-src="/pictures/icons/play-btn.png"></a><span class="title" id="songTitle0"> ##track.artist## - ##track.title##   </span></div>
+      <hr>
+      <div class="songtrack-track-lyrics">
+        <textarea style="display:none;height: 311px;" id="editLyrics0"></textarea><span id="lyricsLoading0">There's a fire starting in my heart
 ##track.prevLyrics##
-<button ng-click="playTrack(track)" >play me </button>
-<br>
-<hr>
+...</span></div>
+    </div>
+    <div class="side-menu">
+      <a ng-click="append_map()"><img src="/pictures/icons/pin.png" class="pin-map-img"></a>
+      <a ng-click="edit_lyrics()"><img src="/pictures/icons/lyrics-white.png" style="height: 55px;margin-left: -2px;margin-top:-10px;"></a>
+      <div class="file-uploader">
+        <div class="uploader" data-dropzone="1" style="margin-top: 10px; margin-bottom: 10px">
+          <div class="controls" style="margin-bottom: 20px">
+            <input type="file" data-files="1" multiple=""><span class="spinner" data-spinner="1" style="display: none"><img src="/bundles/punkavefileuploader/images/spinner.gif"> Uploading...
+      </span></div>
+          <ul class="thumbnails" data-thumbnails="1"></ul>
+        </div>
+      </div>
+    </div><img src="/pictures/icons/tag_music.jpg" class="tag_music">
+    <textarea placeholder="What do yo think about when you listen to ##track.title##?"></textarea><img src="/pictures/icons/shadow-left.png" class="shadow-right"></div>
+</div>

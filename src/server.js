@@ -14,15 +14,11 @@ app.use('/css', express.static(__dirname + '/../dist'));
 app.use('/bower', express.static(__dirname + '/../bower_components'));
 app.use('/components', express.static(__dirname + '/../src/app/components'));
 app.use('/mocks', express.static(__dirname + '/../.tmp'));
+app.use('/pictures', express.static(__dirname + '/../pictures'));
 
-app.use('/seiyria-bootstrap-slider', express.static(__dirname + '/../bower_components/seiyria-bootstrap-slider/dist'));
-app.use('/color-picker', express.static(__dirname + '/../bower_components/mjolnic-bootstrap-colorpicker/dist'));
-app.use('/color-picker', express.static(__dirname + '/../bower_components/mjolnic-bootstrap-colorpicker/dist'));
 app.use('/bootstrap', express.static(__dirname + '/../bower_components/bootstrap/dist'));
 app.use('/jquery', express.static(__dirname + '/../bower_components/jquery/dist'));
 app.use('/css', express.static(__dirname + '/css'));
-app.use('/bootstrap-toggle', express.static(__dirname + '/../bower_components/bootstrap-toggle'));
-app.use('/icons', express.static(__dirname + '/uploaded-icons'));
 app.use('/preview-icons', express.static(__dirname + '/icons'));
 app.set('view engine', 'html');
 

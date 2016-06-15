@@ -1,0 +1,39 @@
+$openSans: 'Open Sans', sans-serif;
+
+@keyframes expand {
+  from {
+    width: 0%
+  }
+  to {
+    width: 100%
+  }
+}
+@keyframes label_up {
+  from {
+    transform: translateY(0px) scale(1) translateX(0)
+  }
+  to {
+    transform: translateY(-25px) scale(0.7) translateX(-145px)
+  }
+}
+@keyframes label_down {
+  from {
+    transform: translateY(-50px) scale(0.7) translateX(-50px)
+  }
+  to {
+    transform: translateY(0px) scale(1) translateX(0)
+  }
+}
+
+.central-container{
+  width: 100%;
+  display: block;
+  text-align: center;
+}
+
+
+.standart-font{
+  width: 50%;
+  font-family: $openSans;
+  display: inline-block;
+}
