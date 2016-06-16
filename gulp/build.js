@@ -6,6 +6,7 @@ let gulp = require('gulp'),
   sourcemaps = require('gulp-sourcemaps'),
   wrench = require('wrench'),
   del = require('del'),
+  uglify = require('gulp-uglify'),
   concat = require('gulp-concat'),
   tslint = require('gulp-tslint');
 
@@ -33,6 +34,12 @@ gulp.task('ts-lint', function() {
   return gulp.src(conf.paths.appTsFilesPath)
 						  .pipe(tslint())
 							.pipe(tslint.report('prose'));
+});
+
+gulp.task('compress', function() {
+  return gulp.src(conf.paths.distAllJSFiles)
+    .pipe(uglify())
+    .pipe(gulp.dest(conf.paths.deploy));
 });
 
 gulp.task('ts-clean', function() {
