@@ -1,5 +1,13 @@
 @import "../../layout/common";
 
+search-box{
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  z-index: 20;
+}
+
 .search-box-container{
   @extend .central-container;
   margin-top: 30px;

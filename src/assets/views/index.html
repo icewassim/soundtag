@@ -15,7 +15,7 @@
 		<giraffe-player track="vm.tracks[0]"></giraffe-player>
 		<br />
 		<br />
-		<track ng-repeat="track in vm.tracks" track="track"></track>
+		<track ng-repeat="track in vm.tracks | reverse" track="track" ng-class="(($index + 1) % 2 === 0)?'float-right-container':'float-left-container'" ></track>
 	</div>
 
 	<script src="/bower/jquery/dist/jquery.js"></script>

@@ -7,17 +7,21 @@
   font-family: 'Open Sans', sans-serif;
   margin-bottom: 40px;
 }
-.float-right,
-.float-left {
+
+.float-right-container, .float-left-container {
+  display: inline-block;
+  width: 100%;
+}
+
+.float{
   position: relative;
   background-color: white;
   height: 100%;
   display: block;
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 0 2px 1px rgba(255, 255, 255, 0.5);
   margin-bottom: 0;
 }
-.float-left .songtrack-content,
-.float-right .side-menu {
+.float-left-container .songtrack-container .float .songtrack-content,
+.float-right-container .songtrack-container .float .side-menu {
   float: right;
 }
 .songtrack-content {
@@ -34,6 +38,7 @@
   border: transparent;
   border-top: 1px solid rgba(128, 128, 128, 0.27);
   margin: 20px 0 10px;
+  margin-bottom: -10px;
 }
 .songtrack-pic img {
   width: 100%;
@@ -95,11 +100,11 @@
   top: 40px;
   border-color: transparent white transparent transparent;
 }
-.float-right .triangle {
+.float-right-container .songtrack-container .float  .triangle {
   border-width: 20px 40px 20px 0;
   left: -40px;
 }
-.float-left .triangle {
+.float-left-container .songtrack-container .float  .triangle {
   border-width: 25px 35px 25px 0;
   right: -35px;
   transform: rotate(180deg);
@@ -188,22 +193,6 @@ textarea {
   outline: 0;
   border-bottom: 3px solid #0099CC;
 }
-.shadow-right {
-  height: 282px;
-  opacity: 0.7;
-  z-index: -1;
-  position: absolute;
-  top: -23px;
-  right: -36px;
-}
-.shadow-left {
-  position: absolute;
-  top: -22px;
-  left: -28px;
-  height: 282px;
-  opacity: 0.7;
-  z-index: -1;
-}
 .shadow-circle {
   top: 22px;
   display: none;
@@ -213,19 +202,20 @@ textarea {
 
 @media only screen and (min-width: 1000px) {
 
-    .float-left .side-menu,
-    .float-right .songtrack-content {
+    .float-left-container .songtrack-container .float  .side-menu,
+    .float-right-container .songtrack-container .float  .songtrack-content {
         float: left;
     }
     #soundtrack-main-container{
       margin-left: 10%;
     }
-    .float-left,
-    .float-right {
+    .float-left-container .songtrack-container .float ,
+    .float-right-container .songtrack-container .float  {
         width: 35%;
     }
-   .float-right {
-        margin-left: 50%;
+   .float-right-container .songtrack-container .float  {
+        float: right;
+        margin-right: 5px;
     }
     .shadow-right,
     .shadow-left,
@@ -279,7 +269,6 @@ textarea {
     -moz-box-sizing: border-box;
     height: 32px;
     outline: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 #pac-input:focus {
     border-color: #4d90fe;
@@ -387,17 +376,16 @@ textarea {
         font-family: 'Open Sans', sans-serif;
         margin-bottom: 40px;
     }
-    .float-right,
-    .float-left {
+    .float-right-container .songtrack-container .float ,
+    .float-left-container .songtrack-container .float  {
         position: relative;
         background-color: white;
         height: 100%;
         display: block;
-        box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.2), 0px 0px 2px 1px rgba(255, 255, 255, 0.5);
         margin-bottom: 0px;
     }
-    .float-left .songtrack-content,
-    .float-right .side-menu {
+    .float-left-container .songtrack-container .float  .songtrack-content,
+    .float-right-container .songtrack-container .float  .side-menu {
         float: right;
     }
     .songtrack-content {
@@ -409,13 +397,6 @@ textarea {
         display: inline-block;
         height: 172px;
         overflow: hidden
-    }
-    .songtrack-content hr {
-        border: transparent;
-        border-top: 1px solid rgba(128, 128, 128, 0.27);
-        margin: 0px;
-        margin-top: 20px;
-        margin-bottom: 10px;
     }
     .songtrack-pic img {
         width: 100%;
@@ -461,11 +442,11 @@ textarea {
         top: 40px;
         border-color: transparent white transparent transparent;
     }
-    .float-right .triangle {
+    .float-right-container .songtrack-container .float  .triangle {
         border-width: 20px 40px 20px 0;
         left: -40px;
     }
-    .float-left .triangle {
+    .float-left-container .songtrack-container .float  .triangle {
         border-width: 25px 35px 25px 0;
         right: -35px;
         transform: rotate(180deg);

@@ -1,5 +1,5 @@
 <div class="songtrack-container">
-  <div class="float-right">
+  <div class="float">
     <div class="triangle"></div>
     <div class="songcover"></div>
     <div class="song_map"></div>
@@ -15,7 +15,7 @@
     </div>
     <div class="side-menu">
       <a ng-click="append_map()"><img src="/pictures/icons/pin.png" class="pin-map-img"></a>
-      <a ng-click="edit_lyrics()"><img src="/pictures/icons/lyrics-white.png" style="height: 55px;margin-left: -2px;margin-top:-10px;"></a>
+      <a ng-onclick="edit_lyrics()"><img src="/pictures/icons/lyrics-white.png" style="height: 55px;margin-left: -2px;margin-top:-10px;"></a>
       <div class="file-uploader">
         <div class="uploader" data-dropzone="1" style="margin-top: 10px; margin-bottom: 10px">
           <div class="controls" style="margin-bottom: 20px">
@@ -24,6 +24,9 @@
           <ul class="thumbnails" data-thumbnails="1"></ul>
         </div>
       </div>
-    </div><img src="/pictures/icons/tag_music.jpg" class="tag_music">
-    <textarea placeholder="What do yo think about when you listen to ##track.title##?"></textarea><img src="/pictures/icons/shadow-left.png" class="shadow-right"></div>
+    </div>
+    <img src="/pictures/icons/tag_music.jpg" class="tag_music">
+    <button ng-show="track.comment.$dirty">submit</button>
+    <textarea ng-model="track.comment" placeholder="What do yo think about when you listen to ##track.title## ?"></textarea>
+  </div>
 </div>

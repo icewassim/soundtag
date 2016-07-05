@@ -8,7 +8,6 @@ var port = process.env.PORT || 3000;
 app.engine('html', consolidate.handlebars);
 app.use('/pics', express.static(__dirname + '/assets/pics'));
 
-console.log(__dirname + '/../dist');
 app.use('/js', express.static(__dirname + '/../dist'));
 app.use('/css', express.static(__dirname + '/../dist'));
 app.use('/bower', express.static(__dirname + '/../bower_components'));
@@ -22,7 +21,6 @@ app.use('/css', express.static(__dirname + '/css'));
 app.use('/preview-icons', express.static(__dirname + '/icons'));
 app.set('view engine', 'html');
 
-console.log( __dirname + '/views');
 app.set('views', __dirname + '/assets/views');
 
 
