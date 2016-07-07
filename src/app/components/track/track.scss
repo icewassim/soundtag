@@ -376,6 +376,19 @@ textarea {
         font-family: 'Open Sans', sans-serif;
         margin-bottom: 40px;
     }
+    .submit-comment-btn {
+      background: #0099cc;
+      border: none;
+      padding: 3px;
+      padding-right: 10px;
+      padding-left: 10px;
+      color: white;
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      cursor: pointer;
+      border-radius: 2px;
+    }
     .float-right-container .songtrack-container .float ,
     .float-left-container .songtrack-container .float  {
         position: relative;

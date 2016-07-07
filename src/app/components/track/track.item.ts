@@ -7,6 +7,15 @@ namespace app.components {
     soundCloudId?: string;
     duration?: number;
     albumThumbnail?: string;
+    comment?: string;
+    comments?: Array<ICommentTrack>;
     soundCloudPermalink?: string;
+  }
+
+  export interface ICommentTrack {
+    content: string;
+    authorName: string;
+    authorPic: string;
+    date: string;
   }
 }

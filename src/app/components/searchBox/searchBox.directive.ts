@@ -51,7 +51,18 @@ namespace app.components {
         };
 
         $scope.selectSuggestion = (suggestion: app.components.ITrack) => {
-          playlistService.addTrack(suggestion);
+          searchService.getTrackLyrics(suggestion)
+            .then((response: any) => {
+              suggestion.prevLyrics = response.lyrics.trim();
+              playlistService.addTrack(suggestion);
+            })
+            .catch((error) => {
+              console.error("$http.get Failed with error", error);
+            });
+          searchService.getSoundCloudID(suggestion)
+              .then((response: any) => {
+                debugger;
+            });
           $scope.searchSuggestions = [];
           $scope.searchTerm = "";
           $scope.focusIndex = 0;
