@@ -4,16 +4,19 @@ namespace app.components {
   const UP_KEY = 38;
   const DOWN_KEY = 40;
   const ENTER_KEY = 13;
+  const PRESS_KEY_TIMEOUT = 1000;
 
   interface ISearchScope extends ng.IScope {
     searchTerm: string;
     focusIndex: number;
+    resetKey: number;
     searchSuggestions: Array<app.components.ITrack>;
     selectSuggestion: (suggestion: app.components.ITrack) => void;
     triggerSelectInput: () => void;
   }
 
-  export function searchBox(searchService: app.core.ISearchService, playlistService: app.core.IPlaylistService): ng.IDirective {
+  export function searchBox(searchService: app.core.ISearchService,
+                            playlistService: app.core.IPlaylistService): ng.IDirective {
     return {
       restrict: "E",
       templateUrl: "/components/searchBox/searchBox.html",
@@ -44,6 +47,20 @@ namespace app.components {
           $scope.$apply();
         };
 
+        let displaySearchSuggestions = ($scope: ISearchScope) => {
+          searchService.getSearchSuggestions($scope.searchTerm)
+          .then((data: any) => {
+            $scope.searchSuggestions = data.results.trackmatches.track.map(function(track){
+              return {
+                title: track.name,
+                splitted: track.name.split("").concat([" ", "-", " "]).concat(track.artist.split("")),
+                artist: track.artist,
+                image: track.image[0]["#text"]
+              };
+            });
+          });
+        };
+
         $scope.triggerSelectInput = () => {
           let searchBoxElm = document.getElementById("search-ipnut-group");
           searchBoxElm.setAttribute("class", "selected-input input-group-item");
@@ -59,16 +76,21 @@ namespace app.components {
             .catch((error) => {
               console.error("$http.get Failed with error", error);
             });
-          searchService.getSoundCloudID(suggestion)
+          /*searchService.getSoundCloudID(suggestion)
               .then((response: any) => {
                 debugger;
-            });
+            });*/
           $scope.searchSuggestions = [];
           $scope.searchTerm = "";
           $scope.focusIndex = 0;
         };
         element.bind("keydown", (event) => {
           // console.log(event.keyCode);
+          clearTimeout($scope.resetKey);
+          $scope.resetKey = setTimeout(() => {
+            displaySearchSuggestions($scope);
+          }, PRESS_KEY_TIMEOUT);
+
           switch (event.keyCode) {
             case UP_KEY:
               focusUp();
@@ -77,16 +99,8 @@ namespace app.components {
               focusDown();
             break;
             case SPACE_KEY:
-              searchService.getSearchSuggestions($scope.searchTerm)
-              .then((data: any) => {
-                $scope.searchSuggestions = data.results.trackmatches.track.map(function(track){
-                  return {
-                    title: track.name,
-                    artist: track.artist,
-                    image: track.image[0]["#text"]
-                  };
-                });
-              });
+              clearTimeout($scope.resetKey);
+              displaySearchSuggestions($scope);
             break;
             case ENTER_KEY:
               $scope.selectSuggestion($scope.searchSuggestions[$scope.focusIndex - 1]);

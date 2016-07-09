@@ -70,9 +70,13 @@ search-box{
   color:white;
   padding-bottom: 5px;
   padding-top: 5px;
-  padding-left: 10px;
+  padding-left: 5px;
   cursor: pointer;
-  opacity: .7;
+  min-height: 40px;
+}
+
+.margin-div {
+  margin-right: 13px;
 }
 
 .search-box-suggestion:hover,.focused-suggestion{
@@ -80,7 +84,14 @@ search-box{
   color: black;
 }
 
+.search-box-suggestion img{
+  float: left;
+}
 .suggestions-container{
   @extend .standart-font;
   box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.22), 0 0 200px 1px rgba(49, 49, 49, 0.01);
+}
+
+.tagged-letter{
+  color: rgb(175, 226, 46);
 }

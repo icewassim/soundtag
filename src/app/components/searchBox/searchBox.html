@@ -4,8 +4,16 @@
 </div>
 
 <div class="suggestions-container" ng-show="searchSuggestions.length > 0">
-  <div ng-repeat="suggestion in searchSuggestions" >
-    <a ng-class="(focusIndex !== $index + 1)?'search-box-suggestion':'search-box-suggestion focused-suggestion'" ng-click="selectSuggestion(suggestion)">{{suggestion.artist}} - {{suggestion.title}} <a/>
+  <div ng-repeat="suggestion in searchSuggestions " >
+    <!-- suggestionList = suggestion.split('') -->
+    <a ng-class="(focusIndex !== $index + 1)?'search-box-suggestion':'search-box-suggestion focused-suggestion'" ng-click="selectSuggestion(suggestion)">
+      <img ng-src="##suggestion.image##"  />
+      <span class="margin-div"></span>
+      <span ng-repeat="lett in suggestion.splitted track by $index"
+      ng-class="(searchTerm.indexOf(lett.toLowerCase()) !== -1 &&
+                 (searchTerm.indexOf(lett.toLowerCase()+suggestion.splitted[$index+1].toLowerCase()) !== -1) || searchTerm.indexOf(suggestion.splitted[$index-1].toLowerCase()+lett.toLowerCase()) !== -1)
+      ?'tagged-letter':''">##lett##</span>
+    <a/>
   </div>
 </div>
 
