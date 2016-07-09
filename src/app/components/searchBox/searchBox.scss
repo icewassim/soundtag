@@ -3,14 +3,18 @@
 search-box{
   position: absolute;
   top: 20px;
-  left: 0;
-  width: 100%;
+  width: 94%;
+  left: 6%;
+  border-left: 1px solid black;
   z-index: 20;
 }
 
 .search-box-container{
-  @extend .central-container;
+  padding-left: 20px;
   margin-top: 30px;
+  border-bottom: 1px solid black;
+  padding-bottom: 13px;
+  min-height: 32px;
 }
 
 .search-box-container .input-group-item {
@@ -22,8 +26,8 @@ search-box{
   text-align: left;
 }
 .search-box-container .input-group-item .label {
-  top: 10px;
-  left: 0px;
+  top: 7px;
+  left: 7px;
   color: grey;
   font-size: 20px;
   position: absolute;
@@ -50,11 +54,13 @@ search-box{
 
 #search-box {
   border:none;
+  min-height: 41px;
   background-color: transparent;
   box-shadow: none;
   outline: none;
   font-family: $openSans;
   padding: 2px;
+  padding-left: 10px;
   font-size: 20px;
   margin: auto;
   width: 60%;
