@@ -6,7 +6,7 @@
     <div class="songtrack-content">
       <div class="songtrack-track-title"><span class="songtrack-date">Just Now</span>
         <button class="edit-button">Edit Lyrics</button>
-        <a ng-click="playTrack(track)"><img class="play-btn" ng-src="/pictures/icons/play-btn.png"></a><span class="title" id="songTitle0"> ##track.artist## - ##track.title##   </span></div>
+        <button ng-click="playTrack(track)"><img class="play-btn" ng-src="/pictures/icons/play-btn.png"></button><span class="title" id="songTitle0"> ##track.artist## - ##track.title##   </span></div>
       <hr>
       <div class="songtrack-track-lyrics">
         <textarea style="display:none;height: 311px;" id="editLyrics0"></textarea><span id="lyricsLoading0">##track.prevLyrics## ...</span></div>
@@ -27,7 +27,7 @@
       ##comment.content##
     </div>
     <img src="/pictures/icons/tag_music.jpg" class="tag_music">
-    <button class="submit-comment-btn" ng-click="addComment(track)">submit</button>
+    <button class="submit-comment-btn" ng-click="addComment(track)">22submit{{vm.tracks.length}}</button>
     <textarea ng-model="track.comment" placeholder="What do yo think about when you listen to ##track.title## ?"></textarea>
   </div>
 </div>

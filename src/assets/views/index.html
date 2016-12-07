@@ -13,7 +13,7 @@
 		<search-box></search-box>
 	</div>
 	<div ng-controller="playlistController as vm">
-		<giraffe-player track="vm.tracks[0]"></giraffe-player>
+		<giraffe-player track=""></giraffe-player>
 		<br />
 		<br />
 		<track ng-repeat="track in vm.tracks | reverse" track="track" ng-class="(($index + 1) % 2 === 0)?'float-right-container':'float-left-container'" ></track>

@@ -1,7 +1,7 @@
 namespace app.components {
   "use strict";
 
-  interface IPlayerScope extends ng.IScope {
+  export interface IPlayerScope extends ng.IScope {
       isPlaying: boolean;
       currenPosition: number;
       start(song: ITrack): void;
@@ -12,17 +12,13 @@ namespace app.components {
     return {
       restrict: "E",
       templateUrl: "/components/giraffePlayer/giraffePlayer.html",
-      scope: {
-        track: "="
-      },
       link: ($scope: IPlayerScope) => {
-        $scope.start = function(song: ITrack){
-          $scope.isPlaying = true;
-          console.log("playing the song", song.title, song.artist);
-        };
-        $scope.stop = function() {
-          $scope.isPlaying = false;
-        };
+          $scope.start = function(song: app.components.ITrack){
+            $scope.isPlaying = true;
+          };
+          $scope.stop = function() {
+            $scope.isPlaying = false;
+          };
       }
     };
   }

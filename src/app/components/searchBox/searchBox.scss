@@ -69,7 +69,6 @@ search-box{
 .search-box-suggestion {
   font-size: 20px;
   text-align: left;
-  width: 100%;
   display: block;
   background-color: rgba(66, 139, 202, 0.84);
   border-top: 0.2px solid #cccccc;
@@ -95,6 +94,7 @@ search-box{
 }
 .suggestions-container{
   @extend .standart-font;
+  width: 100%;
   box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.22), 0 0 200px 1px rgba(49, 49, 49, 0.01);
 }
 

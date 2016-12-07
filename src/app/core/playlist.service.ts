@@ -4,8 +4,8 @@ namespace app.core {
   export interface IPlaylistService {
     getTrackList: () => ng.IPromise<any>;
     addTrack: (track: app.components.ITrack) => void;
-    getCurrentTrack: () => app.components.ITrack;
     setCurrentTrack: (track: app.components.ITrack) => void;
+    getCurrentTrack: () => app.components.ITrack;
   }
 
   export class PlaylistService implements IPlaylistService {
@@ -16,13 +16,14 @@ namespace app.core {
     constructor(private $http: ng.IHttpService, private $rootScope: ng.IRootScopeService) {
     };
 
-    setCurrentTrack: (track: app.components.ITrack) => void = (track: app.components.ITrack) => {
-      this.currentTrack = track;
-    };
-
     getCurrentTrack: () => app.components.ITrack  = () => {
       return this.currentTrack;
     };
+
+    setCurrentTrack: (track: app.components.ITrack) => void = (track: app.components.ITrack) => {
+        this.currentTrack = track;
+        this.$rootScope.$broadcast("playing", track);
+    }
 
     addTrack: (track: app.components.ITrack) => void = (track: app.components.ITrack) => {
       this.$rootScope.$broadcast("newTrackAdded", track);
