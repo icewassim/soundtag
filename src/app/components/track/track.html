@@ -1,4 +1,4 @@
-<div class="songtrack-container">
+<!-- <div class="songtrack-container">
   <div class="float">
     <div class="triangle"></div>
     <div class="songcover"></div>
@@ -30,4 +30,30 @@
     <button class="submit-comment-btn" ng-click="addComment(track)">22submit{{vm.tracks.length}}</button>
     <textarea ng-model="track.comment" placeholder="What do yo think about when you listen to ##track.title## ?"></textarea>
   </div>
+</div> -->
+
+<div class="track-card background-image-card">
+    <span class="black-layer"></span>
+    <span class="track-card-place">
+        <img src="/pictures/icons/pin.png" class="title-play-icon">
+        Amsterdam Canals
+    </span>
+    <span class="track-card-lyrics">
+        <img src="/pictures/icons/lyrics-white.png" class="lyrics-icon">
+        Highlight lyrics
+    </span>
+    <span id="player-controll-buttons">
+        <img id="previousTrack" class="prev-track" src="http://soundtag.me/pictures/icons/backward-white.png">
+        <img id="playerPlayButton" ng-click="playTrack(track)" class="play-track" src="http://soundtag.me/pictures/icons/play-button.png" onclick="resume_track()">
+        <img id="nextTrack" src="http://soundtag.me/pictures/icons/forward-white.png" class="next-track">
+    </span>
+    <span class="track-card-title">
+        ##track.title##
+    </span>
+    <span class="track-card-artist">
+        ##track.artist##
+    </span>
+    <span class="track-card-date">
+        May 2, Jan 2016
+    </span>
 </div>

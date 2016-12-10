@@ -1,7 +1,10 @@
-<div id="search-ipnut-group" class="input-group-item" ng-click="triggerSelectInput()">
-  <span class="label">Type Song or artist name</span>
-  <input id="search-box" type="text" ng-model="searchTerm" ></input>
-</div>
+<span class="logo-container"><img class="logo-header" src="/pictures/icons/soulPsWhite.png"/><span class="bold">Sound</span>Tag</span>
+<span class="header-input-container" ng-click="triggerSelectInput()" id="search-ipnut-group">
+    <input id="search-box" type="text" ng-model="searchTerm" placeholder="Type a song or artist Name"></input>
+</span>
+<span class="user-logo">
+    <img src="http://soundtag.me/avatars/avatar.jpg"/>
+</span>
 
 <div class="suggestions-container" ng-show="searchSuggestions.length > 0">
   <div ng-repeat="suggestion in searchSuggestions " >

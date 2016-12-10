@@ -1,0 +1,261 @@
+/* ----------------------------------------------------------------
+
+    Soundtag.me
+    souller app
+    @author: Icewassom
+
+ * ---------------------------------------------------------------- */
+ * {
+     box-sizing: border-box;
+ }
+ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, button, textarea, p, blockquote, th, td {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+ }
+ body{
+     background-color:#213246;
+ }
+
+ $openSans: 'Open Sans', sans-serif;
+
+ header{
+    display: block;
+    margin: 0px 15px 20px 15px;
+    padding: 10px 0 10px 0;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 20px;
+    font-family: $openSans;
+ }
+
+
+header .logo-container {
+    height: 48px;
+    border-right: 2px solid rgba(255, 255, 255, 0.2);
+    width: 12%;
+    display: block;
+    display: inline-block;
+    font-weight: 400;
+ }
+ header .logo-header{
+    height: 45px;
+    margin-bottom: -10px;
+    margin-right: 5px;
+ }
+
+header .header-input-container{
+    width: 70%;
+    position: relative;
+    display: inline-block;
+    border-right: 2px solid rgba(255, 255, 255, 0.2);
+    padding-right: 20px;
+    width: 30%;
+    opacity: 0.5;
+}
+
+header .user-logo {
+    display: inline-block;
+}
+
+header .user-logo img{
+    position: fixed;
+    right: 15px;
+    top: 9px;
+    height: 50px;
+    border-radius: 50%;
+    width: 50px;
+    box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.6), 0 0 0px 1px rgba(255, 255, 255, 0.5);
+    max-width: 50px;
+}
+
+.bold{
+    font-weight: 700;
+}
+
+header .header-input-container img{
+    height: 25px;
+    margin-bottom: -5px;
+}
+
+.dash-container{
+    margin: 20px;
+}
+
+.track-card {
+    display: inline-block;
+    margin: 2px;
+    background: transparent;
+    position: relative;
+    font-family: $openSans;
+}
+
+
+.background-image-card {
+    background-size: cover;
+    // background-image: url(http://wallpapercave.com/wp/JOPHIL2.jpg);
+    background-image: url(https://wallpaperscraft.com/image/channel_dawn_city_water_netherlands_amsterdam_69340_1920x1080.jpg);
+    width: 33%;
+    height: 281px;
+    border-radius: 10px;
+}
+
+.title-play-icon {
+    height: 20px;
+}
+
+.black-layer{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.32);
+    height: 100%;
+}
+
+.track-card-date {
+    color: white;
+    position: absolute;
+    top: 28px;
+    right: 8px;
+    font-weight: 400;
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.track-card-artist {
+    opacity: 0.8;
+    position: absolute;
+    left: 25px;
+    bottom: 15px;
+    font-weight: 400;
+    font-size: 18px;
+    color: white;
+}
+
+.track-card-place{
+    opacity: 0.8;
+    font-size: 14px;
+    color: white;
+    top: 3px;
+    position: absolute;
+    right: 6px;
+}
+
+.lyrics-icon{
+    height: 33px;
+    margin-bottom: -10px;
+    margin-right: -8px;
+}
+
+.track-card-lyrics {
+    cursor: pointer;
+    opacity: 0.8;
+    font-size: 14px;
+    color: white;
+    top: -1px;
+    position: absolute;
+    left: 6px;
+}
+.track-card-lyrics:hover,
+.prev-track:hover,
+.next-track:hover,
+.play-track:hover {
+    opacity: 1;
+}
+
+.track-card-title {
+    color: white;
+    display: block;
+    font-size: 25px;
+    position: absolute;
+    bottom: 40px;
+    left: 25px;
+    font-weight: 700;
+    width: 90%;
+    border-top: 1px solid #b6b2b2;
+    padding-top: 8px;
+}
+
+.play-track {
+    padding: 5px;
+    border: 2px solid white;
+    border-radius: 50%;
+    height: 48px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+#player-controll-buttons {
+    position: absolute;
+    bottom: 86px;
+    width: 100%;
+    text-align: center;
+    opacity: .8;
+}
+
+.prev-track, .next-track {
+    padding: 5px;
+    border-radius: 50%;
+    margin-left: -12px;
+    height: 25px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+}
+
+.next-track {
+    margin-left: 0px;
+}
+
+#search-box {
+    background: transparent;
+    border: none;
+    height: 35px;
+    width: 70%;
+    color: gainsboro;
+    font-family: "Open Sans", sans-serif;
+    font-size: 25px;
+    padding-left: 30px;
+    box-shadow: none;
+    outline: none;
+}
+
+.search-box-suggestion {
+  font-size: 20px;
+  text-align: left;
+  display: block;
+  background-color: rgba(66, 139, 202, 0.84);
+  border-top: 0.2px solid #cccccc;
+  color:white;
+  padding-bottom: 5px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  cursor: pointer;
+  min-height: 40px;
+}
+
+.margin-div {
+  margin-right: 13px;
+}
+
+.search-box-suggestion:hover,.focused-suggestion{
+  background-color: rgba(219, 239, 255, 0.84);
+  color: black;
+}
+
+.search-box-suggestion img{
+  float: left;
+}
+.suggestions-container{
+    width: 100%;
+    box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.22), 0 0 200px 1px rgba(49, 49, 49, 0.01);
+    position: absolute;
+    z-index: 2;
+    top: 72px;
+}
+
+.tagged-letter{
+  color: rgb(175, 226, 46);
+}

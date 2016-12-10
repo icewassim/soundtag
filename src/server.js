@@ -32,5 +32,5 @@ app.listen(port, function(err) {
 });
 
 app.get('/', function(req, res) {
-  res.status(200).render('index');
+  res.status(200).render('dashboard');
 });
